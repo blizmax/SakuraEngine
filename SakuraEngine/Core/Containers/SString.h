@@ -45,36 +45,16 @@
 #include "../CoreMinimal/SKeyWords.h"
 #include <string>
 #include "SVariant.h"
-#ifdef SAKURA_TARGET_PLATFORM_OSX
-#include <boost/container/pmr/string.hpp>
-#include <boost/container/pmr/vector.hpp>
-#include <boost/container/pmr/map.hpp>
-#else
-#include <memory_resource>
-#endif
 #include <EASTL/string.h>
 #include <EASTL/vector.h>
 #include <EASTL/map.h>
 
 using namespace std; 
-namespace Sakura::__
-{
-    namespace pmr
-    {
-        using eastl::string;
-        using eastl::vector;
-        using eastl::map;
-    }
-}
 
 namespace Sakura
 {
     // __c_plus_plus 17+
-    #ifndef SAKURA_TARGET_PLATFORM_OSX
-    using sstring = pmr::string;
-    #else
     using sstring = eastl::string;
-    #endif
     /*
     using sstring = std::string;
     using swstring = std::wstring;*/

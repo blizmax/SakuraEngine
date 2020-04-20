@@ -5,8 +5,6 @@
 	"version": "1.0.0",
 	"linking": "shared",
     "dependencies": [ 
-                        {"name":"CoreModule", "version":"1.0.0"},
-						{"name":"ApplicationModule", "version":"1.0.0"},
 						{"name":"CGDModule", "version":"1.0.0"}
                     ],
 	"author": "",

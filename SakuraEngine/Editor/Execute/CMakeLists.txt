@@ -4,4 +4,4 @@ add_executable(SakuraEngineEditorWin32
 )
 
 target_link_libraries(SakuraEngineEditorWin32 PUBLIC
-SPA TaskSystem CoreModule ${Vulkan_LIBRARIES}) 
+SPA TaskSystem ${Vulkan_LIBRARIES}) 

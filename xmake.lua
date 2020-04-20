@@ -13,7 +13,7 @@ add_includedirs("Extern/include/DirectXMath/Inc")
 add_includedirs("./")
 add_includedirs("SakuraEngine/")
 
-add_requires("Vulkan", "vcpkg::eastl")
+add_requires("Vulkan", "vcpkg::eastl", "vcpkg::SDL2", "vcpkg::freetype", "vcpkg::glm")
 
 EngineVersion = "0.0.1"
 set_version(EngineVersion)
@@ -32,14 +32,6 @@ elseif is_plat("windows") then
     add_defines("SAKURA_TARGET_PLATFORM_WIN32") 
 end
 
--- Generate Engine Module Metas
---target("Sakura")
-    --before_build(function(target)
-    --    print("Sakura Engine Version "..target:get("version"))
-        --os.exec("python3 SPA/anyToheader.py meta .json SakuraEngine")
-        --os.exec("python3 SPA/ModuleCollector.py meta SakuraEngine")
-    --end)
-
 function static_lib(targetName, version, ...)
 target(targetName)
     set_version(version)
@@ -57,6 +49,8 @@ end
 function static_module(targetName, version, ...)
     static_lib(targetName, version, ...)
     before_build(function(target)
+        --import("BuildTools.ModuleInfoGen", {rootdir = "./"})
+        --ModuleInfoGen("meta", target:scriptdir(), "./")
         os.exec("lua BuildTools/ModuleInfoGen.lua ".."meta "..target:scriptdir().." ./")
     end)
 end
@@ -73,4 +67,4 @@ end
 
 includes("SPA")
 includes("SakuraEngine")
-includes("SPAUnitTest")
+--includes("SPAUnitTest")

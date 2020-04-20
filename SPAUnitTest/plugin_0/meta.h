@@ -1,6 +1,6 @@
 //A header file genereate by Sakura J2H tool
 //Contains the infomation of a module of Sakura Engine
-//With the MIT License Copyright!
+//With the MIT License Copyright!\n")
 #pragma once
 #include <string>
 #include <cstddef>

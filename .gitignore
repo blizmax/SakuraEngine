@@ -15,7 +15,6 @@
 */.xmake
 *.DS_Store
 .DS_Store
-#
 *.jpg
 *.png
 *.tif

@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-13 22:00:21
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-20 20:15:35
+ * @LastEditTime: 2020-04-20 23:52:48
  */
 #ifndef _WIN32
 #include "../fs.h"
@@ -57,7 +57,7 @@ namespace Sakura::fs
         const char* s = strrchr((char*)path, '/');
         if (s == 0) return ::mkdir(path, 0755) == 0;
 
-        __::pmr::string parent(path, s - path);
+        sstring parent(path, s - path);
         
         if (fs::exists(parent.c_str())) {
             return ::mkdir(path, 0755) == 0;
@@ -77,7 +77,7 @@ namespace Sakura::fs
                 return rmdir(path) == 0;
             return unlink(path) == 0;
         } else {
-            __::pmr::string cmd;
+            sstring cmd;
             cmd.resize(strlen(path) + 9);
             cmd.append("rm -rf \"").append(path);
             cmd += '"';
@@ -113,7 +113,7 @@ namespace xx
     struct fctx 
     {
         int fd;
-        __::pmr::string path;
+        sstring path;
     };
 
     Sakura::fs::file::~file() 
@@ -130,7 +130,7 @@ namespace xx
         return p && p->fd != nullfd;
     }
 
-    const __::pmr::string& file::path() const 
+    const sstring& file::path() const 
     {
         fctx* p = (fctx*) _p;
         return p->path;
@@ -162,8 +162,8 @@ namespace xx
         return r < 0 ? 0 : (size_t)r;
     }
 
-    __::pmr::string file::read(size_t n) {
-        __::pmr::string s;
+    sstring file::read(size_t n) {
+        sstring s;
         s.resize(n + 1);
         this->read((void*)s.data(), n);
         return s;

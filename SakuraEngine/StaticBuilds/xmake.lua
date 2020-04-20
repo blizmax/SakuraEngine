@@ -1,1 +1,2 @@
---includes("GraphicsInterface")
+includes("GraphicsInterface")
+includes("ImGuiProfiler")

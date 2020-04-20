@@ -8,11 +8,13 @@
 const std::string sp_meta = 
 R"({
 	"api": "0.1.0",
-	"name": "CoreModule",
-	"prettyname": "CoreModule",
+	"name": "EditorModule",
+	"prettyname": "EditorModule",
 	"version": "1.0.0",
 	"linking": "shared",
-	"dependencies": [],
+    "dependencies": [ 
+						{"name":"CGDModule", "version":"1.0.0"}
+                    ],
 	"author": "",
 	"url": "",
 	"license": "",

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:45
- * @LastEditTime: 2020-04-17 21:10:47
+ * @LastEditTime: 2020-04-20 22:16:40
  */
 #include "../Modules.generated.h"
 #include "../SPA/include/modulemanager.h"
@@ -36,7 +36,7 @@ int main()
     auto mng = GetModuleManager();
 #ifndef _WIN32
     #ifdef CONFINFO_PLATFORM_MACOS
-        mng->Mount("/Users/huangzheng/Coding/SakuraEngine/build/macosx/x86_64");
+        mng->Mount("/Users/saeruhikari/Coding/SakuraEngine/build/macosx/x86_64");
     #else
         mng->Mount("/home/saeruhikari/Coding/SakuraEngine/build");
     #endif
