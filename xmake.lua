@@ -57,6 +57,7 @@ end
 
 function shared_module(targetName, version, ...)
     shared_lib(targetName, version, ...)
+    add_deps("SPA")
     before_build(function(target)
         os.exec("lua BuildTools/ModuleInfoGen.lua ".."meta "..target:scriptdir().." ./")
         for i = 1, #target._INFO._INFO.includedirs do

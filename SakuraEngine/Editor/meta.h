@@ -13,7 +13,7 @@ R"({
 	"version": "1.0.0",
 	"linking": "shared",
     "dependencies": [ 
-						{"name":"CGDModule", "version":"1.0.0"}
+						{"name":"CoreModule", "version":"1.0.0"}
                     ],
 	"author": "",
 	"url": "",

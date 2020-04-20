@@ -5,9 +5,9 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-24 13:24:40
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-13 21:25:41
+ * @LastEditTime: 2020-04-21 00:26:45
  */
-#include "SakuraEngine/SPAModules.generated.h"//include generated file in the root path
+#include "Modules.generated.h"//include generated file in the root path
 #include "SPA/include/modulemanager.h"
 #include "SakuraEngine/Core/CoreModule.h"
 #include "SakuraEngine/StaticBuilds/TaskSystem/TaskSystem.h"
@@ -19,7 +19,7 @@ int main(void)
 {
     auto mng = GetModuleManager();
 #ifndef _WIN32
-    mng->Mount("/home/saeruhikari/Coding/SakuraEngine/build");
+    mng->Mount("/Users/saeruhikari/Coding/SakuraEngine/build/macosx/x86_64");
 #elif defined(_WIN32)
     mng->Mount("D:\\Coding\\SakuraEngine\\build");
 #endif

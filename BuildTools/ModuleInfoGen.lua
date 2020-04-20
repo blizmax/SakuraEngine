@@ -53,12 +53,14 @@ R"(]]..jsonContent..")\";\n")
             GenHeader = io.open(arg[3].."/".."Modules.generated.h", "a") 
             io.output(GenHeader)
             if bMainModule == true then
-                io.write([[//A header file genereate by Sakura J2H tool
+                io.write([[
+//A header file genereate by Sakura J2H tool
 //Contains the header of static modules of Sakura Engine
-//With the MIT License Copyright!]])
+//With the MIT License Copyright!]].."\n")
             end
-            io.write("#pragma once\n")
-            io.write("#include \""..arg[2].."/"..ModuleMeta["name"]..".h\"\n")
+            io.write([[
+#pragma once
+#include "]]..arg[2].."/"..ModuleMeta["name"]..".h\"\n")
             io.close(GenHeader)
         end
     end
