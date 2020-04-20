@@ -22,11 +22,26 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-18 09:13:31
- * @LastEditTime: 2020-03-26 17:08:27
+ * @LastEditTime: 2020-04-18 02:27:29
  */
 #pragma once
 #include <vector>
+#ifdef SAKURA_TARGET_PLATFORM_OSX
+#include <boost/container/pmr/string.hpp>
+#include <boost/container/pmr/vector.hpp>
+#include <boost/container/pmr/map.hpp>
+namespace Sakura::SPA
+{
+    namespace pmr
+    {
+        using boost::container::string;
+        using boost::container::vector;
+        using boost::container::map;
+    }
+}
+#else
 #include <memory_resource>
+#endif
 #include "../../GraphicsCommon/GraphicsObjects/RootSignature.h"
 #include "vulkan/vulkan.h"
 #include "SakuraEngine/Core/EngineUtils/log.h"
@@ -45,7 +60,7 @@ namespace Sakura::Graphics::Vk
         virtual ~RootSignatureVk() final override;
         VkDescriptorSetLayout descriptorSetLayout[RootParameterSetCount + 1];
         VkDescriptorPool pool = VK_NULL_HANDLE;
-        virtual [[nodiscard]] RootParameter* CreateArgument(
+        [[nodiscard]] virtual RootParameter* CreateArgument(
             const RootParameterSet targetSet) const override final;
     protected:
         std::vector<VkSampler> staticSamplers;

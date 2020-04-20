@@ -22,9 +22,9 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:45
- * @LastEditTime: 2020-04-17 15:03:27
+ * @LastEditTime: 2020-04-17 21:10:47
  */
-#include "SPAModules.generated.h"
+#include "../Modules.generated.h"
 #include "../SPA/include/modulemanager.h"
 #include "plugin_main/plugin_main.h"
 #include "../Extern/include/confinfo.h"

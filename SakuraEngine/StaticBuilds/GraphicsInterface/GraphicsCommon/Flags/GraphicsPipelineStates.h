@@ -22,10 +22,9 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-06 16:47:38
- * @LastEditTime: 2020-03-30 22:21:16
+ * @LastEditTime: 2020-04-18 03:01:04
  */
 #pragma once
-#include <memory_resource>
 #include "Core/CoreMinimal/sinterface.h"
 #include "Core/CoreMinimal/SDefination.h"
 #include "Core/Containers/SString.h"

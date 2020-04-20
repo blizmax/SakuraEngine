@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-11 20:52:05
- * @LastEditTime: 2020-03-24 00:52:10
+ * @LastEditTime: 2020-04-18 02:29:45
  */
 #include "FenceVk.h"
 #include "../CGD_Vulkan.h"
@@ -49,7 +49,7 @@ FenceVk::FenceVk(const CGDVk& _cgd)
 {
 	VkSemaphoreTypeCreateInfo timelineCreateInfo;
 	timelineCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO;
-	timelineCreateInfo.pNext = NULL;
+	timelineCreateInfo.pNext = nullptr;
 	timelineCreateInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE;
 	timelineCreateInfo.initialValue = 0;
 
@@ -58,7 +58,7 @@ FenceVk::FenceVk(const CGDVk& _cgd)
 	createInfo.pNext = &timelineCreateInfo;
 	createInfo.flags = 0;
 
-	vkCreateSemaphore(_cgd.GetCGDEntity().device, &createInfo, NULL,
+	vkCreateSemaphore(_cgd.GetCGDEntity().device, &createInfo, nullptr,
         &timelineSemaphore);
 }
 
@@ -74,7 +74,7 @@ void CGDVk::Wait(Fence* toWait, uint64 until) const
 
 	VkSemaphoreWaitInfo waitInfo;
 	waitInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO;
-	waitInfo.pNext = NULL;
+	waitInfo.pNext = nullptr;
 	waitInfo.flags = VK_SEMAPHORE_WAIT_ANY_BIT;
 	waitInfo.semaphoreCount = 1;
 	waitInfo.pSemaphores = &fcVk->timelineSemaphore;

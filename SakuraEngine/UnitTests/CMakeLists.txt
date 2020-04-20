@@ -1,5 +1,4 @@
 add_subdirectory(UnitTestGraphics)
-add_subdirectory(DIPExps)
 add_subdirectory(coro)
 if(MSVC)     
     foreach(var 

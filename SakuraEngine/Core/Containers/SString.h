@@ -46,9 +46,18 @@
 #include <string>
 #include "SVariant.h"
 #ifdef SAKURA_TARGET_PLATFORM_OSX
-#include <experimental/memory_resource>
-#include <experimental/string>
-using namespace std::experimental;
+#include <boost/container/pmr/string.hpp>
+#include <boost/container/pmr/vector.hpp>
+#include <boost/container/pmr/map.hpp>
+namespace Sakura::__
+{
+    namespace pmr
+    {
+        using boost::container::string;
+        using boost::container::vector;
+        using boost::container::map;
+    }
+}
 #else
 #include <memory_resource>
 #endif
@@ -58,8 +67,11 @@ using namespace std;
 namespace Sakura
 {
     // __c_plus_plus 17+
+    #ifndef SAKURA_TARGET_PLATFORM_OSX
     using sstring = pmr::string;
-    using swstring = pmr::wstring;
+    #else
+    using sstring = boost::container::string;
+    #endif
     /*
     using sstring = std::string;
     using swstring = std::wstring;*/
@@ -75,7 +87,7 @@ namespace Sakura
         {
             return std::string_view(str);
         }
-        sinline sstring_view view(const pmr::string& str) noexcept
+        sinline sstring_view view(const __::pmr::string& str) noexcept
         {
             return std::string_view(str);
         }

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-03-30 00:15:22
+ * @LastEditTime: 2020-04-18 02:15:20
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -86,7 +86,7 @@ namespace Sakura::Graphics
         virtual ~CGD() = default;
         virtual void Initialize(CGDInfo info) = 0;
         virtual void InitializeDevice(void* mainSurface) = 0;
-        virtual [[nodiscard]] SwapChain* CreateSwapChain(
+        [[nodiscard]] virtual SwapChain* CreateSwapChain(
             const int width, const int height, void* mainSurface) = 0;
 
         virtual void Present(SwapChain* chain) = 0;
@@ -97,14 +97,14 @@ namespace Sakura::Graphics
             const char*, std::size_t) = 0;
         virtual const char* CompileShader(const char*, std::size_t) = 0;
 
-        virtual [[nodiscard]] RenderPass* CreateRenderPass(
+        [[nodiscard]] virtual RenderPass* CreateRenderPass(
             const RenderPassCreateInfo& info) const = 0;
         
-        virtual [[nodiscard]] GraphicsPipeline* CreateGraphicsPipeline(
+        [[nodiscard]] virtual GraphicsPipeline* CreateGraphicsPipeline(
             const GraphicsPipelineCreateInfo& info,
             const RenderPass& progress) const = 0;
 
-        virtual [[nodiscard]] ComputePipeline* CreateComputePipeline(
+        [[nodiscard]] virtual ComputePipeline* CreateComputePipeline(
             const ComputePipelineCreateInfo& info) const = 0;
             
         // Create & Destroy Command Contexts
@@ -115,10 +115,10 @@ namespace Sakura::Graphics
         virtual void FreeContext(CommandContext* context) = 0;
         virtual void FreeAllContexts(ECommandType typeToDestroy) = 0;
 
-        virtual [[nodiscard]] ResourceView* ViewIntoResource(
+        [[nodiscard]] virtual ResourceView* ViewIntoResource(
             const GpuResource&, const ResourceViewCreateInfo&) const = 0;
         
-        virtual [[nodiscard]] ResourceView* ViewIntoTexture(
+        [[nodiscard]] virtual ResourceView* ViewIntoTexture(
             const GpuTexture&, const Format, const ImageAspectFlags,
             uint32 mipLevels = 1, uint32 baseMip = 0,
             uint32 layerCount = 1, uint32 baseArrayLayer = 0) const;
@@ -127,34 +127,34 @@ namespace Sakura::Graphics
         virtual CommandQueue* GetComputeQueue(void) const = 0;
         virtual CommandQueue* GetCopyQueue(void) const = 0;
         
-        virtual [[nodiscard]] CommandQueue* AllocQueue(ECommandType type) const = 0;
+        [[nodiscard]] virtual CommandQueue* AllocQueue(ECommandType type) const = 0;
 
-        virtual [[nodiscard]] GpuBuffer* CreateGpuResource(
+        [[nodiscard]] virtual GpuBuffer* CreateGpuResource(
             const BufferCreateInfo&) const = 0;
         
-        virtual [[nodiscard]] GpuTexture* CreateGpuResource(
+        [[nodiscard]] virtual GpuTexture* CreateGpuResource(
             const TextureCreateInfo&) const = 0;
 
         virtual void Wait(Fence* toWait, uint64 until) const = 0;
         virtual void WaitIdle() const = 0;
-        virtual [[nodiscard]] Fence* AllocFence(void) = 0;
+        [[nodiscard]] virtual Fence* AllocFence(void) = 0;
 
-        virtual [[nodiscard]] RootSignature*
+        [[nodiscard]] virtual RootSignature*
             CreateRootSignature(const RootSignatureCreateInfo& sigInfo) const  = 0;
 
         virtual const TargetGraphicsinterface GetBackEndAPI(void) const = 0;
 
-        virtual [[nodiscard]] Sampler* CreateSampler(
+        [[nodiscard]] virtual Sampler* CreateSampler(
             const SamplerCreateInfo&) const = 0;
 
         virtual const Format FindDepthFormat(void) const = 0;
     public:
-        virtual [[nodiscard]] GpuBuffer* CreateUploadBuffer(
+        [[nodiscard]] virtual GpuBuffer* CreateUploadBuffer(
             const std::size_t bufferSize) const;
-        virtual [[nodiscard]] GpuTexture* CreateGpuTexture(const Format format,
+        [[nodiscard]] virtual GpuTexture* CreateGpuTexture(const Format format,
             const uint32 width, const uint32 height,
             ImageUsages imageUsages, uint32 mipLevels = 1) const; 
-        virtual [[nodiscard]] GpuBuffer* CreateGpuBuffer(const uint64 size, 
+        [[nodiscard]] virtual GpuBuffer* CreateGpuBuffer(const uint64 size, 
             BufferUsages bufferUsages, CPUAccessFlags cpuAccess) const;
     public:
         const uint64 contextNum() const {return contextPools[0].size();}

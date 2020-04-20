@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-03 10:41:13
- * @LastEditTime: 2020-03-24 10:40:15
+ * @LastEditTime: 2020-04-18 02:31:58
  */
 #include "CommandQueueVk.h"
 #include "CommandContextVk.h"
@@ -47,7 +47,7 @@ void CommandQueueVk::Submit(CommandContext* commandContext,
 
     VkTimelineSemaphoreSubmitInfo timelineInfo;
 	timelineInfo.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO;
-	timelineInfo.pNext = NULL;
+	timelineInfo.pNext = nullptr;
 	timelineInfo.waitSemaphoreValueCount = 1;
 	timelineInfo.pWaitSemaphoreValues = &waitValue;
 	timelineInfo.signalSemaphoreValueCount = 1;
@@ -117,7 +117,7 @@ void CommandQueueVk::Submit(Fence* fence, uint64 completedValue)
     FcVk->targetVal = completedValue;
     VkTimelineSemaphoreSubmitInfo timelineInfo;
 	timelineInfo.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO;
-	timelineInfo.pNext = NULL;
+	timelineInfo.pNext = nullptr;
 	timelineInfo.waitSemaphoreValueCount = 1;
 	timelineInfo.pWaitSemaphoreValues = &waitValue;
 	timelineInfo.signalSemaphoreValueCount = 1;
@@ -148,7 +148,7 @@ void CommandQueueVk::Wait(Fence* fence, uint64 until)
 
     VkTimelineSemaphoreSubmitInfo timelineInfo;
 	timelineInfo.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO;
-	timelineInfo.pNext = NULL;
+	timelineInfo.pNext = nullptr;
 	timelineInfo.waitSemaphoreValueCount = 1;
 	timelineInfo.pWaitSemaphoreValues = &waitValue;
 	timelineInfo.signalSemaphoreValueCount = 1;

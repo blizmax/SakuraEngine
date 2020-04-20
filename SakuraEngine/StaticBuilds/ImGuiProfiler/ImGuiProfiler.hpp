@@ -22,10 +22,25 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-16 17:02:13
- * @LastEditTime: 2020-03-21 22:42:03
+ * @LastEditTime: 2020-04-18 02:48:28
  */
 #pragma once
-#include "memory_resource"
+#ifdef SAKURA_TARGET_PLATFORM_OSX
+#include <boost/container/pmr/string.hpp>
+#include <boost/container/pmr/vector.hpp>
+#include <boost/container/pmr/map.hpp>
+namespace Sakura::SPA
+{
+    namespace pmr
+    {
+        using boost::container::string;
+        using boost::container::vector;
+        using boost::container::map;
+    }
+}
+#else
+#include <memory_resource>
+#endif
 #include <string>
 #include "SakuraEngine/Core/CoreMinimal/CoreMinimal.h"
 #include "ImGuiVulkanSDL.h"

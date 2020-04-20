@@ -22,12 +22,26 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-08 21:04:52
- * @LastEditTime: 2020-03-18 10:48:49
+ * @LastEditTime: 2020-04-18 02:26:56
  */
 #pragma once
 #include "../../GraphicsCommon/GraphicsObjects/GraphicsPipeline.h"
+#ifdef SAKURA_TARGET_PLATFORM_OSX
+#include <boost/container/pmr/string.hpp>
+#include <boost/container/pmr/vector.hpp>
+#include <boost/container/pmr/map.hpp>
+namespace Sakura::SPA
+{
+    namespace pmr
+    {
+        using boost::container::string;
+        using boost::container::vector;
+        using boost::container::map;
+    }
+}
+#else
 #include <memory_resource>
-#include <unordered_map>
+#endif
 #include "RenderPassVk.h"
 #include "vulkan/vulkan.h"
 

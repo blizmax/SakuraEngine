@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-03-25 10:48:56
+ * @LastEditTime: 2020-04-18 02:32:18
  */
 #define API_EXPORTS
 #include "CGD_Vulkan.h"
@@ -162,7 +162,7 @@ void CGDVk::Present(SwapChain* chain)
     const VkPipelineStageFlags wat = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
     VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.pNext = NULL;
+    submitInfo.pNext = nullptr;
     submitInfo.commandBufferCount = 0;
     submitInfo.waitSemaphoreCount = 1;
 	submitInfo.pWaitSemaphores = 

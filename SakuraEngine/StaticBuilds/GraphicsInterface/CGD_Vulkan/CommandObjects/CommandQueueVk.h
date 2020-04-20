@@ -22,12 +22,17 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-03 10:39:51
- * @LastEditTime: 2020-03-21 22:30:31
+ * @LastEditTime: 2020-04-18 02:31:38
  */
 #pragma once
 #include "../../GraphicsCommon/CommandObjects/CommandQueue.h"
 #include "SakuraEngine/Core/CoreMinimal/CoreMinimal.h"
 #include <vulkan/vulkan.h>
+
+namespace Sakura::Graphics::Vk
+{
+    class CGDVk;
+}
 
 namespace Sakura::Graphics::Vk
 {

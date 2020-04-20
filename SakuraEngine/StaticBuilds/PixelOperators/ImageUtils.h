@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-13 16:46:06
- * @LastEditTime: 2020-03-21 20:57:45
+ * @LastEditTime: 2020-04-18 02:53:28
  */
 #pragma once
 #define STB_IMAGE_IMPLEMENTATION
@@ -58,7 +58,7 @@ namespace Sakura::Images
         };
         template<typename channelFormat = Sakura::Math::Unorm>
         channelFormat ViewIntoPixel(const int channelNum,
-            const int X, const int Y, const PixelChannel channel = 0) const
+            const int X, const int Y, const PixelChannel channel = PixelChannel::X) const
         {
             channelFormat* fullView = ((channelFormat*)data.get());
             return *(fullView + channelNum * (X + Y * X) + channel);

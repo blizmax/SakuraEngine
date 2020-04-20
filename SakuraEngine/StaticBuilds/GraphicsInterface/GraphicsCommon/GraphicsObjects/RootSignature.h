@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-17 22:31:04
- * @LastEditTime: 2020-03-31 00:04:09
+ * @LastEditTime: 2020-04-18 02:16:32
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -154,7 +154,7 @@ namespace Sakura::Graphics
     sinterface RootSignature
     {
         virtual ~RootSignature(){};
-        virtual [[nodiscard]] RootParameter* CreateArgument(
+        [[nodiscard]] virtual RootParameter* CreateArgument(
             const RootParameterSet targetSet) const = 0;
     };
 } // namespace Sakura::Graphics

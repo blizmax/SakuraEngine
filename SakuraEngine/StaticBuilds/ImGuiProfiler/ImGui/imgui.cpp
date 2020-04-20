@@ -9836,7 +9836,7 @@ bool ImGui::BeginDragDropSource(ImGuiDragDropFlags flags)
         {
             // If you want to use BeginDragDropSource() on an item with no unique identifier for interaction, such as Text() or Image(), you need to:
             // A) Read the explanation below, B) Use the ImGuiDragDropFlags_SourceAllowNullID flag, C) Swallow your programmer pride.
-            if (!(flags & ImGuiDragDropFlags_SourceAllowNullID))
+            if (!(flags & ImGuiDragDropFlags_SourceAllownullptrID))
             {
                 IM_ASSERT(0);
                 return false;

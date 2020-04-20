@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-11 01:38:49
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-26 17:13:22
+ * @LastEditTime: 2020-04-18 02:28:22
  */
 #pragma once
 #include "../../GraphicsCommon/CommandObjects/CommandContext.h"
@@ -15,6 +15,7 @@ namespace Sakura::Graphics::Vk
 {
     class GraphicsPipelineVk;
     class ComputePipelineVk;
+    class CommandQueueVk;
 }
 
 namespace Sakura::Graphics::Vk

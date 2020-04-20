@@ -17,49 +17,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THESOFTWARE.
  * 
- * 
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-03-05 01:29:37
- * @LastEditTime: 2020-04-18 02:17:37
+ * @Date: 2020-03-02 18:44:11
+ * @LastEditTime: 2020-03-21 22:30:38
  */
 #pragma once
-#include "../../GraphicsCommon/GraphicsObjects/SwapChain.h"
-#include "../../GraphicsCommon/ResourceObjects/Resource.h"
-#include "../Flags/FormatVk.h"
+#include "SakuraEngine/Core/CoreMinimal/CoreMinimal.h"
 
 namespace Sakura::Graphics
 {
-    struct Extent2D;
+    sinterface CommandContext;
+    sinterface Fence;
 }
 
-namespace Sakura::Graphics::Vk
+namespace Sakura::Graphics
 {
-    class CGDVk;
-}
-
-namespace Sakura::Graphics::Vk
-{
-    struct SwapChainVk final : public Sakura::Graphics::SwapChain
+    enum CommandQueueTypes
     {
-        friend class CGDVk;
-        SwapChainVk(const VkSwapchainKHR _chain, 
-            const CGDVk& _device,const uint32 _chainCount);
-        
-        virtual ~SwapChainVk() override final;
-        virtual Extent2D GetExtent() const override final;
-        inline VkFormat GetVkPixelFormat() 
-        {
-            return Transfer(swapChainImageFormat);
-        }
-        VkSwapchainKHR swapChain;
-        VkExtent2D swapChainExtent;
-        std::vector<VkSemaphore> imageAvailableSemaphores;
-        std::vector<VkSemaphore> renderCompleteSemaphores;
-        std::vector<VkFence> inFlightFences;
-        std::vector<VkFence> imagesInFlight;
-        uint32_t nextPresent = 0;
-        uint32_t currentPresent = 0;
+        COMMAND_QUEUE_GRAPHICS,
+        COMMAND_QUEUE_COMPUTE,
+        COMMAND_QUEUE_COPY
+    };
+
+    sinterface CommandQueue
+    {
+        virtual void Submit(CommandContext* commandContext) = 0;
+        virtual void Submit(CommandContext* commandContext,
+            Fence* fence, uint64 until, uint64 to) = 0;
+        virtual void Submit(Fence* fence, uint64 completedValue) = 0;
+        virtual void Wait(Fence* fence, uint64 until) = 0;
+        virtual void WaitIdle() = 0;
+    protected:
+        CommandQueue() = default;
     };
 }

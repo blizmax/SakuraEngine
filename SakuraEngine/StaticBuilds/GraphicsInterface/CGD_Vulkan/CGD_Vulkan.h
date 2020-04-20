@@ -67,14 +67,14 @@ namespace Sakura::Graphics::Vk
         virtual void InitializeDevice(void* mainSurface) override final;
         // Vulkan functions
         virtual void Initialize(CGDInfo info) override final;
-        virtual [[nodiscard]] Sakura::Graphics::SwapChain*
+        [[nodiscard]] virtual Sakura::Graphics::SwapChain*
             CreateSwapChain(const int width, const int height, 
                 void* mainSurface) override final;
         virtual void Present(SwapChain* chain) override final;
         virtual CommandQueue* GetGraphicsQueue() const override final;
         virtual CommandQueue* GetComputeQueue() const override final;
         virtual CommandQueue* GetCopyQueue() const override final;
-        virtual [[nodiscard]] CommandQueue*
+        [[nodiscard]] virtual CommandQueue*
             AllocQueue(ECommandType type) const override final;
         const auto GetVkInstance() const {return entityVk.instance;}
         const CGDEntityVk& GetCGDEntity() const {return entityVk;}
@@ -86,45 +86,45 @@ namespace Sakura::Graphics::Vk
             const char*, std::size_t) override final;
     public:
         // Implements: See GraphicsObjects/GraphicsPipelineVk.cpp
-        virtual [[nodiscard]] GraphicsPipeline* CreateGraphicsPipeline(
+        [[nodiscard]] virtual GraphicsPipeline* CreateGraphicsPipeline(
             const GraphicsPipelineCreateInfo& info,
             const RenderPass& progress) const override final;
     public:
         // Implements: See GraphicsObjects/ComputePipeline.cpp
-        virtual [[nodiscard]] ComputePipeline* CreateComputePipeline(
+        [[nodiscard]] virtual ComputePipeline* CreateComputePipeline(
             const ComputePipelineCreateInfo& info) const override final;
     public: 
         // Implements: See ResourceObjects/ResourceViewVk.cpp
-        virtual [[nodiscard]] ResourceView* ViewIntoResource(
+        [[nodiscard]] virtual ResourceView* ViewIntoResource(
             const GpuResource&, const ResourceViewCreateInfo&) const override final;
     public:
     // Implements: See GraphicsObjects/RenderPassVk.cpp
-        virtual [[nodiscard]] RenderPass* CreateRenderPass(
+        [[nodiscard]] virtual RenderPass* CreateRenderPass(
             const RenderPassCreateInfo& rpInfo) const override final;
     public:
     // Implements: See CommandObjects/CommandContextVk.cpp
         virtual CommandContext* AllocateContext(
             ECommandType type, bool bTransiant = true) override final;
-        virtual [[nodiscard]] CommandContext* CreateContext(
+        [[nodiscard]] virtual CommandContext* CreateContext(
             ECommandType type, bool bTransiant = true) const override final;
         virtual void FreeContext(CommandContext* context) override final;
         virtual void FreeAllContexts(ECommandType typeToDestroy) override final;
     public:
     // Implements: See GraphicsObjects/FenceVk.cpp
-        virtual [[nodiscard]] Fence* AllocFence(void) override final;
+        [[nodiscard]] virtual Fence* AllocFence(void) override final;
         virtual void Wait(Fence* toWait, uint64 until) const override final;
         virtual void WaitIdle() const override final;
     public:
     // Implements: See ResourceObjects/GpuResourceVk.cpp
-        virtual [[nodiscard]] GpuBuffer* CreateGpuResource(
+        [[nodiscard]] virtual GpuBuffer* CreateGpuResource(
             const BufferCreateInfo&) const override final;
-        virtual [[nodiscard]] GpuTexture* CreateGpuResource(
+        [[nodiscard]] virtual GpuTexture* CreateGpuResource(
             const TextureCreateInfo&) const override final;
-        virtual [[nodiscard]] Sampler* CreateSampler(
+        [[nodiscard]] virtual Sampler* CreateSampler(
             const SamplerCreateInfo& createInfo) const final override;
     public:
     // Implements: See GraphicsObjects/RootSignatureVk.cpp
-        virtual [[nodiscard]] RootSignature* CreateRootSignature(
+        [[nodiscard]] virtual RootSignature* CreateRootSignature(
            const RootSignatureCreateInfo& sigInfo) const override final;
     public:
         virtual const Format FindDepthFormat(void) const override final;

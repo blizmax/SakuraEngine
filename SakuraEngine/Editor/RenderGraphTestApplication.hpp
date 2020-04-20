@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-29 11:46:00
- * @LastEditTime: 2020-03-31 13:49:24
+ * @LastEditTime: 2020-04-18 02:59:18
  */
 #pragma once
 #define GLM_FORCE_RADIANS
@@ -55,12 +55,17 @@ using namespace Sakura::Graphics::Vk;
 
 #if defined(CONFINFO_PLATFORM_LINUX) 
 #elif defined(CONFINFO_PLATFORM_MACOS)
-    Sakura::fs::file vs_f
-    ("/Users/saeruhikari/Coding/SakuraEngine/SakuraTestProject/shaders/VertexBuffer/HWVert.spv",
+Sakura::fs::file vs_srv
+    ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVVertex.spv",
+        'r');  
+    Sakura::fs::file fs_srv
+    ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVPixel.spv",
         'r');
-    Sakura::fs::file fs_f
-    ("/Users/saeruhikari/Coding/SakuraEngine/SakuraEngine/UnitTests/UnitTestGraphics/frag.spv",
-        'r');
+    Sakura::fs::file cs_avgfilter
+	("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\Compute\\avgfiltering.comp.spv",
+		'r');
+    const std::string texPath =
+        "D:\\Coding\\SakuraEngine\\SakuraTestProject\\textures\\CGBull.jpg";
 #elif defined(CONFINFO_PLATFORM_WIN32)
     Sakura::fs::file vs_srv
     ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVVertex.spv",
@@ -205,7 +210,7 @@ private:
         info.rootSignature = rootSignature.get();
         info.depthStencilCreateInfo = depthStencil;
 		info.AddVertexBinding(VertexData::getBindingDescription());
-		info.AddVertexAttribute(VertexData::getAttributeDescriptions());
+		//info.AddVertexAttribute(VertexData::getAttributeDescriptions());
 
 		// Create Render Pass
 		RenderPassCreateInfo rpinfo;

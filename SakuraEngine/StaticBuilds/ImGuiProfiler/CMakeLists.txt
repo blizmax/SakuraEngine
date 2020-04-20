@@ -1,3 +1,5 @@
+include_directories(./ImGui)
+
 add_subdirectory(ImGui)
 
 add_library(ImGuiProfiler ImGuiVulkanSDL.cpp)

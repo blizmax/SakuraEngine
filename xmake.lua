@@ -13,6 +13,7 @@ add_includedirs("Extern/include/DirectXMath/Inc")
 add_includedirs("./")
 add_includedirs("SakuraEngine/")
 
+add_requires("Vulkan")
 
 EngineVersion = "0.0.1"
 set_version(EngineVersion)
