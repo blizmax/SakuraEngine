@@ -13,13 +13,14 @@ add_includedirs("Extern/include/DirectXMath/Inc")
 add_includedirs("./")
 add_includedirs("SakuraEngine/")
 
-add_requires("Vulkan")
+add_requires("Vulkan", "vcpkg::eastl")
 
 EngineVersion = "0.0.1"
 set_version(EngineVersion)
 add_defines("SAKURA_CONSOLE_INOUT")
 add_defines("SAKURA_DEBUG_EDITOR")
 add_defines("SAKURA_DEBUG_GAME")
+add_packages("vcpkg::eastl")
 if is_plat("linux", "macosx") then 
     add_defines("SAKURA_TARGET_PLATFORM_UNIX") 
     if is_plat("linux") then

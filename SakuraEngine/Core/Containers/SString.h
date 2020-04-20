@@ -49,20 +49,23 @@
 #include <boost/container/pmr/string.hpp>
 #include <boost/container/pmr/vector.hpp>
 #include <boost/container/pmr/map.hpp>
+#else
+#include <memory_resource>
+#endif
+#include <EASTL/string.h>
+#include <EASTL/vector.h>
+#include <EASTL/map.h>
+
+using namespace std; 
 namespace Sakura::__
 {
     namespace pmr
     {
-        using boost::container::string;
-        using boost::container::vector;
-        using boost::container::map;
+        using eastl::string;
+        using eastl::vector;
+        using eastl::map;
     }
 }
-#else
-#include <memory_resource>
-#endif
-
-using namespace std; 
 
 namespace Sakura
 {
@@ -70,7 +73,7 @@ namespace Sakura
     #ifndef SAKURA_TARGET_PLATFORM_OSX
     using sstring = pmr::string;
     #else
-    using sstring = boost::container::string;
+    using sstring = eastl::string;
     #endif
     /*
     using sstring = std::string;
@@ -79,18 +82,6 @@ namespace Sakura
     
     namespace String
     {
-        sinline sstring str(std::string_view view)
-        {
-            return sstring(view);
-        }
-        sinline sstring_view view(const std::string& str) noexcept
-        {
-            return std::string_view(str);
-        }
-        sinline sstring_view view(const __::pmr::string& str) noexcept
-        {
-            return std::string_view(str);
-        }
         /**
          * @description: Discard old ref and transfer. 
          * @param {type} 
