@@ -18,7 +18,7 @@ R"({
 	"author": "",
 	"url": "",
 	"license": "",
-	"copyright": ""
+	"copyright": "SaeruHikari@MIT"
 })";
 inline const char* __GetMetaData(void)
 {

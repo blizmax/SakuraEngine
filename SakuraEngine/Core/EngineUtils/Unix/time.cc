@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-02-09 16:02:00
- * @LastEditTime : 2020-02-09 17:00:40
- * @LastEditors  : SaeruHikari
+ * @LastEditTime: 2020-04-22 13:34:10
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /SakuraEngine/Core/EngineUtils/Unix/time.cc
  */

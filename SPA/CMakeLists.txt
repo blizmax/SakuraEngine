@@ -52,6 +52,8 @@ add_library(
     ${whereami_files}
 )
 
+target_link_libraries(SPA EASTL EABase)
+
 if(UNIX)
     target_link_libraries(SPA dl)
 endif()

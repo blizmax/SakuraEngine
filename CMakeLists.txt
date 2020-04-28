@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 
-
 #/home/saeruhikari/OpenLib/vcpkg/vcpkg install --triplet x64-linux eigen3 boost gtest spdlog glfw3 SDL2 fmt xxHash SDL2[vulkan]
 set(VCPKG_PKGS SDL2 SDL2[vulkan] freetype glm 
 tinyobjloader tinyobjloader[double]
@@ -41,6 +40,8 @@ find_package(EnTT CONFIG REQUIRED)
 #find_package(glfw3 CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
+find_package(EASTL CONFIG REQUIRED)
+find_package(EABase CONFIG REQUIRED)
 
 find_package(Vulkan REQUIRED VERSION 1.2.131.2) 
 if(Vulkan_FOUND)
@@ -66,7 +67,6 @@ if (CMAKE_BUILD_TYPE STREQUAL Debug)
 add_definitions(-D_DEBUG)
 endif ()
 
-
 if(MSVC)
     add_definitions(-D "SAKURA_COMPILER_MSVC")
     message(STATUS "MSVC Compiler cl.exe")
@@ -75,7 +75,7 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_definitions(-D "SAKURA_COMPILER_CLANG")
     message(STATUS "Use CLANG Compiler lang.exe")
     add_definitions(-msse4.2)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -stdlib=libc++ -m64 -fPIC -march=native -O3 -pthread -lpthread ${VAR_CONFIG_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wconstant-logical-operand -std=c++20 -stdlib=libc++ -m64 -fPIC -march=native -O3 -pthread -lpthread ${VAR_CONFIG_FLAGS}")
 else()
     add_definitions(-D "SAKURA_COMPILER_GCC")
     message(STATUS "Use GCC Compiler gcc.exe")
@@ -106,6 +106,8 @@ elseif(WIN32)
     message(STATUS "Platform WIN32")
     set(OS_WINDOWS 1)
 endif(UNIX)
+
+include(cmake/PluginBash.cmake)
 
 include_directories(Extern/include/)
 include_directories(Extern/include/DirectXMath/Inc/)

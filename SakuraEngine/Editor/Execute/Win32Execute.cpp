@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-24 13:24:40
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-21 00:26:45
+ * @LastEditTime: 2020-04-22 12:25:33
  */
 #include "Modules.generated.h"//include generated file in the root path
 #include "SPA/include/modulemanager.h"
@@ -19,7 +19,7 @@ int main(void)
 {
     auto mng = GetModuleManager();
 #ifndef _WIN32
-    mng->Mount("/Users/saeruhikari/Coding/SakuraEngine/build/macosx/x86_64");
+    mng->Mount("/Users/huangzheng/Coding/SakuraEngine/build");
 #elif defined(_WIN32)
     mng->Mount("D:\\Coding\\SakuraEngine\\build");
 #endif

@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-13 23:23:02
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-17 15:06:06
+ * @LastEditTime: 2020-04-22 12:26:08
  */
 #define API_EXPORTS
 #include "../include/modulemanager.h"
@@ -66,7 +66,7 @@ namespace Sakura::SPA
     #else
         prefix.append("/release"); 
     #endif
-        prefix.append("/lib").append(name);
+        prefix.append("/lib/lib").append(name);
     #if defined(DEBUG) || defined(_DEBUG)
         prefix.append("d");
     #endif

@@ -22,28 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-08 21:04:52
- * @LastEditTime: 2020-04-18 02:26:56
+ * @LastEditTime: 2020-04-22 12:36:21
  */
 #pragma once
 #include "../../GraphicsCommon/GraphicsObjects/GraphicsPipeline.h"
-#ifdef SAKURA_TARGET_PLATFORM_OSX
-#include <boost/container/pmr/string.hpp>
-#include <boost/container/pmr/vector.hpp>
-#include <boost/container/pmr/map.hpp>
-namespace Sakura::SPA
-{
-    namespace pmr
-    {
-        using boost::container::string;
-        using boost::container::vector;
-        using boost::container::map;
-    }
-}
-#else
-#include <memory_resource>
-#endif
 #include "RenderPassVk.h"
 #include "vulkan/vulkan.h"
+#include <unordered_map>
 
 using namespace Sakura::Graphics;
 namespace Sakura::Graphics::Vk
@@ -67,7 +52,7 @@ namespace Sakura::Graphics::Vk
         GraphicsPipelineVk(const GraphicsPipelineCreateInfo& info,
             const RenderPassVk& prog, const CGDVk& cgd);
     protected:
-        pmr::unordered_map<uint64, VkFramebuffer> fbs;
+        std::unordered_map<uint64, VkFramebuffer> fbs;
         const RenderPassVk& progress;
         VkPipelineLayout pipelineLayout;
         VkPipeline graphicsPipeline;

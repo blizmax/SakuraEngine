@@ -13,9 +13,9 @@ set(VAR_CONFIG_FLAGS " -D DEBUG")
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 
-#GTest
-enable_testing()
-add_subdirectory(DAGUnitTests)
+#GTest#
+#enable_testing()
+#add_subdirectory(DAGUnitTests)
 
 include_directories(
     ../Extern/include

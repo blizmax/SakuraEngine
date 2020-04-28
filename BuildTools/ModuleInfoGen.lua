@@ -24,7 +24,7 @@ function main(...)
     end
 
     if JsonFileModify == nil then
-        print("No meta.json in the dir "..arg[2].." of Plugin.")
+        print("No "..arg[1]..".json in the dir "..arg[2].." of Plugin.")
     else
         JsF = io.open(JsonFile, "r")
         jsonContent = JsF:read("*a")
@@ -48,9 +48,10 @@ R"(]]..jsonContent..")\";\n")
             io.close(HdrF)
         end
         ModuleMeta = json.decode(jsonContent)
+        print("Root "..arg[3])
+        GenHeader = io.open(arg[3].."/".."Modules.generated.h", "a") 
         if ModuleMeta["linking"] == "static" then
             -- include static module files
-            GenHeader = io.open(arg[3].."/".."Modules.generated.h", "a") 
             io.output(GenHeader)
             if bMainModule == true then
                 io.write([[
@@ -61,8 +62,8 @@ R"(]]..jsonContent..")\";\n")
             io.write([[
 #pragma once
 #include "]]..arg[2].."/"..ModuleMeta["name"]..".h\"\n")
-            io.close(GenHeader)
         end
+        io.close(GenHeader)
     end
 end
 
