@@ -7,6 +7,9 @@ LANGUAGES CXX
 
 add_subdirectory(CGD_Vulkan)
 #add_subdirectory(CGD_Direct3D12)
+if(APPLE)
+add_subdirectory(CGD_Metal)
+endif()
 add_subdirectory(CGD)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

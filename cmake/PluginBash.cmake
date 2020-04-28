@@ -5,9 +5,9 @@ endfunction()
 
 function(reflection_target arg)
 get_target_property(TargetIncludes ${ARGV0} INCLUDE_DIRECTORIES)
-    message(STATUS "DIR: ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include")
+    #message(STATUS "DIR: ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include")
     foreach(dir ${TargetIncludes})
-        message(STATUS "DIR: ${dir}")
+        #message(STATUS "DIR: ${dir}")
     endforeach()
     execute_process(COMMAND BuildTools/SReflCodeGen 
     
