@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-04-30 00:18:21
+ * @LastEditTime: 2020-04-30 02:12:02
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -94,7 +94,7 @@ namespace Sakura::Graphics
 
         virtual void Destroy() = 0;
 
-        virtual std::unique_ptr<Shader> CreateShader(
+        virtual Shader* CreateShader(
             const char*, std::size_t) = 0;
         virtual const char* CompileShader(const char*, std::size_t) = 0;
 

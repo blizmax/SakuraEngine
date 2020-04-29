@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-06 20:51:22
- * @LastEditTime: 2020-03-06 23:01:17
+ * @LastEditTime: 2020-04-30 02:12:34
  */
 #include "ShaderVk.h"
 #include "../CGD_Vulkan.h"
@@ -35,10 +35,10 @@ ShaderVk::~ShaderVk()
     vkDestroyShaderModule(device, shaderModule, nullptr);
 }
 
-std::unique_ptr<Shader> CGDVk::CreateShader(
+Shader* CGDVk::CreateShader(
     const char* data, std::size_t dataSize)
 {
-    auto shader = std::make_unique<ShaderVk>(entityVk.device);
+    auto shader = new ShaderVk(entityVk.device);
     VkShaderModuleCreateInfo createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     createInfo.codeSize = dataSize;
@@ -48,7 +48,7 @@ std::unique_ptr<Shader> CGDVk::CreateShader(
     {
         throw std::runtime_error("failed to create shader module!");
     }
-    return std::move(shader);
+    return shader;
 }
 
 const char* CGDVk::CompileShader(const char* src, std::size_t srcSize)

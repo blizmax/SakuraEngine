@@ -5,6 +5,8 @@ set(PLATFORM_SOURCES
     CommandObjects/CommandContextMtl.cpp
     CommandObjects/CommandQueueMtl.h
     CommandObjects/CommandQueueMtl.cpp
+    ResourceObjects/ShaderMtl.h
+    ResourceObjects/ShaderMtl.cpp
     mtlpp/mtlpp.hpp
     mtlpp/mtlpp.mm
 )

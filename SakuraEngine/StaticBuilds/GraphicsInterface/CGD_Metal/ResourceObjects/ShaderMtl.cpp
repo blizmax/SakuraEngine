@@ -21,42 +21,30 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-04-28 23:05:58
- * @LastEditTime: 2020-04-30 02:16:11
+ * @Date: 2020-04-30 01:54:35
+ * @LastEditTime: 2020-04-30 02:31:34
  */
-#pragma once
-#include "../GraphicsCommon/CGD.h"
-#include "mtlpp/mtlpp.hpp"
+#include "ShaderMtl.h"
+#include "../CGDMetal.hpp"
 
-namespace Sakura::Graphics::Mtl
+using namespace Sakura::Graphics::Mtl;
+
+ShaderMtl::ShaderMtl(mtlpp::Library library)
+    :shaderLib(library)
 {
-    class CommandQueueMtl;
-    class CommandContextMtl;
+    
 }
 
-namespace Sakura::Graphics::Mtl
+const void* ShaderMtl::GetFunction(const std::string& entryName)
 {
-    struct CGDEntityMtl
+    if(shaderFunctions.find(entryName) == shaderFunctions.end())
     {
-        ~CGDEntityMtl();
-        // MTL device
-        mtlpp::Device device;
-        CommandQueueMtl* graphicsQueue;
-        CommandQueueMtl* computeQueue;
-        CommandQueueMtl* blitQueue;
-    };
-
-    class CGDMtl 
-    {
-        DECLARE_LOGGER("CGDMetal")
-    public:
-        void Initialize(CGDInfo info);
-        void InitializeDevice(void* mainSurface);
-        CommandContext* CreateContext(const CommandQueue& queue,
-            bool bTransiant = true) const;
-        Shader* CreateShader(
-            const char* data, std::size_t dataSize);
-    private:
-        CGDEntityMtl entity;
-    };
+        mtlpp::Function func = shaderLib.NewFunction(entryName.c_str());
+        if(!func.Validate())
+        {
+            CGDMtl::debug_error("CGDMtl: Create Metal Shader Function Failed!");
+        }
+        shaderFunctions[entryName] = func;
+    }
+    return shaderFunctions[entryName].GetPtr();
 }

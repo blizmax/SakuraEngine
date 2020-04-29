@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-06 16:47:38
- * @LastEditTime: 2020-04-30 01:35:10
+ * @LastEditTime: 2020-04-30 02:27:59
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -30,6 +30,7 @@
 #include "Core/Containers/SString.h"
 #include "../ResourceObjects/Shader.h"
 #include "Format.h"
+#include <vector>
 #include "Flags.h"
 
 using namespace Sakura;
@@ -87,9 +88,40 @@ namespace Sakura::Graphics
 
     struct ShaderFunction
     {
+        ShaderFunction(ShaderStageFlags _stage,
+            Shader* _shader, const std::string& _entry)
+            : stage(_stage), shader(_shader), entry(_entry)
+        {
+            funcHandle = shader->GetFunction(_entry);
+        }
+        ShaderFunction()
+        {
+            
+        }
+        ~ShaderFunction()
+        {
+            
+        }
+        auto GetStage() const 
+        {
+            return stage;
+        }
+        auto GetShader() const
+        {
+            return shader;
+        }
+        auto GetEntry() const
+        {
+            return entry;
+        }
+    protected:
         ShaderStageFlags stage;
         Shader* shader = nullptr;
         std::string entry;
+        // For metal, this is called MTLFunction in MTLLibrary
+        // For vulkan, this handle keeps as nullptr
+        // For Direct3D12, this handle keeps as nullptr
+        const void* funcHandle = nullptr;
     };
 
     struct RasterizationStateCreateInfo

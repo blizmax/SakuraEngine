@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-04-30 00:18:00
+ * @LastEditTime: 2020-04-30 02:13:10
  */
 #pragma once
 #include "../GraphicsCommon/CGD.h"
@@ -82,7 +82,7 @@ namespace Sakura::Graphics::Vk
         const CGDEntityVk& GetCGDEntity() const {return entityVk;}
     public:
         // Implements: See ResourceObjects/ShaderVk.cpp
-        virtual std::unique_ptr<Shader> CreateShader(
+        [[nodiscard]] virtual Shader* CreateShader(
             const char*, std::size_t) override final;
         virtual const char* CompileShader(
             const char*, std::size_t) override final;

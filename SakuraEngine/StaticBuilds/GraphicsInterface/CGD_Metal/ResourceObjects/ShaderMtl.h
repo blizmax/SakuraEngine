@@ -21,42 +21,25 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-04-28 23:05:58
- * @LastEditTime: 2020-04-30 02:16:11
+ * @Date: 2020-04-30 01:54:22
+ * @LastEditTime: 2020-04-30 02:09:44
  */
 #pragma once
-#include "../GraphicsCommon/CGD.h"
-#include "mtlpp/mtlpp.hpp"
+#include "../../GraphicsCommon/ResourceObjects/Shader.h"
+#include "../../GraphicsCommon/Flags/GraphicsPipelineStates.h"
+#include "../mtlpp/mtlpp.hpp"
+#include <unordered_map>
 
 namespace Sakura::Graphics::Mtl
 {
-    class CommandQueueMtl;
-    class CommandContextMtl;
-}
-
-namespace Sakura::Graphics::Mtl
-{
-    struct CGDEntityMtl
+    using ShaderFunctions = std::vector<ShaderFunction>;
+    struct ShaderMtl final : public Shader
     {
-        ~CGDEntityMtl();
-        // MTL device
-        mtlpp::Device device;
-        CommandQueueMtl* graphicsQueue;
-        CommandQueueMtl* computeQueue;
-        CommandQueueMtl* blitQueue;
-    };
+        ShaderMtl(mtlpp::Library library);
 
-    class CGDMtl 
-    {
-        DECLARE_LOGGER("CGDMetal")
-    public:
-        void Initialize(CGDInfo info);
-        void InitializeDevice(void* mainSurface);
-        CommandContext* CreateContext(const CommandQueue& queue,
-            bool bTransiant = true) const;
-        Shader* CreateShader(
-            const char* data, std::size_t dataSize);
-    private:
-        CGDEntityMtl entity;
+        virtual const void* GetFunction(const std::string& entryName) final override;
+
+        mtlpp::Library shaderLib;
+        std::unordered_map<std::string, mtlpp::Function> shaderFunctions;
     };
 }

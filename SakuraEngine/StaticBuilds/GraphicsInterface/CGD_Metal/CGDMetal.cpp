@@ -22,11 +22,12 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:06:28
- * @LastEditTime: 2020-04-30 01:21:39
+ * @LastEditTime: 2020-04-30 02:24:38
  */
 #include "CGDMetal.hpp"
 #include <iostream>
 #include "CommandObjects/CommandQueueMtl.h"
+#include "ResourceObjects/ShaderMtl.h"
 
 using namespace Sakura::Graphics::Mtl;
 using namespace Sakura::Graphics;
@@ -58,9 +59,20 @@ void CGDMtl::InitializeDevice(void* mainSurface)
         entity.device.NewCommandQueue(), CommandQueueTypes::COMMAND_QUEUE_COPY);
 }
 
+Shader* CGDMtl::CreateShader(const char* data, std::size_t dataSize)
+{
+    mtlpp::Library library 
+        = entity.device.NewLibrary(data, mtlpp::CompileOptions(), nullptr);
+    if(!library.Validate())
+    {
+        CGDMtl::debug_error("CGDMtl: Create Metal Shader Failed!");
+    }
+    return new ShaderMtl(library);
+}
+
 CommandContext* CGDMtl::CreateContext(const CommandQueue& queue,
     bool bTransiant) const
 {
     CGDMtl::debug_info("CGDMtl: Create Context");
-
+    return nullptr;
 }

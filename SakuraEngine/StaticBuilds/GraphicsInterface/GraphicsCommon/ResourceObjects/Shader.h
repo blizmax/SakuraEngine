@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-06 16:50:13
- * @LastEditTime: 2020-03-18 08:10:13
+ * @LastEditTime: 2020-04-30 02:09:55
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -33,6 +33,10 @@ namespace Sakura::Graphics
     sinterface Shader
     {
         virtual ~Shader(){}
+        virtual const void* GetFunction(const std::string& entryName)
+        {
+            return nullptr;
+        }
     };
 
     enum ShaderType

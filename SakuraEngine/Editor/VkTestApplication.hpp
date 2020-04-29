@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-29 11:46:00
- * @LastEditTime: 2020-04-30 00:22:05
+ * @LastEditTime: 2020-04-30 02:23:57
  */
 #pragma once
 #define GLM_FORCE_RADIANS
@@ -181,17 +181,13 @@ private:
 		vs_srv.read(vs_bytes.data(), vs_bytes.size());
 		fs_srv.read(fs_bytes.data(), fs_bytes.size());
 		cs_avgfilter.read(cs_bytes.data(), cs_bytes.size());
-		vertshader = cgd->CreateShader(vs_bytes.data(), vs_bytes.size());
-		fragshader = cgd->CreateShader(fs_bytes.data(), fs_bytes.size());
-        computeshader = cgd->CreateShader(cs_bytes.data(), cs_bytes.size());
+		vertshader.reset(cgd->CreateShader(vs_bytes.data(), vs_bytes.size()));
+		fragshader.reset(cgd->CreateShader(fs_bytes.data(), fs_bytes.size()));
+        computeshader.reset(cgd->CreateShader(cs_bytes.data(), cs_bytes.size()));
         // shader stages
-		vsStage.stage = ShaderStageFlags::VertexStage;
-		vsStage.shader = vertshader.get(); vsStage.entry = "main";
-		fsStage.stage = ShaderStageFlags::PixelStage;
-		fsStage.shader = fragshader.get(); fsStage.entry = "main";
-        
-        csStage.stage = ShaderStageFlags::ComputeStage;
-        csStage.shader = computeshader.get(); csStage.entry = "main";
+		vsStage = ShaderFunction(ShaderStageFlags::VertexStage, vertshader.get(), "main");
+        fsStage = ShaderFunction(ShaderStageFlags::PixelStage, fragshader.get(), "main");
+        csStage = ShaderFunction(ShaderStageFlags::ComputeStage, computeshader.get(), "main");
     }
 
     void ResizeWindow(uint32 width, uint32 height)

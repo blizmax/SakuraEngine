@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-07 11:13:03
- * @LastEditTime: 2020-04-30 01:34:49
+ * @LastEditTime: 2020-04-30 01:46:26
  */
 #pragma once
 #include "SakuraEngine/Core/CoreMinimal/CoreMinimal.h"
@@ -164,9 +164,9 @@ namespace Sakura::Graphics::Vk
 	{
 		VkPipelineShaderStageCreateInfo stage = {};
         stage.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-        stage.stage = Transfer(info.stage);
-        stage.module = ((ShaderVk*)info.shader)->shaderModule;
-        stage.pName = info.entry.c_str();
+        stage.stage = Transfer(info.GetStage());
+        stage.module = ((ShaderVk*)info.GetShader())->shaderModule;
+        stage.pName = info.GetEntry().c_str();
         return stage;
 	}
 

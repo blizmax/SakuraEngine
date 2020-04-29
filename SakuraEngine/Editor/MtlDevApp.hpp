@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 11:33:30
- * @LastEditTime: 2020-04-29 13:35:59
+ * @LastEditTime: 2020-04-30 02:32:05
  */
 #pragma once
 extern "C"
@@ -35,6 +35,22 @@ extern "C"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/GraphicsCommon/CGD.h"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/CGD_Metal/CGDMetal.hpp"
 
+const char shadersSrc[] = R"""(
+    #include <metal_stdlib>
+    using namespace metal;
+
+    vertex float4 vertFunc(
+        const device packed_float3* vertexArray [[buffer(0)]],
+        unsigned int vID[[vertex_id]])
+    {
+        return float4(vertexArray[vID], 1.0);
+    }
+
+    fragment half4 fragFunc()
+    {
+        return half4(1.0, 0.0, 0.0, 1.0);
+    }
+)""";
 class MtlDevApp
 {
 public:
@@ -43,7 +59,12 @@ public:
         Sakura::Graphics::CGDInfo cgd_info;
         cgd = std::make_unique<Sakura::Graphics::Mtl::CGDMtl>();
         cgd->Initialize(cgd_info);
+        cgd->InitializeDevice(nullptr);
+        shader.reset(cgd->CreateShader(shadersSrc, strlen(shadersSrc)));
+        vertFunction 
+            = ShaderFunction(ShaderStageFlags::VertexStage, shader.get(), "vertFunc");
     };
-
+    ShaderFunction vertFunction;
     std::unique_ptr<Sakura::Graphics::Mtl::CGDMtl> cgd;
+    std::unique_ptr<Sakura::Graphics::Shader> shader;
 };
