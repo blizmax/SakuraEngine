@@ -9,7 +9,7 @@ namespace Sakura::Graphics
 	struct ComputePipelineCreateInfo
 	{
 		const RootSignature* rootSignature = nullptr;
-		ShaderStageCreateInfo shaderStage;
+		ShaderFunction shaderStage;
 	};
 	sinterface ComputePipeline
 	{

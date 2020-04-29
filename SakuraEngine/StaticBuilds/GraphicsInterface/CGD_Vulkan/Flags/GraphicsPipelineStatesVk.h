@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-07 11:13:03
- * @LastEditTime: 2020-03-30 00:52:50
+ * @LastEditTime: 2020-04-30 01:34:49
  */
 #pragma once
 #include "SakuraEngine/Core/CoreMinimal/CoreMinimal.h"
@@ -160,7 +160,7 @@ namespace Sakura::Graphics::Vk
     }
 
 	sinline static VkPipelineShaderStageCreateInfo Transfer(
-        const ShaderStageCreateInfo& info)
+        const ShaderFunction& info)
 	{
 		VkPipelineShaderStageCreateInfo stage = {};
         stage.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;

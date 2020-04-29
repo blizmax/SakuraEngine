@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-06 16:47:38
- * @LastEditTime: 2020-04-18 03:01:04
+ * @LastEditTime: 2020-04-30 01:35:10
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -85,7 +85,7 @@ namespace Sakura::Graphics
         float maxDepthBounds;
     };
 
-    struct ShaderStageCreateInfo
+    struct ShaderFunction
     {
         ShaderStageFlags stage;
         Shader* shader = nullptr;
@@ -166,15 +166,15 @@ namespace Sakura::Graphics
         ColorBlendStateCreateInfo colorBlendStateCreateInfo;
 		const RootSignature* rootSignature = nullptr;
 
-        template<typename _ShaderStageCreateInfo>
-        sinline void PushShaderStage(_ShaderStageCreateInfo&& shaderStage)
+        template<typename _ShaderFunction>
+        sinline void PushShaderStage(_ShaderFunction&& shaderStage)
         {
             shaderStages.push_back(shaderStage);
         }
 
-        template<typename _ShaderStageCreateInfo, typename... Ts>
+        template<typename _ShaderFunction, typename... Ts>
         sinline void PushShaderStage(
-            _ShaderStageCreateInfo&& shaderStage, Ts&&... shaderStages)
+            _ShaderFunction&& shaderStage, Ts&&... shaderStages)
         {
             PushShaderStage(shaderStage);
             PushShaderStage(shaderStages...);
@@ -257,6 +257,6 @@ namespace Sakura::Graphics
                 AddVertexBinding(bindings[i]);
 			}
 		}
-		std::vector<ShaderStageCreateInfo> shaderStages;
+		std::vector<ShaderFunction> shaderStages;
     };
 }

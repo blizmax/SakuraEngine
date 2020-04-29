@@ -584,7 +584,7 @@ private:
     std::unique_ptr<GpuTexture> depth, texture, textureTarget;
     std::unique_ptr<ResourceView> depthView, textureView, textureTargetView;
 
-    ShaderStageCreateInfo vsStage, fsStage, csStage;
+    ShaderFunction vsStage, fsStage, csStage;
     std::unique_ptr<Shader> vertshader, fragshader, computeshader;
     std::unique_ptr<GraphicsPipeline> Pipeline;
     std::unique_ptr<ComputePipeline> compPipeline;
