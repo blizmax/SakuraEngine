@@ -21,21 +21,14 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-04-29 01:38:54
- * @LastEditTime: 2020-04-29 01:41:45
+ * @Date: 2020-04-29 01:39:13
+ * @LastEditTime: 2020-04-29 12:54:03
  */
-#pragma once
-#include "../../GraphicsCommon/CommandObjects/CommandContext.h"
-#include <Metal/Metal.h>
+#include "CommandContextMtl.h"
 
-namespace Sakura::Graphics::Mtl
+using namespace Sakura::Graphics::Mtl;
+
+void CommandContextMtl::Begin() 
 {
-    class CommandContextMtl : simplements CommandContext
-    {
-    public:
-        virtual void Begin() override final;
-
-    private:
-        id<MTLCommandBuffer> m_mtl_cmd_buffer = nil;
-    };
+    
 }

@@ -22,14 +22,11 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-29 11:46:00
- * @LastEditTime: 2020-04-18 02:59:18
+ * @LastEditTime: 2020-04-29 11:33:07
  */
 #pragma once
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 #include "SakuraEngine/StaticBuilds/PixelOperators/ImageUtils.h"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/GraphicsCommon/CGD.h"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/CGD_Vulkan.h"
@@ -41,44 +38,15 @@ extern "C"
 	#undef main
 }
 #include "SakuraEngine/Core/Core.h"
-#include "vulkan/vulkan.h"
-#include "Extern/include/SDL2Tools/SDL2Vk.hpp"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/Flags/FormatVk.h"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/Flags/GraphicsPipelineStatesVk.h"
 #include "SakuraEngine/StaticBuilds/TaskSystem/TaskSystem.h"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/GraphicsObjects/FenceVk.h"
 #include "SakuraEngine/StaticBuilds/ImGuiProfiler/ImGuiProfiler.hpp"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/GraphicsCommon/GraphicsObjects/ComputePipeline.h"
-#include "SakuraEngine/StaticBuilds/RenderGraph/RenderGraph.h"
+
 using namespace Sakura;
 using namespace Sakura::Graphics::Vk;
-
-#if defined(CONFINFO_PLATFORM_LINUX) 
-#elif defined(CONFINFO_PLATFORM_MACOS)
-Sakura::fs::file vs_srv
-    ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVVertex.spv",
-        'r');  
-    Sakura::fs::file fs_srv
-    ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVPixel.spv",
-        'r');
-    Sakura::fs::file cs_avgfilter
-	("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\Compute\\avgfiltering.comp.spv",
-		'r');
-    const std::string texPath =
-        "D:\\Coding\\SakuraEngine\\SakuraTestProject\\textures\\CGBull.jpg";
-#elif defined(CONFINFO_PLATFORM_WIN32)
-    Sakura::fs::file vs_srv
-    ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVVertex.spv",
-        'r');  
-    Sakura::fs::file fs_srv
-    ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVPixel.spv",
-        'r');
-    Sakura::fs::file cs_avgfilter
-	("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\Compute\\avgfiltering.comp.spv",
-		'r');
-    const std::string texPath =
-        "D:\\Coding\\SakuraEngine\\SakuraTestProject\\textures\\CGBull.jpg";
-#endif
 
 struct VertexData
 {
@@ -138,7 +106,7 @@ struct UniformBufferObject
     alignas(16) Matrix4x4 proj;
 };
 
-class RenderGraphTestApplication
+class VkTestApplication
 {
 public:
     void run()
@@ -335,10 +303,6 @@ private:
 
     void createBuffer()
     {
-        int a = 5;
-        std::cout << std::endl << &a << std::endl; 
-        int&& b = std::move(a);
-        std::cout << std::endl << &b << "  " << a << std::endl; 
         auto vbsize = sizeof(VertexData) * vertices.size();
         auto ibsize = sizeof(uint32_t) * indices.size();
         vertexBuffer.reset(cgd->CreateGpuBuffer(vbsize,
@@ -375,7 +339,7 @@ private:
         createTexture();
         createDepth();
     }
-    using GraphPassBuilder = Sakura::RenderGraph::GraphPassBuilder;
+
     void createRootSignature()
     {
         RootSignatureCreateInfo info = {};
@@ -392,18 +356,10 @@ private:
         samplerInfo.maxLod = 15;
         samplerInfo.mipLodBias = 0;
         info.PushStaticSampler(samplerInfo);
-        info.PushSignatureSlot(slots);
+        info.paramSlots[0] = slots;
         rootSignature.reset(cgd->CreateRootSignature(info));
         cbvArgument.reset(rootSignature->
             CreateArgument(RootParameterSet::RootParameterPerObject));
-
-        GraphPassBuilder builder;
-        builder.AddStaticSampler(samplerInfo);
-        builder.AddParameter(
-            GraphPassBuilder::ShaderParameter<UniformBufferSlot>(),
-            GraphPassBuilder::ShaderParameter<SamplerSlot>(),
-            GraphPassBuilder::ShaderParameter<SampledImageSlot>());
-
 
         // Compute Pass RootSig
         RootSignatureCreateInfo compInfo = {};
@@ -412,7 +368,7 @@ private:
         slots[0].stageFlags = ShaderStageFlags::ComputeStage;
 		slots[1].type = SignatureSlotType::StorageImageSlot;
 		slots[1].stageFlags = ShaderStageFlags::ComputeStage;
-        compInfo.PushSignatureSlot(slots);
+        compInfo.paramSlots[0] = slots;
         compRootSignature.reset(cgd->CreateRootSignature(compInfo));
 		compArgument.reset(compRootSignature->
             CreateArgument(RootParameterSet::RootParameterPerObject));

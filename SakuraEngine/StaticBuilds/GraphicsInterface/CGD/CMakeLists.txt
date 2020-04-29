@@ -6,4 +6,4 @@ add_library(CGD
 CGD.cpp 
 ../GraphicsCommon/CGD.h)
 
-target_link_libraries(CGD CGD_Vulkan)
+target_link_libraries(CGD CGD_Vulkan CGDMetal)

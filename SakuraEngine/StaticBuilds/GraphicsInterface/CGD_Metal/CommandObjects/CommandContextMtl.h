@@ -21,7 +21,20 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-04-28 23:05:58
- * @LastEditTime: 2020-04-29 01:40:11
+ * @Date: 2020-04-29 01:38:54
+ * @LastEditTime: 2020-04-29 12:52:47
  */
 #pragma once
+#include "../../GraphicsCommon/CommandObjects/CommandContext.h"
+
+namespace Sakura::Graphics::Mtl
+{
+    class CommandContextMtl : simplements CommandContext
+    {
+    public:
+        virtual void Begin() override final;
+
+    private:
+        
+    };
+}
