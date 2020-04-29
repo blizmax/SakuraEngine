@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 01:38:54
- * @LastEditTime: 2020-04-29 23:52:15
+ * @LastEditTime: 2020-04-30 01:06:16
  */
 #pragma once
 #include "../../GraphicsCommon/CommandObjects/CommandContext.h"
@@ -53,9 +53,36 @@ namespace Sakura::Graphics::Mtl
     public:
         virtual void Begin() override final;
 
+        virtual void End() override final;
+
+        virtual void BeginRenderPass(
+            GraphicsPipeline* gp, const RenderTargetSet& rts) override final;
+
+        virtual void EndRenderPass() override final;
+
+        virtual void BeginComputePass(ComputePipeline* gp) override final;
+
+        virtual void DispatchCompute(uint32 groupCountX, 
+            uint32 groupCountY, uint32 groupCountZ) override final;
+
+        virtual void Draw(uint32 vertexCount, uint32 instanceCount,
+            uint32 firstVertex, uint32 firstInstance) override final;
+        
+        virtual void DrawIndexed(const uint32 indicesCount,
+            const uint32 instanceCount) override final;
+
+        virtual void BindVertexBuffer(const GpuBuffer& vb) override final;
+
+        virtual void BindIndexBuffer(const GpuBuffer& ib,
+            const IndexBufferStride stride = IndexBufferStride::IndexBufferUINT32) override final;
+        
+        virtual void BindRootParameters(const PipelineBindPoint bindPoint,
+            const RootParameter** arguments, uint32 argumentNum) final override;
+
     private:
-        SpecifiedEncoder encoders;
+        std::unique_ptr<SpecifiedEncoder> encoderHeader;
         CommandBuffersMtl commandBuffers;
+        SpecifiedEncoder* cursor = nullptr;
     };
 
 }
