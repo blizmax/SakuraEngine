@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-03 10:41:13
- * @LastEditTime: 2020-04-18 02:31:58
+ * @LastEditTime: 2020-04-30 00:07:34
  */
 #include "CommandQueueVk.h"
 #include "CommandContextVk.h"
@@ -32,10 +32,11 @@
 using namespace Sakura::Graphics;
 using namespace Sakura::Graphics::Vk;
 
-CommandQueueVk::CommandQueueVk(const CGDVk& _cgd)
-    :cgd(_cgd)
+CommandQueueVk::CommandQueueVk(const CGDVk& _cgd, 
+    std::uint32_t _fIndex, CommandQueueTypes _type)
+    :cgd(_cgd), queueFramilyIndex(_fIndex)
 {
-
+    type = _type;
 }
 
 void CommandQueueVk::Submit(CommandContext* commandContext,

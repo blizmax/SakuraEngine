@@ -22,11 +22,18 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:05:58
- * @LastEditTime: 2020-04-29 12:55:54
+ * @LastEditTime: 2020-04-30 00:55:41
  */
 #pragma once
 #include "../GraphicsCommon/CGD.h"
-#include "../mtlpp/mtlpp.hpp"
+#include "CommandObjects/CommandQueueMtl.h"
+#include "mtlpp/mtlpp.hpp"
+
+namespace Sakura::Graphics::Mtl
+{
+    class CommandQueueMtl;
+    class CommandContextMtl;
+}
 
 namespace Sakura::Graphics::Mtl
 {
@@ -34,12 +41,19 @@ namespace Sakura::Graphics::Mtl
     {
         // MTL device
         mtlpp::Device device;
+        std::unique_ptr<CommandQueueMtl> graphicsQueue;
+        std::unique_ptr<CommandQueueMtl> computeQueue;
+        std::unique_ptr<CommandQueueMtl> blitQueue;
     };
 
-    class CGDMtl final 
+    class CGDMtl 
     {
         DECLARE_LOGGER("CGDMetal")
+    public:
         void Initialize(CGDInfo info);
+        void InitializeDevice(void* mainSurface);
+        CommandContext* CreateContext(const CommandQueue& queue,
+            bool bTransiant = true) const;
 
     private:
         CGDEntityMtl entity;

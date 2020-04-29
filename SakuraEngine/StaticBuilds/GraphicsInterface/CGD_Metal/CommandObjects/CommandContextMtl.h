@@ -22,19 +22,40 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 01:38:54
- * @LastEditTime: 2020-04-29 12:52:47
+ * @LastEditTime: 2020-04-29 23:52:15
  */
 #pragma once
 #include "../../GraphicsCommon/CommandObjects/CommandContext.h"
+#include "../mtlpp/mtlpp.hpp"
 
 namespace Sakura::Graphics::Mtl
 {
+    struct SpecifiedEncoder
+    {
+        ~SpecifiedEncoder()
+        {
+            next.reset();
+            // !Warning: to keep the order of encoders' destructiion,
+            // please add extra works below next's reset.
+        }
+        void SpwanNext(ECommandType cmdType)
+        {
+            
+        }
+        std::unique_ptr<mtlpp::CommandEncoder> encoder;
+        ECommandType cmdType;
+        std::unique_ptr<SpecifiedEncoder> next;
+    };
+
+    using CommandBuffersMtl = mtlpp::CommandBuffer;
     class CommandContextMtl : simplements CommandContext
     {
     public:
         virtual void Begin() override final;
 
     private:
-        
+        SpecifiedEncoder encoders;
+        CommandBuffersMtl commandBuffers;
     };
+
 }

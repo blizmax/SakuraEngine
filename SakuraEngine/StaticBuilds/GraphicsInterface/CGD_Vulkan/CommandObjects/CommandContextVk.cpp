@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-11 01:25:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-29 19:48:01
+ * @LastEditTime: 2020-04-30 00:15:36
  */
 #include "../../GraphicsCommon/CommandObjects/CommandContext.h"
 #include "../CGD_Vulkan.h"
@@ -25,9 +25,11 @@
 using namespace Sakura::Graphics;
 using namespace Sakura::Graphics::Vk;
 
-CommandContext* CGDVk::AllocateContext(ECommandType type, bool bTransiant)
+CommandContext* CGDVk::AllocateContext(const CommandQueue& queue,
+    bool bTransiant)
 {
     std::lock_guard<std::mutex> LockGurad(contextAllocationMutex);
+    CommandQueueTypes type = queue.GetType();
 #ifdef PROFILING_POOL
     for (auto i = 0; i < contextPools[type].size(); i++)
     {
@@ -46,16 +48,18 @@ CommandContext* CGDVk::AllocateContext(ECommandType type, bool bTransiant)
             return res;
         }
     }
-    CommandContext* newContext = new CommandContextVk(*this, type, bTransiant);
+    CommandContext* newContext = new CommandContextVk(*this, 
+        (ECommandType)queue.GetType(), bTransiant);
     auto result = std::unique_ptr<CommandContext>(newContext);
     auto ptr = result.get();
     contextPools[type].push_back(std::move(result));
     return ptr;
 }
 
-CommandContext* CGDVk::CreateContext(ECommandType type, bool bTransiant) const
+CommandContext* CGDVk::CreateContext(const CommandQueue& queue, bool bTransiant) const
 {
-    return new CommandContextVk(*this, type, bTransiant);
+    return new CommandContextVk(*this,
+        (ECommandType)queue.GetType(), bTransiant);
 }
 
 void CGDVk::FreeAllContexts(ECommandType type)

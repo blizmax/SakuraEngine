@@ -2341,7 +2341,9 @@ namespace ns
         m_ptr(handle.ptr)
     {
         if (m_ptr)
+        {
             CFRetain(m_ptr);
+        }
     }
 
     Object::Object(const Object& rhs) :

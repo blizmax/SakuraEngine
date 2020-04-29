@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-04-01 23:25:06
+ * @LastEditTime: 2020-04-30 00:18:00
  */
 #pragma once
 #include "../GraphicsCommon/CGD.h"
@@ -64,6 +64,8 @@ namespace Sakura::Graphics::Vk
     public:
         CGDVk() = default;
         virtual void Destroy() override final; 
+        // Create Physical Device, Logical Device, AsyncQueues
+        // memory allocator & pipelinecache.
         virtual void InitializeDevice(void* mainSurface) override final;
         // Vulkan functions
         virtual void Initialize(CGDInfo info) override final;
@@ -75,7 +77,7 @@ namespace Sakura::Graphics::Vk
         virtual CommandQueue* GetComputeQueue() const override final;
         virtual CommandQueue* GetCopyQueue() const override final;
         [[nodiscard]] virtual CommandQueue*
-            AllocQueue(ECommandType type) const override final;
+            AllocQueue(CommandQueueTypes type) const override final;
         const auto GetVkInstance() const {return entityVk.instance;}
         const CGDEntityVk& GetCGDEntity() const {return entityVk;}
     public:
@@ -104,9 +106,9 @@ namespace Sakura::Graphics::Vk
     public:
     // Implements: See CommandObjects/CommandContextVk.cpp
         virtual CommandContext* AllocateContext(
-            ECommandType type, bool bTransiant = true) override final;
+            const CommandQueue& queue, bool bTransiant = true) override final;
         [[nodiscard]] virtual CommandContext* CreateContext(
-            ECommandType type, bool bTransiant = true) const override final;
+            const CommandQueue& queue, bool bTransiant = true) const override final;
         virtual void FreeContext(CommandContext* context) override final;
         virtual void FreeAllContexts(ECommandType typeToDestroy) override final;
     public:

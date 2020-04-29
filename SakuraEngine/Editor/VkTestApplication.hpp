@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-29 11:46:00
- * @LastEditTime: 2020-04-22 12:51:05
+ * @LastEditTime: 2020-04-30 00:22:05
  */
 #pragma once
 #define GLM_FORCE_RADIANS
@@ -257,7 +257,8 @@ private:
         TextureSubresourceRange textureSubresource;
         textureSubresource.mipLevels = mipLevels;
         std::unique_ptr<CommandContext> context;
-        context.reset(cgd->CreateContext(ECommandType::CommandContext_Graphics));
+        context.reset(cgd->CreateContext(*cgd->GetGraphicsQueue(),
+            ECommandType::CommandContext_Graphics));
         context->Begin();
         context->ResourceBarrier(*texture.get(),
             ImageLayout::Unknown, ImageLayout::TransferDstOptimal,
@@ -305,7 +306,8 @@ private:
         compAttachments[1].dstBinding = 1;
         compArgument->UpdateArgument(compAttachments, 2);
 
-        context.reset(cgd->CreateContext(ECommandType::CommandContext_Graphics));
+        context.reset(cgd->CreateContext(*cgd->GetGraphicsQueue(),
+            ECommandType::CommandContext_Graphics));
         context->Begin();
         context->BeginComputePass(compPipeline.get());
         const auto* cmparg = compArgument.get();
@@ -356,7 +358,8 @@ private:
             });
 
         std::unique_ptr<CommandContext> context; 
-        context.reset(cgd->CreateContext(ECommandType::CommandContext_Copy));
+        context.reset(cgd->CreateContext(*cgd->GetCopyQueue(),
+            ECommandType::CommandContext_Copy));
         context->Begin();
         context->CopyResource(*uploadBufferVB.get(), *vertexBuffer.get(),vbsize);
         context->CopyResource(*uploadBufferIB.get(), *indexBuffer.get(), ibsize);
@@ -490,8 +493,10 @@ private:
         RenderTarget rts[2] = {rt, ds};
         RenderTargetSet rtset{(RenderTarget*)rts, 2};
 
-        context.reset(cgd->CreateContext(ECommandType::CommandContext_Graphics));
-		imContext.reset(cgd->CreateContext(ECommandType::CommandContext_Graphics));
+        context.reset(cgd->CreateContext(
+            *cgd->GetGraphicsQueue(), ECommandType::CommandContext_Graphics));
+		imContext.reset(cgd->CreateContext(
+            *cgd->GetGraphicsQueue(), ECommandType::CommandContext_Graphics));
         
         updateUniformBuffer();
         

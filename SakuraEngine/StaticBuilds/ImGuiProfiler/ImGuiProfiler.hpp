@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-16 17:02:13
- * @LastEditTime: 2020-04-18 02:48:28
+ * @LastEditTime: 2020-04-30 00:23:45
  */
 #pragma once
 #ifdef SAKURA_TARGET_PLATFORM_OSX
@@ -265,7 +265,8 @@ namespace Sakura::Graphics::Im
             {
                 // Use any command queue
                 auto ctx =
-                    ((CGD&)gfxDevice).AllocateContext(ECommandType::CommandContext_Graphics);
+                    ((CGD&)gfxDevice).AllocateContext(*gfxDevice.GetGraphicsQueue(),
+                        ECommandType::CommandContext_Graphics);
                 ctx->Reset();
                 VkCommandBuffer command_buffer =
                     ((const CommandContextVk*)ctx)->commandBuffer;

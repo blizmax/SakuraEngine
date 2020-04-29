@@ -107,7 +107,13 @@ namespace ns
         inline const void* GetPtr() const { return m_ptr; }
 
         inline operator bool() const { return m_ptr != nullptr; }
-
+        inline bool Validate() const
+        {
+#if MTLPP_CONFIG_VALIDATE
+            assert(m_ptr);
+#endif
+            return m_ptr != nullptr;
+        }
     protected:
         Object();
         Object(const Handle& handle);
@@ -121,13 +127,6 @@ namespace ns
 #if MTLPP_CONFIG_RVALUE_REFERENCES
         Object& operator=(Object&& rhs);
 #endif
-
-        inline void Validate() const
-        {
-#if MTLPP_CONFIG_VALIDATE
-            assert(m_ptr);
-#endif
-        }
 
         const void* m_ptr = nullptr;
     };

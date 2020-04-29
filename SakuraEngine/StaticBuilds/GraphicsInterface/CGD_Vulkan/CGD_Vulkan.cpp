@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-04-18 02:32:18
+ * @LastEditTime: 2020-04-30 00:17:36
  */
 #define API_EXPORTS
 #include "CGD_Vulkan.h"
@@ -212,25 +212,25 @@ void CGDVk::WaitIdle() const
     vkDeviceWaitIdle(entityVk.device);
 }
 
-CommandQueue* CGDVk::AllocQueue(ECommandType type) const 
+CommandQueue* CGDVk::AllocQueue(CommandQueueTypes type) const 
 {
-    auto newQueue = new CommandQueueVk(*this);
     uint32 family; 
     switch (type)
     {
-    case ECommandType::CommandContext_Compute:
+    case CommandQueueTypes::COMMAND_QUEUE_COMPUTE:
         family = queueFamilyIndices.computeFamily.value();
         break;
-    case ECommandType::CommandContext_Copy:
+    case CommandQueueTypes::COMMAND_QUEUE_COPY:
         family = queueFamilyIndices.copyFamily.value();
         break;
-    case ECommandType::CommandContext_Graphics:
+    case CommandQueueTypes::COMMAND_QUEUE_GRAPHICS:
         family = queueFamilyIndices.graphicsFamily.value();
         break;
     default:
         CGDVk::error("AllocQueue: type not supported!");
         break;
     }
+    auto newQueue = new CommandQueueVk(*this, family, type);
     vkGetDeviceQueue(entityVk.device,
         family,
         0, &newQueue->vkQueue);
@@ -471,9 +471,12 @@ void CGDVk::InitializeDevice(void* mainSurface)
     }
 
     // Create Queue
-    auto graphicsQueue = new CommandQueueVk(*this);
-    auto computeQueue = new CommandQueueVk(*this);
-    auto copyQueue = new CommandQueueVk(*this);
+    auto graphicsQueue = new CommandQueueVk(*this,
+        indices.graphicsFamily.value(), CommandQueueTypes::COMMAND_QUEUE_GRAPHICS);
+    auto computeQueue = new CommandQueueVk(*this,
+        indices.computeFamily.value(), CommandQueueTypes::COMMAND_QUEUE_COMPUTE);
+    auto copyQueue = new CommandQueueVk(*this,
+        indices.copyFamily.value(), CommandQueueTypes::COMMAND_QUEUE_COPY);
     vkGetDeviceQueue(entityVk.device, indices.graphicsFamily.value(),
         0, &graphicsQueue->vkQueue);
     vkGetDeviceQueue(entityVk.device, indices.presentFamily.value(),

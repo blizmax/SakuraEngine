@@ -22,12 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-04-18 02:15:20
+ * @LastEditTime: 2020-04-30 00:18:21
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
 #include "Core/CoreMinimal/SDefination.h"
 #include "CommandObjects/CommandContext.h"
+#include "CommandObjects/CommandQueue.h"
 #include "SakuraEngine/Core/EngineUtils/log.h"
 #include "Flags/CommonFeatures.h"
 #include "ResourceObjects/Shader.h"
@@ -109,9 +110,9 @@ namespace Sakura::Graphics
             
         // Create & Destroy Command Contexts
         virtual CommandContext* CreateContext(
-            ECommandType type, bool bTransiant = true) const = 0;
+            const CommandQueue& queue, bool bTransiant = true) const = 0;
         virtual CommandContext* AllocateContext(
-            ECommandType type, bool bTransiant = true) = 0;
+            const CommandQueue& queue, bool bTransiant = true) = 0;
         virtual void FreeContext(CommandContext* context) = 0;
         virtual void FreeAllContexts(ECommandType typeToDestroy) = 0;
 
@@ -127,7 +128,7 @@ namespace Sakura::Graphics
         virtual CommandQueue* GetComputeQueue(void) const = 0;
         virtual CommandQueue* GetCopyQueue(void) const = 0;
         
-        [[nodiscard]] virtual CommandQueue* AllocQueue(ECommandType type) const = 0;
+        [[nodiscard]] virtual CommandQueue* AllocQueue(CommandQueueTypes type) const = 0;
 
         [[nodiscard]] virtual GpuBuffer* CreateGpuResource(
             const BufferCreateInfo&) const = 0;
@@ -160,9 +161,9 @@ namespace Sakura::Graphics
         const uint64 contextNum() const {return contextPools[0].size();}
     protected:
         std::vector<std::unique_ptr<CommandContext>> 
-            contextPools[ECommandType::CommandContext_Count];
+            contextPools[CommandQueueTypes::CommandQueueTypeCount];
         std::queue<CommandContext*> 
-            availableContexts[ECommandType::CommandContext_Count];
+            availableContexts[CommandQueueTypes::CommandQueueTypeCount];
         std::mutex contextAllocationMutex;
     };
 }

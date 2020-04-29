@@ -21,7 +21,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-02 18:44:11
- * @LastEditTime: 2020-03-21 22:30:38
+ * @LastEditTime: 2020-04-30 00:51:03
  */
 #pragma once
 #include "SakuraEngine/Core/CoreMinimal/CoreMinimal.h"
@@ -38,18 +38,29 @@ namespace Sakura::Graphics
     {
         COMMAND_QUEUE_GRAPHICS,
         COMMAND_QUEUE_COMPUTE,
-        COMMAND_QUEUE_COPY
+        COMMAND_QUEUE_COPY,
+        CommandQueueTypeCount
     };
 
     sinterface CommandQueue
     {
+        CommandQueue(CommandQueueTypes _type)
+            :type(_type)
+        {
+            
+        }
         virtual void Submit(CommandContext* commandContext) = 0;
         virtual void Submit(CommandContext* commandContext,
             Fence* fence, uint64 until, uint64 to) = 0;
         virtual void Submit(Fence* fence, uint64 completedValue) = 0;
         virtual void Wait(Fence* fence, uint64 until) = 0;
         virtual void WaitIdle() = 0;
+        CommandQueueTypes GetType() const
+        {
+            return type;
+        }
     protected:
         CommandQueue() = default;
+        CommandQueueTypes type;
     };
 }

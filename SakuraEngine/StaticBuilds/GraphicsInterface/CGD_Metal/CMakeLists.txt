@@ -3,6 +3,8 @@ set(PLATFORM_SOURCES
     CGDMetal.cpp
     CommandObjects/CommandContextMtl.h
     CommandObjects/CommandContextMtl.cpp
+    CommandObjects/CommandQueueMtl.h
+    CommandObjects/CommandQueueMtl.cpp
     mtlpp/mtlpp.hpp
     mtlpp/mtlpp.mm
 )

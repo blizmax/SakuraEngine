@@ -21,38 +21,45 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-04-28 23:06:28
- * @LastEditTime: 2020-04-30 00:55:29
+ * @Date: 2020-04-29 22:41:14
+ * @LastEditTime: 2020-04-30 00:57:27
  */
-#include "CGDMetal.hpp"
-#include <iostream>
+#include "CommandQueueMtl.h"
+#include "../CGDMetal.hpp"
 
 using namespace Sakura::Graphics::Mtl;
 using namespace Sakura::Graphics;
 
-void CGDMtl::Initialize(CGDInfo info)
+CommandQueueMtl::CommandQueueMtl(mtlpp::CommandQueue _queue,
+    CommandQueueTypes _type)
+        :queue(_queue), CommandQueue(_type)
 {
-    CGDMtl::debug_info("CGDMtl: Create Device");
-    entity.device = mtlpp::Device::CreateSystemDefaultDevice();
-    if(!entity.device.Validate())
-    {
-        CGDMtl::debug_error("CGDMtl: Create Metal Default Device Failed!");
-    }
+    if(!_queue.Validate())
+        CGDMtl::debug_error("CGDMtl: Create Metal Queue Failed!");
 }
 
-void CGDMtl::InitializeDevice(void* mainSurface)
+void CommandQueueMtl::Submit(CommandContext* commandContext)
 {
-    entity.graphicsQueue = std::make_unique<CommandQueueMtl>(
-        entity.device.NewCommandQueue(), CommandQueueTypes::COMMAND_QUEUE_GRAPHICS);
-    entity.computeQueue = std::make_unique<CommandQueueMtl>(
-        entity.device.NewCommandQueue(), CommandQueueTypes::COMMAND_QUEUE_COMPUTE);
-    entity.blitQueue = std::make_unique<CommandQueueMtl>(
-        entity.device.NewCommandQueue(), CommandQueueTypes::COMMAND_QUEUE_COPY);
+    
 }
 
-CommandContext* CGDMtl::CreateContext(const CommandQueue& queue,
-    bool bTransiant) const
+void CommandQueueMtl::Submit(CommandContext* commandContext,
+    Fence* fence, uint64 until, uint64 to)
 {
-    CGDMtl::debug_info("CGDMtl: Create Context");
 
+}
+
+void CommandQueueMtl::Submit(Fence* fence, uint64 completedValue)
+{
+
+}
+
+void CommandQueueMtl::Wait(Fence* fence, uint64 until)
+{
+    
+}
+
+void CommandQueueMtl::WaitIdle()
+{
+    
 }
