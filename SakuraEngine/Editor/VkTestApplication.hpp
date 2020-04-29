@@ -289,7 +289,7 @@ private:
         samplerInfo.mipLodBias = 0;
         sampler.reset(cgd->CreateSampler(samplerInfo));
 
-        RootParameterAttachment compAttachments[2];
+        RootArgumentAttachment compAttachments[2];
         TexSamplerAttachment srcAttach;
         srcAttach.imageView = textureView.get();
         srcAttach.sampler = sampler.get();
@@ -311,7 +311,7 @@ private:
         context->Begin();
         context->BeginComputePass(compPipeline.get());
         const auto* cmparg = compArgument.get();
-        context->BindRootParameters(PipelineBindPoint::BindPointCompute,
+        context->BindRootArguments(PipelineBindPoint::BindPointCompute,
             &cmparg, 1);
         context->DispatchCompute(
             texture->GetExtent().width / 16, 
@@ -394,7 +394,7 @@ private:
         info.paramSlots[0] = slots;
         rootSignature.reset(cgd->CreateRootSignature(info));
         cbvArgument.reset(rootSignature->
-            CreateArgument(RootParameterSet::RootParameterPerObject));
+            CreateArgument(RootArgumentSet::RootArgumentPerObject));
 
         // Compute Pass RootSig
         RootSignatureCreateInfo compInfo = {};
@@ -406,7 +406,7 @@ private:
         compInfo.paramSlots[0] = slots;
         compRootSignature.reset(cgd->CreateRootSignature(compInfo));
 		compArgument.reset(compRootSignature->
-            CreateArgument(RootParameterSet::RootParameterPerObject));
+            CreateArgument(RootArgumentSet::RootArgumentPerObject));
         
         ComputePipelineCreateInfo compPInfo = {};
         compPInfo.rootSignature = compRootSignature.get();
@@ -462,7 +462,7 @@ private:
                 memcpy(ptr, &ubo, sizeof(ubo));
             });
 
-        static RootParameterAttachment attachments[3];
+        static RootArgumentAttachment attachments[3];
         static UniformBufferAttachment ubAttach;
         static TexSamplerAttachment samplerAttach;
         static TexSamplerAttachment texAttach;
@@ -505,7 +505,7 @@ private:
         context->BindVertexBuffer(*vertexBuffer.get());
         context->BindIndexBuffer(*indexBuffer.get());
         const auto* arg = cbvArgument.get();
-        context->BindRootParameters(PipelineBindPoint::BindPointGraphics,
+        context->BindRootArguments(PipelineBindPoint::BindPointGraphics,
             &arg, 1);
         context->DrawIndexed((uint32_t)indices.size(), 1);
         context->EndRenderPass();
@@ -575,7 +575,7 @@ private:
     std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
     std::unique_ptr<CommandContext> context, imContext;
 
-    std::unique_ptr<RootParameter> cbvArgument, compArgument;
+    std::unique_ptr<RootArgument> cbvArgument, compArgument;
     std::unique_ptr<RootSignature> rootSignature, compRootSignature;
     
     std::unique_ptr<Sampler> sampler;

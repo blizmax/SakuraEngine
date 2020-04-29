@@ -39,7 +39,7 @@ RootSignatureVk::RootSignatureVk(
 	std::set<SignatureSlotType> types;
     if(info.staticSamplers.size() > 0)
         types.insert(SamplerSlot);
-    for (auto setN = 0; setN < RootParameterSetCount; setN++)
+    for (auto setN = 0; setN < RootArgumentSetCount; setN++)
     {
 		auto paramSlotNum = info.paramSlots[setN].size();
 		std::vector<VkDescriptorSetLayoutBinding> layoutBindings(paramSlotNum);
@@ -127,7 +127,7 @@ RootSignatureVk::RootSignatureVk(
 	layoutInfo.bindingCount = (uint32_t)staticSamplers.size();
 	layoutInfo.pBindings = layoutBinding.data();
 	if (vkCreateDescriptorSetLayout(cgd.GetCGDEntity().device, &layoutInfo,
-		nullptr, &descriptorSetLayout[RootParameterSetCount]) != VK_SUCCESS)
+		nullptr, &descriptorSetLayout[RootArgumentSetCount]) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create descriptor set layout!");
 	}
@@ -136,7 +136,7 @@ RootSignatureVk::RootSignatureVk(
 	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 	allocInfo.descriptorPool = pool;
 	allocInfo.descriptorSetCount = 1;
-	allocInfo.pSetLayouts = &descriptorSetLayout[RootParameterSetCount];
+	allocInfo.pSetLayouts = &descriptorSetLayout[RootArgumentSetCount];
 	if (vkAllocateDescriptorSets(
 		_cgd.GetCGDEntity().device, &allocInfo, &staticSamplerSet) != VK_SUCCESS)
 	{
@@ -149,16 +149,16 @@ RootSignatureVk::~RootSignatureVk()
 {
     for (auto i = 0; i < staticSamplers.size(); i++)
         vkDestroySampler(cgd.GetCGDEntity().device, staticSamplers[i], nullptr);
-    for(auto i = 0; i < RootParameterSetCount + 1; i++)
+    for(auto i = 0; i < RootArgumentSetCount + 1; i++)
         vkDestroyDescriptorSetLayout(cgd.GetCGDEntity().device,
             descriptorSetLayout[i], nullptr);
     vkDestroyDescriptorPool(cgd.GetCGDEntity().device, 
             pool, nullptr);
 }
 
-RootParameterVk::RootParameterVk(const CGDVk& _cgd, 
+RootArgumentVk::RootArgumentVk(const CGDVk& _cgd, 
     const RootSignatureVk* rootSignature,
-    const RootParameterSet _targetSet,
+    const RootArgumentSet _targetSet,
     const VkDescriptorSetLayout& layout, VkDescriptorPool pool)
     :cgd(_cgd), rootSig(rootSignature), targetSet(_targetSet)
 {
@@ -175,17 +175,17 @@ RootParameterVk::RootParameterVk(const CGDVk& _cgd,
     }
 }
 
-RootParameterVk::~RootParameterVk()
+RootArgumentVk::~RootArgumentVk()
 {
     
 }
 
-const SignatureSlotType RootParameterVk::GetType(void) const
+const SignatureSlotType RootArgumentVk::GetType(void) const
 {
     return type;
 }
 
-const size_t RootParameterVk::GetSlotNum(void) const
+const size_t RootArgumentVk::GetSlotNum(void) const
 {
     return 0;
 }
@@ -196,16 +196,16 @@ RootSignature* CGDVk::CreateRootSignature(
     return new RootSignatureVk(*this, sigInfo);
 }
 
-RootParameter* RootSignatureVk::CreateArgument(const RootParameterSet targetSet) const
+RootArgument* RootSignatureVk::CreateArgument(const RootArgumentSet targetSet) const
 {
-	auto res = new RootParameterVk(cgd, this,
+	auto res = new RootArgumentVk(cgd, this,
 		targetSet, descriptorSetLayout[targetSet], pool);
     res->staticSamplers = &staticSamplerSet;
     return res;
 }
 
-void RootParameterVk::UpdateArgument(
-    const RootParameterAttachment* attachments, std::uint32_t attachmentCount)
+void RootArgumentVk::UpdateArgument(
+    const RootArgumentAttachment* attachments, std::uint32_t attachmentCount)
 {
     std::vector<VkWriteDescriptorSet> descriptorWrites(attachmentCount);
     for(auto i = 0u; i < attachmentCount; i++)

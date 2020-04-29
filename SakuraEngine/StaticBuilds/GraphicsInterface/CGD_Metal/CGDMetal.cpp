@@ -22,13 +22,21 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:06:28
- * @LastEditTime: 2020-04-30 00:55:29
+ * @LastEditTime: 2020-04-30 01:21:39
  */
 #include "CGDMetal.hpp"
 #include <iostream>
+#include "CommandObjects/CommandQueueMtl.h"
 
 using namespace Sakura::Graphics::Mtl;
 using namespace Sakura::Graphics;
+
+CGDEntityMtl::~CGDEntityMtl()
+{
+    delete graphicsQueue;
+    delete computeQueue;
+    delete blitQueue;
+}
 
 void CGDMtl::Initialize(CGDInfo info)
 {
@@ -42,11 +50,11 @@ void CGDMtl::Initialize(CGDInfo info)
 
 void CGDMtl::InitializeDevice(void* mainSurface)
 {
-    entity.graphicsQueue = std::make_unique<CommandQueueMtl>(
+    entity.graphicsQueue = new CommandQueueMtl(
         entity.device.NewCommandQueue(), CommandQueueTypes::COMMAND_QUEUE_GRAPHICS);
-    entity.computeQueue = std::make_unique<CommandQueueMtl>(
+    entity.computeQueue = new CommandQueueMtl(
         entity.device.NewCommandQueue(), CommandQueueTypes::COMMAND_QUEUE_COMPUTE);
-    entity.blitQueue = std::make_unique<CommandQueueMtl>(
+    entity.blitQueue = new CommandQueueMtl(
         entity.device.NewCommandQueue(), CommandQueueTypes::COMMAND_QUEUE_COPY);
 }
 

@@ -50,8 +50,8 @@ namespace Sakura::Graphics::Vk
         virtual void BindIndexBuffer(const Sakura::Graphics::GpuBuffer& ib,
             const IndexBufferStride stride = IndexBufferStride::IndexBufferUINT32) override final;
 
-        virtual void BindRootParameters(const PipelineBindPoint bindPoint,
-            const RootParameter** arguments, uint32_t argumentNum) override final;
+        virtual void BindRootArguments(const PipelineBindPoint bindPoint,
+            const RootArgument** arguments, uint32_t argumentNum) override final;
 
         virtual void CopyResource(GpuBuffer& src, GpuBuffer& dst,
             const uint64_t size,

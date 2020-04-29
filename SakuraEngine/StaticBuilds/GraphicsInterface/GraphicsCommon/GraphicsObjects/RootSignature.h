@@ -64,12 +64,12 @@ namespace Sakura::Graphics
         ShaderStages stageFlags;
     };
 
-    enum RootParameterSet
+    enum RootArgumentSet
     {
-		RootParameterPerObject,
-        RootParameterPerFrame,
-        RootParameterStatic,
-        RootParameterSetCount
+		RootArgumentPerObject,
+        RootArgumentPerFrame,
+        RootArgumentStatic,
+        RootArgumentSetCount
     };
 
     struct RootSignatureCreateInfo
@@ -79,7 +79,7 @@ namespace Sakura::Graphics
         {
             staticSamplers.emplace_back(info);
         }
-        template<RootParameterSet paramSlot = RootParameterPerObject>
+        template<RootArgumentSet paramSlot = RootArgumentPerObject>
         void PushSignatureSlot(const std::vector<SignatureSlot>& slots)
         {
             paramSlots[paramSlot] = slots;
@@ -91,7 +91,7 @@ namespace Sakura::Graphics
             PushStaticSampler(std::forward<Ts>(ts)...);
         }
 
-        template<RootParameterSet paramSlot = RootParameterPerObject,
+        template<RootArgumentSet paramSlot = RootArgumentPerObject,
             typename _SignatureSlot,
             typename std::enable_if<std::is_same<
                 std::remove_reference_t<_SignatureSlot>, SignatureSlot>::value>::type* = nullptr>
@@ -99,7 +99,7 @@ namespace Sakura::Graphics
         {
             paramSlots[paramSlot].emplace_back(slot);
         }
-        template<RootParameterSet paramSlot = RootParameterPerObject,
+        template<RootArgumentSet paramSlot = RootArgumentPerObject,
             typename _SignatureSlot,
             typename std::enable_if<std::is_same<
                 std::remove_reference_t<_SignatureSlot>, std::vector<SignatureSlot>>::value
@@ -108,7 +108,7 @@ namespace Sakura::Graphics
         {
             paramSlots[paramSlot].insert(paramSlots[paramSlot].end(), slots.begin(), slots.end());
         }
-        template<RootParameterSet paramSlot = RootParameterPerObject,
+        template<RootArgumentSet paramSlot = RootArgumentPerObject,
             typename _SignatureSlot, typename... _SignatureSlots>
         void PushSignatureSlot(_SignatureSlot&& slot, _SignatureSlots&&... slots)
         {
@@ -116,7 +116,7 @@ namespace Sakura::Graphics
             PushSignatureSlot(std::forward<_SignatureSlots>(slots)...);
         }
         std::vector<SamplerCreateInfo> staticSamplers;
-        std::vector<SignatureSlot> paramSlots[RootParameterSetCount];
+        std::vector<SignatureSlot> paramSlots[RootArgumentSetCount];
     };
 
     struct UniformBufferAttachment
@@ -133,7 +133,7 @@ namespace Sakura::Graphics
         ImageLayout imageLayout;
     };
 
-    struct RootParameterAttachment
+    struct RootArgumentAttachment
     {
         SignatureSlotType rootArgType = SignatureSlotType::UniformBufferSlot;
         uint32_t dstBinding = 0;
@@ -142,11 +142,11 @@ namespace Sakura::Graphics
         std::variant<UniformBufferAttachment, TexSamplerAttachment> info;
     };
     
-    sinterface RootParameter
+    sinterface RootArgument
     {
-        virtual ~RootParameter(){};
+        virtual ~RootArgument(){};
         virtual const SignatureSlotType GetType(void) const = 0;
-        virtual void UpdateArgument(const RootParameterAttachment* attachments,
+        virtual void UpdateArgument(const RootArgumentAttachment* attachments,
             std::uint32_t attachmentCount) = 0;
         virtual const size_t GetSlotNum(void) const = 0;
     };
@@ -154,8 +154,8 @@ namespace Sakura::Graphics
     sinterface RootSignature
     {
         virtual ~RootSignature(){};
-        [[nodiscard]] virtual RootParameter* CreateArgument(
-            const RootParameterSet targetSet) const = 0;
+        [[nodiscard]] virtual RootArgument* CreateArgument(
+            const RootArgumentSet targetSet) const = 0;
     };
 } // namespace Sakura::Graphics
 

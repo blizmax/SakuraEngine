@@ -48,7 +48,7 @@ namespace Sakura::SPA
 
 namespace Sakura::Graphics::Vk
 {
-    class RootParameterVk;
+    class RootArgumentVk;
 }
 
 namespace Sakura::Graphics::Vk
@@ -58,10 +58,10 @@ namespace Sakura::Graphics::Vk
         friend class CGDVk;
     public:
         virtual ~RootSignatureVk() final override;
-        VkDescriptorSetLayout descriptorSetLayout[RootParameterSetCount + 1];
+        VkDescriptorSetLayout descriptorSetLayout[RootArgumentSetCount + 1];
         VkDescriptorPool pool = VK_NULL_HANDLE;
-        [[nodiscard]] virtual RootParameter* CreateArgument(
-            const RootParameterSet targetSet) const override final;
+        [[nodiscard]] virtual RootArgument* CreateArgument(
+            const RootArgumentSet targetSet) const override final;
     protected:
         std::vector<VkSampler> staticSamplers;
         VkDescriptorSet staticSamplerSet;
@@ -69,25 +69,25 @@ namespace Sakura::Graphics::Vk
         const CGDVk& cgd;
     };
 
-    class RootParameterVk final : simplements Sakura::Graphics::RootParameter
+    class RootArgumentVk final : simplements Sakura::Graphics::RootArgument
     {
         friend class CGDVk;
         friend class RootSignatureVk;
         friend class CommandContextVk;
     public:
         VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
-        virtual ~RootParameterVk() override final;
+        virtual ~RootArgumentVk() override final;
         virtual const SignatureSlotType GetType(void) const override final;
-        virtual void UpdateArgument(const RootParameterAttachment* attachments,
+        virtual void UpdateArgument(const RootArgumentAttachment* attachments,
             std::uint32_t attachmentCount) override final;
         virtual const size_t GetSlotNum(void) const override final;
     protected:
-		RootParameterVk(const CGDVk& _cgd, const RootSignatureVk*,
-			const RootParameterSet targetSet,
+		RootArgumentVk(const CGDVk& _cgd, const RootSignatureVk*,
+			const RootArgumentSet targetSet,
             const VkDescriptorSetLayout& layout, VkDescriptorPool pool);
         const RootSignatureVk* rootSig;
         uint32_t slotNum = 0;
-        const RootParameterSet targetSet;
+        const RootArgumentSet targetSet;
         const VkDescriptorSet* staticSamplers;
         SignatureSlotType type;
         const CGDVk& cgd; 

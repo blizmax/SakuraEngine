@@ -50,7 +50,7 @@ ComputePipelineVk::ComputePipelineVk(const ComputePipelineCreateInfo& info,
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 	if (info.rootSignature)
 	{
-		pipelineLayoutInfo.setLayoutCount = RootParameterSetCount + 1;
+		pipelineLayoutInfo.setLayoutCount = RootArgumentSetCount + 1;
 		pipelineLayoutInfo.pSetLayouts
 			= ((const RootSignatureVk*)info.rootSignature)->descriptorSetLayout;
 	}

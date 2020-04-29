@@ -27,7 +27,7 @@ namespace Sakura::Graphics
     sinterface ComputePipeline;
     sinterface GpuTexture;
     sinterface GpuResource;
-    sinterface RootParameter;
+    sinterface RootArgument;
     sinterface GpuBuffer;
 	struct RenderTargetSet;
     struct BufferImageCopy;
@@ -94,8 +94,8 @@ namespace Sakura::Graphics
         virtual void BindIndexBuffer(const GpuBuffer& ib,
             const IndexBufferStride stride = IndexBufferStride::IndexBufferUINT32) = 0;
 
-        virtual void BindRootParameters(const PipelineBindPoint bindPoint,
-            const RootParameter** arguments, uint32_t argumentNum) = 0;
+        virtual void BindRootArguments(const PipelineBindPoint bindPoint,
+            const RootArgument** arguments, uint32_t argumentNum) = 0;
 
         virtual void CopyResource(GpuBuffer& src, GpuBuffer& dst,
             const uint64_t srcOffset = 0,

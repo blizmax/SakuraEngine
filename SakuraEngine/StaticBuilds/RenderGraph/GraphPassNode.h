@@ -85,7 +85,7 @@ namespace Sakura::RenderGraph
 
         GraphPassBuilder builder;
         std::shared_ptr<RootSignature> rootSignature;
-        std::unique_ptr<RootParameter> rootParameter;
+        std::unique_ptr<RootArgument> RootArgument;
         std::unique_ptr<GraphicsPipeline> graphicsPipeline;
         std::unique_ptr<RenderPass> renderPass;
     };

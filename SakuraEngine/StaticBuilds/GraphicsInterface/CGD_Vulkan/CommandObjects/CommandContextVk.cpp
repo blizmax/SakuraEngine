@@ -220,16 +220,16 @@ void CommandContextVk::BeginRenderPass(
         &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 }
 
-void CommandContextVk::BindRootParameters(const PipelineBindPoint bindPoint,
-    const RootParameter** arguments, uint32_t argumentNum)
+void CommandContextVk::BindRootArguments(const PipelineBindPoint bindPoint,
+    const RootArgument** arguments, uint32_t argumentNum)
 {
     std::vector<VkDescriptorSet> descriptorSets(argumentNum);
     auto set = 9999;
     for(auto i = 0u; i < argumentNum; i++)
     {
-        auto cset = ((const RootParameterVk**)arguments)[i]->targetSet;
+        auto cset = ((const RootArgumentVk**)arguments)[i]->targetSet;
         descriptorSets[i] = 
-            (((const RootParameterVk**)arguments)[i])->descriptorSet;
+            (((const RootArgumentVk**)arguments)[i])->descriptorSet;
         set = cset < set ? cset : set;
     }
 
@@ -239,7 +239,7 @@ void CommandContextVk::BindRootParameters(const PipelineBindPoint bindPoint,
 			vkGp->pipelineLayout, set, argumentNum, descriptorSets.data(), 0, nullptr);
         vkCmdBindDescriptorSets(commandBuffer, Transfer(BindPointGraphics),
 			vkGp->pipelineLayout, 3, 1, 
-            ((RootParameterVk*)arguments[0])->staticSamplers, 0, nullptr);
+            ((RootArgumentVk*)arguments[0])->staticSamplers, 0, nullptr);
     }
     else if(bindPoint == PipelineBindPoint::BindPointCompute)
     {

@@ -22,11 +22,10 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:05:58
- * @LastEditTime: 2020-04-30 00:55:41
+ * @LastEditTime: 2020-04-30 01:20:15
  */
 #pragma once
 #include "../GraphicsCommon/CGD.h"
-#include "CommandObjects/CommandQueueMtl.h"
 #include "mtlpp/mtlpp.hpp"
 
 namespace Sakura::Graphics::Mtl
@@ -39,11 +38,12 @@ namespace Sakura::Graphics::Mtl
 {
     struct CGDEntityMtl
     {
+        ~CGDEntityMtl();
         // MTL device
         mtlpp::Device device;
-        std::unique_ptr<CommandQueueMtl> graphicsQueue;
-        std::unique_ptr<CommandQueueMtl> computeQueue;
-        std::unique_ptr<CommandQueueMtl> blitQueue;
+        CommandQueueMtl* graphicsQueue;
+        CommandQueueMtl* computeQueue;
+        CommandQueueMtl* blitQueue;
     };
 
     class CGDMtl 
