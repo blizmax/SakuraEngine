@@ -44,7 +44,7 @@ namespace Sakura::fs
         if (s == 0) s = strrchr(path, '\\');
         if (s == 0) return CreateDirectoryA(path, 0);
 
-        pmr::string parent(path, s - path);
+        eastl::string parent(path, s - path);
 
         if (fs::exists(parent.c_str())) {
             return CreateDirectoryA(path, 0);
@@ -64,8 +64,8 @@ namespace Sakura::fs
             return DeleteFileA(path);
         }
         else {
-            pmr::string cmd;
-            cmd.append("rd /s /q \"").append(pmr::string(path));
+            eastl::string cmd;
+            cmd.append("rd /s /q \"").append(eastl::string(path));
             cmd += '"';
             return system(cmd.c_str()) != -1;
         }
@@ -104,7 +104,7 @@ namespace Sakura::fs
 
     struct fctx {
         HANDLE fd;
-        pmr::string path;
+        eastl::string path;
     };
 
     file::~file() {
@@ -119,7 +119,7 @@ namespace Sakura::fs
         return p && p->fd != nullfd;
     }
 
-    const pmr::string& file::path() const {
+    const eastl::string& file::path() const {
         fctx* p = (fctx*)_p;
         return p->path;
     }
@@ -160,9 +160,9 @@ namespace Sakura::fs
         return r;
     }
 
-    pmr::string file::read(size_t n)
+    eastl::string file::read(size_t n)
     {
-        pmr::string s;
+        eastl::string s;
         s.resize(n);
         this->read((void*)s.data(), n);
         return s;

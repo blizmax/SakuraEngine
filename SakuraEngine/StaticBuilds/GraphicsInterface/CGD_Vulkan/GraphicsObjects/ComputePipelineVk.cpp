@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-23 10:22:14
- * @LastEditTime: 2020-03-25 17:13:37
+ * @LastEditTime: 2020-04-30 17:48:58
  */
 #include "ComputePipelineVk.h"
 #include "../CGD_Vulkan.h"
@@ -65,7 +65,10 @@ ComputePipelineVk::ComputePipelineVk(const ComputePipelineCreateInfo& info,
 		VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
 	computePipelineCreateInfo.layout = pipelineLayout;
 	computePipelineCreateInfo.flags = 0;
-	computePipelineCreateInfo.stage = Transfer(info.shaderStage);
+	computePipelineCreateInfo.stage.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	computePipelineCreateInfo.stage.stage = Transfer(info.shaderStage.GetStage());
+	computePipelineCreateInfo.stage.module = ((ShaderVk*)info.shaderStage.GetShader())->shaderModule;
+	computePipelineCreateInfo.stage.pName = info.shaderStage.GetEntry().c_str();
 	if (vkCreateComputePipelines(cgd.GetCGDEntity().device, 
 		cgd.GetCGDEntity().pipelineCache,
 		1, &computePipelineCreateInfo, nullptr, &pipeline) != VK_SUCCESS)

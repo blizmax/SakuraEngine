@@ -5,28 +5,13 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-14 00:31:40
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-17 12:02:05
+ * @LastEditTime: 2020-04-30 17:13:43
  */
 #pragma once
 #include <string>
 #include <vector>
 #include <cstdlib>
-#ifdef SAKURA_TARGET_PLATFORM_OSX
-#include <boost/container/pmr/string.hpp>
-#include <boost/container/pmr/vector.hpp>
-#include <boost/container/pmr/map.hpp>
-namespace Sakura::SPA
-{
-    namespace pmr
-    {
-        using boost::container::string;
-        using boost::container::vector;
-        using boost::container::map;
-    }
-}
-#else
-#include <memory_resource>
-#endif
+#include <EASTL/string.h>
 
 namespace Sakura::SPA
 {
@@ -38,8 +23,8 @@ namespace Sakura::SPA
      */
     struct Dependency
     {
-        pmr::string name; //!< The name of the dependency
-        pmr::string version; //!< The version of the dependency
+        eastl::string name; //!< The name of the dependency
+        eastl::string version; //!< The version of the dependency
     };
 
     /**
@@ -48,17 +33,17 @@ namespace Sakura::SPA
      */
     struct ModuleInfo
     {
-        pmr::string name; //!< name of the plugin
-        pmr::string prettyname;//!< formatted name of the plugin
-        pmr::string engine_version;//!< version of the engine
-        pmr::string version;// !< version of the plugin
-        pmr::string linking;// !< linking of the plugin
-        pmr::string license;//!< license of the plugin
-        pmr::string url; //!< url of the plugin 
-        pmr::string copyright;//!< copyright of the plugin
-        pmr::string make;//!<making method
+        eastl::string name; //!< name of the plugin
+        eastl::string prettyname;//!< formatted name of the plugin
+        eastl::string engine_version;//!< version of the engine
+        eastl::string version;// !< version of the plugin
+        eastl::string linking;// !< linking of the plugin
+        eastl::string license;//!< license of the plugin
+        eastl::string url; //!< url of the plugin 
+        eastl::string copyright;//!< copyright of the plugin
+        eastl::string make;//!<making method
 
         // Dependencies array
-        pmr::vector<Dependency> dependencies;
+        eastl::vector<Dependency> dependencies;
     };
 }

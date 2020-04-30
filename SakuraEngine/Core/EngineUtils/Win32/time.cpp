@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-02-09 16:02:27
- * @LastEditTime: 2020-04-14 22:33:07
+ * @LastEditTime: 2020-04-30 17:12:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /SakuraEngine/Core/EngineUtils/Win32/time.cpp
@@ -52,16 +52,6 @@ namespace Sakura::now {
 
     int64 us() {
         return _Mono::us();
-    }
-
-    sstring str(const char* fm) {
-        int64 x = time(0);
-        struct tm t;
-        _localtime64_s(&t, &x);
-
-        char buf[32]; // 32 is big enough int most cases
-        size_t r = strftime(buf, 32, fm, &t);
-        return sstring(buf, r);
     }
 
 } // now

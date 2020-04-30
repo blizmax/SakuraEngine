@@ -6,4 +6,9 @@ add_library(CGD
 CGD.cpp 
 ../GraphicsCommon/CGD.h)
 
+if(APPLE)
 target_link_libraries(CGD CGD_Vulkan CGDMetal)
+else()
+target_link_libraries(CGD CGD_Vulkan)
+endif()
+

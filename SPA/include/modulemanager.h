@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:45
- * @LastEditTime: 2020-04-17 04:24:51
+ * @LastEditTime: 2020-04-30 17:24:08
  */
 #pragma once
 #include "../../Extern/include/version/version.h"
@@ -36,6 +36,7 @@
 #include "moduleininfo.h"
 #include "imodule.h"
 #include <unordered_map>
+#include <EASTL/map.h>
 #ifdef __EMSCRIPTEN__
 #include "emscripten.h"
 #define DLLEXPORT EMSCRIPTEN_KEEPALIVE
@@ -55,7 +56,7 @@
 #define SPA_API __declspec(dllimport)
 #endif
 #endif
-
+  
 namespace Sakura::SPA
 {
     class ModuleManager;
@@ -73,7 +74,7 @@ namespace Sakura::SPA
     struct ModuleProperty
     {
         bool bActive = false;
-        pmr::string name;
+        eastl::string name;
     };
     using registerer = std::function<std::unique_ptr<IModule>(void)>;
     using ModuleProp = property<ModuleProp_t, ModuleProperty>;
@@ -85,36 +86,36 @@ namespace Sakura::SPA
         friend struct IModule;
     public:
         ModuleManager() = default;
-        virtual IModule* GetModule(const pmr::string& name);
+        virtual IModule* GetModule(const eastl::string& name);
     
-        virtual const ModuleGraph& MakeModuleGraph(const pmr::string& entry, 
+        virtual const ModuleGraph& MakeModuleGraph(const eastl::string& entry, 
             bool shared = false);
         virtual bool InitModuleGraph(void);
         virtual bool DestroyModuleGraph(void);
     public:
-        virtual void Mount(const pmr::string& rootdir);
-        virtual std::string_view GetRoot(void);
+        virtual void Mount(const eastl::string& rootdir);
+        virtual eastl::string_view GetRoot(void);
         virtual void RegisterStaticallyLinkedModule(
             const char* moduleName, registerer _register);
-        virtual IModule* SpawnStaticModule(const pmr::string& moduleName);
-        virtual IModule* SpawnDynamicModule(const pmr::string& moduleName);
-        virtual ModuleProperty GetModuleProp(const pmr::string& name);
-        virtual void SetModuleProp(const pmr::string& name, const ModuleProperty& prop);
+        virtual IModule* SpawnStaticModule(const eastl::string& moduleName);
+        virtual IModule* SpawnDynamicModule(const eastl::string& moduleName);
+        virtual ModuleProperty GetModuleProp(const eastl::string& name);
+        virtual void SetModuleProp(const eastl::string& name, const ModuleProperty& prop);
     private:
-        bool __internal_DestroyModuleGraph(const pmr::string& nodename);
-        void __internal_MakeModuleGraph(const pmr::string& entry,
+        bool __internal_DestroyModuleGraph(const eastl::string& nodename);
+        void __internal_MakeModuleGraph(const eastl::string& entry,
             bool shared = false);
-        bool __internal_InitModuleGraph(const pmr::string& nodename);
+        bool __internal_InitModuleGraph(const eastl::string& nodename);
         Version CoreVersion{"0.1.0"};
         ModuleInfo ParseMetaData(const char* metadata);
     private:
-        pmr::string moduleDir;
-        std::vector<pmr::string> roots;
-        pmr::string mainModuleName;
+        eastl::string moduleDir;
+        std::vector<eastl::string> roots;
+        eastl::string mainModuleName;
         ModuleGraph moduleDependecyGraph;
-        pmr::map<pmr::string, int, std::less<>> NodeMap;
-        pmr::map<pmr::string, registerer, std::less<>> InitializeMap;
-        pmr::map<pmr::string, std::unique_ptr<IModule>, std::less<>>
+        eastl::map<eastl::string, int, std::less<>> NodeMap;
+        eastl::map<eastl::string, registerer, std::less<>> InitializeMap;
+        eastl::map<eastl::string, std::unique_ptr<IModule>, std::less<>>
             ModulesMap;
     };
 

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-29 11:46:00
- * @LastEditTime: 2020-04-30 02:23:57
+ * @LastEditTime: 2020-04-30 17:51:57
  */
 #pragma once
 #define GLM_FORCE_RADIANS
@@ -206,7 +206,7 @@ private:
         info.rootSignature = rootSignature.get();
         info.depthStencilCreateInfo = depthStencil;
 		info.AddVertexBinding(VertexData::getBindingDescription());
-		//info.AddVertexAttribute(VertexData::getAttributeDescriptions());
+		info.AddVertexAttribute(VertexData::getAttributeDescriptions());
 
 		// Create Render Pass
 		RenderPassCreateInfo rpinfo;

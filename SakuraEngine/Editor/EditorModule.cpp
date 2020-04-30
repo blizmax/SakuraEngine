@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-24 13:05:07
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-29 12:25:17
+ * @LastEditTime: 2020-04-30 17:26:26
  */
 #include "EditorModule.h"
 #include "SakuraEngine/Core/Core.h"
@@ -31,9 +31,9 @@ void EditorModule::MainPluginExec()
     EditorModule::debug_info<Sakura::flags::DEBUG_EDITOR>
         ("Editor Module: Main Plugin Exec!");
 
-    //auto app = std::make_unique<VkTestApplication>();
+    auto app = std::make_unique<VkTestApplication>();
     //auto app = std::make_unique<RenderGraphTestApplication>();
-    auto app = std::make_unique<MtlDevApp>();
+    //auto app = std::make_unique<MtlDevApp>();
 	app->run();
     return;
 }

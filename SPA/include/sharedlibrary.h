@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-13 22:58:31
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-17 12:06:58
+ * @LastEditTime: 2020-04-30 17:20:57
  */
 #pragma once
 #include "confinfo.h" 
@@ -17,22 +17,8 @@ using NativeLibHandle = void*;
 #include <windows.h>
 using NativeLibHandle = HMODULE;
 #endif
-#ifdef SAKURA_TARGET_PLATFORM_OSX
-#include <boost/container/pmr/string.hpp>
-#include <boost/container/pmr/vector.hpp>
-#include <boost/container/pmr/map.hpp>
-namespace Sakura::SPA
-{
-    namespace pmr
-    {
-        using boost::container::string;
-        using boost::container::vector;
-        using boost::container::map;
-    }
-}
-#else
-#include <memory_resource>
-#endif
+#include <EASTL/string.h>
+
 namespace Sakura::SPA
 {      
     /**
@@ -52,7 +38,7 @@ namespace Sakura::SPA
         {load(path);}
         SharedLibrary(const std::string& path)
         {load(path);}
-        SharedLibrary(const pmr::string& path)
+        SharedLibrary(const eastl::string& path)
         {load(path);}
         SharedLibrary(std::string_view path)
         {load(path);}
@@ -84,7 +70,7 @@ namespace Sakura::SPA
         * @overload 
         * @see load(const char* path) 
         */
-        inline bool load(const pmr::string& path)
+        inline bool load(const eastl::string& path)
         {return load(path.c_str());}
         /**
         * @overload 
@@ -114,7 +100,7 @@ namespace Sakura::SPA
          */
         bool hasSymbol(const char* symbolName)
         {
-            pmr::string error = _lastError;
+            std::string error = _lastError;
             getImpl(symbolName);
             bool has = _lastError.empty();
             _lastError = error;
@@ -150,7 +136,7 @@ namespace Sakura::SPA
         * @see get(const char* symbolName)
         */
         template<typename SymT>
-        SymT& get(const pmr::string& symbolName)
+        SymT& get(const eastl::string& symbolName)
         {return get<SymT>(symbolName.c_str());}
         /**
         * @overload
@@ -187,7 +173,7 @@ namespace Sakura::SPA
          * @description: Get the last error string.
          * @author: SaeruHikari
          */
-        pmr::string errorString() const
+        std::string errorString() const
         { return _lastError; }
 
         /**
@@ -197,7 +183,7 @@ namespace Sakura::SPA
         NativeLibHandle handle() const
         {return _handle;}
     private:
-        pmr::string _lastError;
+        std::string _lastError;
         NativeLibHandle _handle = nullptr;
         // Linux implementation
 #if defined(CONFINFO_PLATFORM_LINUX) || defined(CONFINFO_PLATFORM_CYGWIN) || defined(CONFINFO_PLATFORM_MACOS)

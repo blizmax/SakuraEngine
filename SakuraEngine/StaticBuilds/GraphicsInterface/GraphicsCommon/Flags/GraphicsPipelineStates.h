@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-06 16:47:38
- * @LastEditTime: 2020-04-30 02:27:59
+ * @LastEditTime: 2020-04-30 17:49:08
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -98,10 +98,6 @@ namespace Sakura::Graphics
         {
             
         }
-        ~ShaderFunction()
-        {
-            
-        }
         auto GetStage() const 
         {
             return stage;
@@ -110,7 +106,7 @@ namespace Sakura::Graphics
         {
             return shader;
         }
-        auto GetEntry() const
+        const std::string& GetEntry() const
         {
             return entry;
         }
@@ -127,7 +123,7 @@ namespace Sakura::Graphics
     struct RasterizationStateCreateInfo
     {
         bool depthClampEnable = false;
-        CullModes cullMode = CullModes::CullModeNone    ;
+        CullModes cullMode = CullModes::CullModeNone;
         PolygonMode polygonMode = PolygonMode::PolygonFill;
         FrontFace frontFace = FrontFace::FrontFaceCounterClockWise;
         bool depthBiasEnable = false;
