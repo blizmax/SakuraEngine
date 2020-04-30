@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-03 10:41:13
- * @LastEditTime: 2020-04-30 00:07:34
+ * @LastEditTime: 2020-04-30 23:53:03
  */
 #include "CommandQueueVk.h"
 #include "CommandBufferVk.h"
@@ -83,7 +83,7 @@ void CommandQueueVk::Submit(CommandBuffer* CommandBuffer,
 
 void CommandQueueVk::Submit(CommandBuffer* CommandBuffer)
 {
-    CommandBufferVk* cmdVk = (CommandBufferVk*)CommandBuffer;
+    CommandBufferVk* cmdVk = dynamic_cast<CommandBufferVk*>(CommandBuffer);
     VkSubmitInfo submitInfo;
     {
         submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;

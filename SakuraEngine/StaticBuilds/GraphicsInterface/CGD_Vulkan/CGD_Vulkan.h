@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-04-30 02:13:10
+ * @LastEditTime: 2020-04-30 23:59:20
  */
 #pragma once
 #include "../GraphicsCommon/CGD.h"
@@ -106,9 +106,9 @@ namespace Sakura::Graphics::Vk
     public:
     // Implements: See CommandObjects/CommandBufferVk.cpp
         virtual CommandBuffer* AllocateContext(
-            const CommandQueue& queue, bool bTransiant = true) override final;
+            const CommandQueue& queue, ECommandType type, bool bTransiant = true) override final;
         [[nodiscard]] virtual CommandBuffer* CreateContext(
-            const CommandQueue& queue, bool bTransiant = true) const override final;
+            const CommandQueue& queue, ECommandType type, bool bTransiant = true) const override final;
         virtual void FreeContext(CommandBuffer* context) override final;
         virtual void FreeAllContexts(ECommandType typeToDestroy) override final;
     public:

@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-11 01:38:49
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-18 02:28:22
+ * @LastEditTime: 2020-05-01 00:01:53
  */
 #pragma once
 #include "../../GraphicsCommon/CommandObjects/CommandBuffer.h"
@@ -20,28 +20,41 @@ namespace Sakura::Graphics::Vk
 
 namespace Sakura::Graphics::Vk
 {
-    class CommandBufferVk : simplements CommandBuffer
+    class CommandBufferVk
+    {
+	public:
+		VkCommandBuffer commandBuffer;
+		const CGDVk& cgd;
+		GraphicsPipelineVk* vkGp = nullptr;
+		VkCommandPool commandPool;
+		VkFence recordingFence = VK_NULL_HANDLE;
+	protected:
+		CommandBufferVk(const CGDVk& _cgd, std::uint32_t family, bool bTransiant = false);
+    };
+
+    class CommandBufferGraphicsVk : simplements CommandBufferGraphics, public CommandBufferVk
     {
         friend class CGDVk;
         friend class CommandQueueVk;
-        virtual ~CommandBufferVk() override final;
+        virtual ~CommandBufferGraphicsVk() override final;
     public:
         virtual void Begin() override final;
         virtual void End() override final;
         virtual void Reset() override final;
+
+		virtual void ResourceBarrier(GpuTexture& toTransition,
+			const ImageLayout oldLayout, const ImageLayout newLayout,
+			const TextureSubresourceRange & = plainTextureSubresourceRange) override final;
+
+        // CommandBufferGraphics Interfaces
         virtual void EndRenderPass() override final;
 
         virtual void BeginRenderPass(
             GraphicsPipeline* gp, const RenderTargetSet& rts) override final;
 
-        virtual void BeginComputePass(ComputePipeline* cp) override final;
-
-        virtual void DispatchCompute(uint32 groupCountX, uint32 groupCountY,
-            uint32 groupCountZ) override final;
-
         virtual void Draw(uint32 vertexCount, uint32 instanceCount,
             uint32 firstVertex, uint32 firstInstance) override final;
-            
+
         virtual void DrawIndexed(const uint32_t indicesCount,
             const uint32_t instanceCount) override final;
 
@@ -52,37 +65,74 @@ namespace Sakura::Graphics::Vk
 
         virtual void BindRootArguments(const PipelineBindPoint bindPoint,
             const RootArgument** arguments, uint32_t argumentNum) override final;
-
-        virtual void CopyResource(GpuBuffer& src, GpuBuffer& dst,
-            const uint64_t size,
-            const uint64_t srcOffset = 0, const uint64_t dstOffset = 0) override final;
-        
-        virtual void CopyResource(GpuBuffer& src, GpuTexture& dst,
-            const uint32_t imageWidth, const uint32_t imageHeight,
-            const ImageAspectFlags aspectFlags, const uint64_t srcOffset = 0) override final;
-
-        virtual void CopyResource(GpuBuffer& src, GpuTexture& dst,
-            const BufferImageCopy& info) override final;
-
-        virtual void ResourceBarrier(GpuBuffer& toTransition) override final;
-    
-        virtual void ResourceBarrier(GpuTexture& toTransition,
-            const ImageLayout oldLayout, const ImageLayout newLayout,
-            const TextureSubresourceRange& = plainTextureSubresourceRange) override final;
-
-        virtual void GenerateMipmaps(GpuTexture& texture, Format format,
-            uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels) override final;
-    public:
-        VkCommandBuffer commandBuffer;
     protected:
-        CommandBufferVk(const CGDVk& _cgd, ECommandType type,
-            bool bTransiant = false);
-    protected:
-        const CGDVk& cgd;
         GraphicsPipelineVk* vkGp = nullptr;
+		CommandBufferGraphicsVk(const CGDVk& _cgd, std::uint32_t family, bool bTransiant = false);
+    };
+
+    class CommandBufferComputeVk : simplements CommandBufferCompute, public CommandBufferVk
+    {
+		friend class CGDVk;
+		friend class CommandQueueVk;
+		friend class ComputePipelineVk;
+		virtual ~CommandBufferComputeVk() override final;
+    public:
+        // CommandBuffer Interfaces
+		virtual void Begin() override final;
+		virtual void End() override final;
+		virtual void Reset() override final;
+
+		virtual void ResourceBarrier(GpuTexture& toTransition,
+			const ImageLayout oldLayout, const ImageLayout newLayout,
+			const TextureSubresourceRange & = plainTextureSubresourceRange) override final;
+
+        // CommandBufferCompute Interfaces
+		virtual void BindRootArguments(const PipelineBindPoint bindPoint,
+			const RootArgument** arguments, uint32_t argumentNum) override final;
+
+		virtual void BeginComputePass(ComputePipeline* cp) override final;
+
+		virtual void DispatchCompute(uint32 groupCountX, uint32 groupCountY,
+			uint32 groupCountZ) override final;
+
+		virtual void GenerateMipmaps(GpuTexture& texture, Format format,
+			uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels) override final;
+	protected:
         ComputePipelineVk* vkCp = nullptr;
-        VkCommandPool commandPool;
-        VkFence recordingFence = VK_NULL_HANDLE;
+        CommandBufferComputeVk(const CGDVk& _cgd, std::uint32_t family, bool bTransiant = false);
+    };
+
+    class CommandBufferCopyVk : simplements CommandBufferCopy, public CommandBufferVk
+    {
+		friend class CGDVk;
+		friend class CommandQueueVk;
+		virtual ~CommandBufferCopyVk() override final;
+	public:
+		// CommandBuffer Interfaces
+		virtual void Begin() override final;
+		virtual void End() override final;
+		virtual void Reset() override final;
+
+		virtual void ResourceBarrier(GpuTexture& toTransition,
+			const ImageLayout oldLayout, const ImageLayout newLayout,
+			const TextureSubresourceRange & = plainTextureSubresourceRange) override final;
+
+        // CommandBufferCopy Resources
+		virtual void CopyResource(GpuBuffer& src, GpuBuffer& dst,
+			const uint64_t size,
+			const uint64_t srcOffset = 0, const uint64_t dstOffset = 0) override final;
+
+		virtual void CopyResource(GpuBuffer& src, GpuTexture& dst,
+			const uint32_t imageWidth, const uint32_t imageHeight,
+			const ImageAspectFlags aspectFlags, const uint64_t srcOffset = 0) override final;
+
+		virtual void CopyResource(GpuBuffer& src, GpuTexture& dst,
+			const BufferImageCopy& info) override final;
+
+		virtual void GenerateMipmaps(GpuTexture& texture, Format format,
+			uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels) override final;
+	protected:
+        CommandBufferCopyVk(const CGDVk& _cgd, std::uint32_t family, bool bTransiant = false);
     };
 } // namespace Sakura::Graphics
 

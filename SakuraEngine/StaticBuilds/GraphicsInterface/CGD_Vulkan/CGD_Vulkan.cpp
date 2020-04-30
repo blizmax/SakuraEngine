@@ -217,13 +217,13 @@ CommandQueue* CGDVk::AllocQueue(CommandQueueTypes type) const
     uint32 family; 
     switch (type)
     {
-    case CommandQueueTypes::CommandQueueCompute:
+    case CommandQueueTypes::ECommandQueueCompute:
         family = queueFamilyIndices.computeFamily.value();
         break;
-    case CommandQueueTypes::CommandQueueCopy:
+    case CommandQueueTypes::ECommandQueueCopy:
         family = queueFamilyIndices.copyFamily.value();
         break;
-    case CommandQueueTypes::CommandQueueGraphics:
+    case CommandQueueTypes::ECommandQueueGraphics:
         family = queueFamilyIndices.graphicsFamily.value();
         break;
     default:
@@ -472,11 +472,11 @@ void CGDVk::InitializeDevice(void* mainSurface)
 
     // Create Queue
     auto graphicsQueue = new CommandQueueVk(*this,
-        indices.graphicsFamily.value(), CommandQueueTypes::CommandQueueGraphics);
+        indices.graphicsFamily.value(), CommandQueueTypes::ECommandQueueGraphics);
     auto computeQueue = new CommandQueueVk(*this,
-        indices.computeFamily.value(), CommandQueueTypes::CommandQueueCompute);
+        indices.computeFamily.value(), CommandQueueTypes::ECommandQueueCompute);
     auto copyQueue = new CommandQueueVk(*this,
-        indices.copyFamily.value(), CommandQueueTypes::CommandQueueCopy);
+        indices.copyFamily.value(), CommandQueueTypes::ECommandQueueCopy);
     vkGetDeviceQueue(entityVk.device, indices.graphicsFamily.value(),
         0, &graphicsQueue->vkQueue);
     vkGetDeviceQueue(entityVk.device, indices.presentFamily.value(),

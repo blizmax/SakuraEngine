@@ -42,7 +42,7 @@ namespace Sakura::Graphics::Vk
     class GraphicsPipelineVk final : simplements GraphicsPipeline
     {
         friend class CGDVk;
-        friend class CommandBufferVk;
+        friend class CommandBufferGraphicsVk;
     public:
         virtual ~GraphicsPipelineVk() override final;
     protected:

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-04-30 02:12:02
+ * @LastEditTime: 2020-04-30 23:58:56
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -110,9 +110,9 @@ namespace Sakura::Graphics
             
         // Create & Destroy Command Contexts
         virtual CommandBuffer* CreateContext(
-            const CommandQueue& queue, bool bTransiant = true) const = 0;
+            const CommandQueue& queue, ECommandType type, bool bTransiant = true) const = 0;
         virtual CommandBuffer* AllocateContext(
-            const CommandQueue& queue, bool bTransiant = true) = 0;
+            const CommandQueue& queue, ECommandType type, bool bTransiant = true) = 0;
         virtual void FreeContext(CommandBuffer* context) = 0;
         virtual void FreeAllContexts(ECommandType typeToDestroy) = 0;
 
@@ -161,9 +161,9 @@ namespace Sakura::Graphics
         const uint64 contextNum() const {return contextPools[0].size();}
     protected:
         std::vector<std::unique_ptr<CommandBuffer>> 
-            contextPools[CommandQueueTypes::CommandQueueTypeCount];
+            contextPools[CommandQueueTypes::ECommandQueueTypeCount];
         std::queue<CommandBuffer*> 
-            availableContexts[CommandQueueTypes::CommandQueueTypeCount];
+            availableContexts[CommandQueueTypes::ECommandQueueTypeCount];
         std::mutex contextAllocationMutex;
     };
 }

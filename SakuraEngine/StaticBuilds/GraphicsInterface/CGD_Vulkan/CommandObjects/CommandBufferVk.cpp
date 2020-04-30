@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-11 01:25:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-30 00:15:36
+ * @LastEditTime: 2020-05-01 00:03:55
  */
 #include "../../GraphicsCommon/CommandObjects/CommandBuffer.h"
 #include "../CGD_Vulkan.h"
@@ -26,10 +26,9 @@ using namespace Sakura::Graphics;
 using namespace Sakura::Graphics::Vk;
 
 CommandBuffer* CGDVk::AllocateContext(const CommandQueue& queue,
-    bool bTransiant)
+    ECommandType type, bool bTransiant)
 {
     std::lock_guard<std::mutex> LockGurad(contextAllocationMutex);
-    CommandQueueTypes type = queue.GetType();
 #ifdef PROFILING_POOL
     for (auto i = 0; i < contextPools[type].size(); i++)
     {
@@ -48,18 +47,51 @@ CommandBuffer* CGDVk::AllocateContext(const CommandQueue& queue,
             return res;
         }
     }
-    CommandBuffer* newContext = new CommandBufferVk(*this, 
-        (ECommandType)queue.GetType(), bTransiant);
+    CommandBuffer* newContext = nullptr;
+    switch (type)
+    {
+    case ECommandType::ECommandBufferGraphics:
+        newContext = new CommandBufferGraphicsVk(*this,
+            ((const CommandQueueVk&)queue).queueFramilyIndex, bTransiant);
+        break;
+    case ECommandType::ECommandBufferCompute:
+		newContext = new CommandBufferComputeVk(*this,
+            ((const CommandQueueVk&)queue).queueFramilyIndex, bTransiant);
+		break;
+    case ECommandType::ECommandBufferCopy:
+		newContext = new CommandBufferCopyVk(*this,
+            ((const CommandQueueVk&)queue).queueFramilyIndex, bTransiant);
+		break;
+    default:
+        break;
+    }
     auto result = std::unique_ptr<CommandBuffer>(newContext);
     auto ptr = result.get();
     contextPools[type].push_back(std::move(result));
     return ptr;
 }
 
-CommandBuffer* CGDVk::CreateContext(const CommandQueue& queue, bool bTransiant) const
+CommandBuffer* CGDVk::CreateContext(const CommandQueue& queue, ECommandType type, bool bTransiant) const
 {
-    return new CommandBufferVk(*this,
-        (ECommandType)queue.GetType(), bTransiant);
+	CommandBuffer* newContext = nullptr;
+	switch (type)
+	{
+	case ECommandType::ECommandBufferGraphics:
+		newContext = new CommandBufferGraphicsVk(*this,
+            ((const CommandQueueVk&)queue).queueFramilyIndex, bTransiant);
+		break;
+	case ECommandType::ECommandBufferCompute:
+		newContext = new CommandBufferComputeVk(*this,
+            ((const CommandQueueVk&)queue).queueFramilyIndex, bTransiant);
+		break;
+	case ECommandType::ECommandBufferCopy:
+		newContext = new CommandBufferCopyVk(*this,
+            ((const CommandQueueVk&)queue).queueFramilyIndex, bTransiant);
+		break;
+	default:
+		break;
+	}
+    return newContext;
 }
 
 void CGDVk::FreeAllContexts(ECommandType type)
@@ -78,91 +110,121 @@ void CGDVk::FreeContext(CommandBuffer* context)
     availableContexts[context->GetCommandBufferType()].push(context);
 }
 
-CommandBufferVk::CommandBufferVk(const CGDVk& _cgd, 
-    ECommandType type, bool bTransiant)
-    : cgd(_cgd)
+
+CommandBufferVk::CommandBufferVk(const CGDVk& _cgd, std::uint32_t family, bool bTransiant)
+    :cgd(_cgd)
 {
-    auto indices = _cgd.GetQueueFamily().graphicsFamily.value();
-    switch (type)
-    {
-    case ECommandType::CommandBufferGraphics:
-        indices = _cgd.GetQueueFamily().graphicsFamily.value();
-        break;
-    case ECommandType::CommandBufferCompute:
-        indices = _cgd.GetQueueFamily().computeFamily.value();
-        break;
-    case ECommandType::CommandBufferCopy:
-        indices = _cgd.GetQueueFamily().copyFamily.value();
-        break;
-    default:
-        break;
-    }
-    this->m_Type = type;
-    VkCommandPoolCreateInfo poolInfo = {};
-    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.queueFamilyIndex = indices;
+	auto indices = family; 
+    VkCommandPoolCreateInfo poolInfo = {}; 
+    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO; 
+    poolInfo.queueFamilyIndex = indices; 
     poolInfo.flags = bTransiant ? VK_COMMAND_POOL_CREATE_TRANSIENT_BIT : 0; 
-    if (vkCreateCommandPool(_cgd.GetCGDEntity().device, &poolInfo,
-        nullptr, &commandPool) != VK_SUCCESS) 
+    if (vkCreateCommandPool(_cgd.GetCGDEntity().device, &poolInfo, 
+        nullptr, &commandPool) != VK_SUCCESS)
     {
-        CGDVk::error("Vulkan: failed to create command pool!");
-        throw std::runtime_error("failed to create command pool!");
+        CGDVk::error("Vulkan: failed to create command pool!"); 
+        throw std::runtime_error("failed to create command pool!"); 
     }
-
-    VkCommandBufferAllocateInfo allocInfo = {};
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    VkCommandBufferAllocateInfo allocInfo = {}; 
+    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO; 
     allocInfo.commandPool = commandPool;
-    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandBufferCount = 1;
-
-    if (vkAllocateCommandBuffers(_cgd.GetCGDEntity().device, &allocInfo,
-        &commandBuffer) != VK_SUCCESS) 
+    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY; 
+    allocInfo.commandBufferCount = 1; 
+    if (vkAllocateCommandBuffers(_cgd.GetCGDEntity().device, &allocInfo, 
+        & commandBuffer) != VK_SUCCESS)
     {
         CGDVk::error("Vulkan: failed to allocate command buffers!");
-        throw std::runtime_error("failed to allocate command buffers!");
+        throw std::runtime_error("failed to allocate command buffers!"); 
     }
-
-    VkFenceCreateInfo fenceInfo = {};
-    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-    if(vkCreateFence(_cgd.GetCGDEntity().device, &fenceInfo,
+    VkFenceCreateInfo fenceInfo = {}; 
+    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO; 
+    fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT; 
+    if (vkCreateFence(_cgd.GetCGDEntity().device, &fenceInfo, 
         nullptr, &recordingFence) != VK_SUCCESS)
-    {        
-        CGDVk::error("failed to create synchronization objects for a CmdBuffer!");
-        throw std::runtime_error("failed to create synchronization objects for a CmdBuffer!");
-    }
-}
-
-CommandBufferVk::~CommandBufferVk()
-{
-    vkWaitForFences(cgd.GetCGDEntity().device,
-        1, &recordingFence, VK_TRUE, UINT64_MAX);
-    vkDestroyFence(cgd.GetCGDEntity().device, recordingFence, nullptr);
-    vkDestroyCommandPool(cgd.GetCGDEntity().device, commandPool, nullptr);
-}
-
-void CommandBufferVk::Begin()
-{
-    bOpen = true;
-    vkResetCommandPool(cgd.GetCGDEntity().device,
-        commandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT); 
-    VkCommandBufferBeginInfo beginInfo = {};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) 
     {
-        CGDVk::error("Vulkan: failed to begin recording command buffer!");
-        throw std::runtime_error("failed to begin recording command buffer!");
+        CGDVk::error("failed to create synchronization objects for a CmdBuffer!"); 
+        throw std::runtime_error("failed to create synchronization objects for a CmdBuffer!"); 
     }
 }
 
-void CommandBufferVk::BindVertexBuffer(const GpuBuffer& vb) 
+CommandBufferGraphicsVk::CommandBufferGraphicsVk(const CGDVk& _cgd,
+    std::uint32_t family, bool bTransiant)
+    : CommandBufferVk(_cgd, family, bTransiant)
+{
+    this->m_Type = ECommandType::ECommandBufferGraphics;
+}
+
+CommandBufferComputeVk::CommandBufferComputeVk(const CGDVk& _cgd,
+    std::uint32_t family, bool bTransiant)
+    : CommandBufferVk(_cgd, family, bTransiant)
+{
+    this->m_Type = ECommandType::ECommandBufferCompute;
+}
+
+CommandBufferCopyVk::CommandBufferCopyVk(const CGDVk& _cgd,
+    std::uint32_t family, bool bTransiant)
+    : CommandBufferVk(_cgd, family, bTransiant)
+{
+    this->m_Type = ECommandType::ECommandBufferCopy;
+}
+
+template<typename Buffer>
+void Destruct(Buffer* _this)
+{
+	vkWaitForFences(_this->cgd.GetCGDEntity().device,
+		1, &_this->recordingFence, VK_TRUE, UINT64_MAX);
+	vkDestroyFence(_this->cgd.GetCGDEntity().device, _this->recordingFence, nullptr);
+	vkDestroyCommandPool(_this->cgd.GetCGDEntity().device, _this->commandPool, nullptr);
+}
+
+CommandBufferGraphicsVk::~CommandBufferGraphicsVk()
+{
+    Destruct(this);
+}
+CommandBufferComputeVk::~CommandBufferComputeVk()
+{
+    Destruct(this);
+}
+CommandBufferCopyVk::~CommandBufferCopyVk()
+{
+    Destruct(this);
+}
+
+template<typename Buffer>
+void BeginBuffer(Buffer* _this)
+{
+	_this->bOpen = true;
+	vkResetCommandPool(_this->cgd.GetCGDEntity().device,
+        _this->commandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
+	VkCommandBufferBeginInfo beginInfo = {};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	if (vkBeginCommandBuffer(_this->commandBuffer, &beginInfo) != VK_SUCCESS)
+	{
+		CGDVk::error("Vulkan: failed to begin recording command buffer!");
+		throw std::runtime_error("failed to begin recording command buffer!");
+	}
+}
+void CommandBufferGraphicsVk::Begin()
+{
+    BeginBuffer(this);
+}
+void CommandBufferComputeVk::Begin()
+{
+    BeginBuffer(this);
+}
+void CommandBufferCopyVk::Begin()
+{
+    BeginBuffer(this);
+}
+
+void CommandBufferGraphicsVk::BindVertexBuffer(const GpuBuffer& vb)
 {
     VkDeviceSize offsets[] = {0};
     VkBuffer bufs[] = {((const GpuResourceVkBuffer&)vb).buffer};
     vkCmdBindVertexBuffers(commandBuffer, 0, 1, bufs, offsets);
 }
 
-void CommandBufferVk::BindIndexBuffer(const GpuBuffer& ib,
+void CommandBufferGraphicsVk::BindIndexBuffer(const GpuBuffer& ib,
     const IndexBufferStride stride)
 {
     VkBuffer buf = ((const GpuResourceVkBuffer&)ib).buffer;
@@ -171,7 +233,7 @@ void CommandBufferVk::BindIndexBuffer(const GpuBuffer& ib,
     vkCmdBindIndexBuffer(commandBuffer, buf, 0, index);
 }
 
-void CommandBufferVk::BeginComputePass(ComputePipeline* cp)
+void CommandBufferComputeVk::BeginComputePass(ComputePipeline* cp)
 {
     vkCp = (ComputePipelineVk*)cp;
     if(vkCp->pipeline == VK_NULL_HANDLE)
@@ -183,13 +245,13 @@ void CommandBufferVk::BeginComputePass(ComputePipeline* cp)
         VK_PIPELINE_BIND_POINT_COMPUTE, ((ComputePipelineVk*)cp)->pipeline);
 }
 
-void CommandBufferVk::DispatchCompute(uint32 groupCountX,
+void CommandBufferComputeVk::DispatchCompute(uint32 groupCountX,
     uint32 groupCountY, uint32 groupCountZ)
 {
     vkCmdDispatch(commandBuffer, groupCountX, groupCountY, groupCountZ);
 }
 
-void CommandBufferVk::BeginRenderPass(
+void CommandBufferGraphicsVk::BeginRenderPass(
     GraphicsPipeline* gp, const RenderTargetSet& rts)
 {
     vkGp = (GraphicsPipelineVk*)gp;
@@ -220,7 +282,7 @@ void CommandBufferVk::BeginRenderPass(
         &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 }
 
-void CommandBufferVk::BindRootArguments(const PipelineBindPoint bindPoint,
+void CommandBufferGraphicsVk::BindRootArguments(const PipelineBindPoint bindPoint,
     const RootArgument** arguments, uint32_t argumentNum)
 {
     std::vector<VkDescriptorSet> descriptorSets(argumentNum);
@@ -232,37 +294,44 @@ void CommandBufferVk::BindRootArguments(const PipelineBindPoint bindPoint,
             (((const RootArgumentVk**)arguments)[i])->descriptorSet;
         set = cset < set ? cset : set;
     }
-
-    if (bindPoint == PipelineBindPoint::BindPointGraphics)
-    {
-		vkCmdBindDescriptorSets(commandBuffer, Transfer(bindPoint),
-			vkGp->pipelineLayout, set, argumentNum, descriptorSets.data(), 0, nullptr);
-        vkCmdBindDescriptorSets(commandBuffer, Transfer(BindPointGraphics),
-			vkGp->pipelineLayout, 3, 1, 
-            ((RootArgumentVk*)arguments[0])->staticSamplers, 0, nullptr);
-    }
-    else if(bindPoint == PipelineBindPoint::BindPointCompute)
-    {
-        vkCmdBindDescriptorSets(commandBuffer, Transfer(bindPoint),
-            vkCp->pipelineLayout, set, argumentNum, descriptorSets.data(), 0, nullptr);
-    }
+	vkCmdBindDescriptorSets(commandBuffer, Transfer(bindPoint),
+		vkGp->pipelineLayout, set, argumentNum, descriptorSets.data(), 0, nullptr);
+	vkCmdBindDescriptorSets(commandBuffer, Transfer(BindPointGraphics),
+		vkGp->pipelineLayout, 3, 1,
+		((RootArgumentVk*)arguments[0])->staticSamplers, 0, nullptr);
 }
 
-void CommandBufferVk::Draw(uint32 vertexCount, uint32 instanceCount,
+void CommandBufferComputeVk::BindRootArguments(const PipelineBindPoint bindPoint,
+	const RootArgument** arguments, uint32_t argumentNum)
+{
+	std::vector<VkDescriptorSet> descriptorSets(argumentNum);
+	auto set = 9999;
+	for (auto i = 0u; i < argumentNum; i++)
+	{
+		auto cset = ((const RootArgumentVk**)arguments)[i]->targetSet;
+		descriptorSets[i] =
+			(((const RootArgumentVk**)arguments)[i])->descriptorSet;
+		set = cset < set ? cset : set;
+	}
+	vkCmdBindDescriptorSets(commandBuffer, Transfer(bindPoint),
+		vkCp->pipelineLayout, set, argumentNum, descriptorSets.data(), 0, nullptr);
+}
+
+void CommandBufferGraphicsVk::Draw(uint32 vertexCount, uint32 instanceCount,
     uint32 firstVertex, uint32 firstInstance)
 {
     vkCmdDraw(commandBuffer, vertexCount,
         instanceCount, firstVertex, firstInstance);
 }
 
-void CommandBufferVk::DrawIndexed(const uint32_t indicesCount,
+void CommandBufferGraphicsVk::DrawIndexed(const uint32_t indicesCount,
     const uint32_t instanceCount)
 {
     vkCmdDrawIndexed(commandBuffer, indicesCount,
         instanceCount, 0, 0, 0);
 }
 
-void CommandBufferVk::CopyResource(GpuBuffer& src, GpuBuffer& dst,
+void CommandBufferCopyVk::CopyResource(GpuBuffer& src, GpuBuffer& dst,
     const uint64 size, const uint64 srcOffset, const uint64 dstOffset)
 {
     VkBufferCopy copyRegion = {};
@@ -274,7 +343,7 @@ void CommandBufferVk::CopyResource(GpuBuffer& src, GpuBuffer& dst,
         ((GpuResourceVkBuffer&)dst).buffer, 1, &copyRegion);
 }
 
-void CommandBufferVk::CopyResource(GpuBuffer& src, GpuTexture& dst,
+void CommandBufferCopyVk::CopyResource(GpuBuffer& src, GpuTexture& dst,
     const BufferImageCopy& info)
 {
     VkBufferImageCopy region = {};
@@ -293,7 +362,7 @@ void CommandBufferVk::CopyResource(GpuBuffer& src, GpuTexture& dst,
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 }
 
-void CommandBufferVk::CopyResource(GpuBuffer& src, GpuTexture& dst,
+void CommandBufferCopyVk::CopyResource(GpuBuffer& src, GpuTexture& dst,
         const uint32_t imageWidth, const uint32_t imageHeight,
         const ImageAspectFlags aspectFlags, const uint64_t srcOffset)
 {
@@ -315,11 +384,6 @@ void CommandBufferVk::CopyResource(GpuBuffer& src, GpuTexture& dst,
         ((GpuResourceVkBuffer&)src).buffer,
         ((GpuResourceVkImage&)dst).image,
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
-}
-
-void CommandBufferVk::ResourceBarrier(GpuBuffer& buffer)
-{
-    
 }
 
 // Create an image memory barrier for changing the layout of
@@ -456,76 +520,85 @@ void setImageLayout(
         1, &imageMemoryBarrier);
 }
 
-void CommandBufferVk::ResourceBarrier(GpuTexture& texture,
+void resourceBarrier(VkCommandBuffer& commandBuffer, GpuTexture& texture,
     const ImageLayout oldLayout, const ImageLayout newLayout,
     const TextureSubresourceRange& range)
 {
-    VkImageMemoryBarrier barrier = {};
-    barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-    barrier.oldLayout = *(VkImageLayout*)&oldLayout;
-    barrier.newLayout = *(VkImageLayout*)&newLayout;
-    barrier.subresourceRange.aspectMask = range.aspectMask;
-    barrier.subresourceRange.baseMipLevel = range.baseMipLevel;
-    barrier.subresourceRange.levelCount = range.mipLevels;
-    barrier.subresourceRange.baseArrayLayer = range.baseArrayLayer;
-    barrier.subresourceRange.layerCount = range.layerCount;
+	VkImageMemoryBarrier barrier = {};
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.oldLayout = *(VkImageLayout*)&oldLayout;
+	barrier.newLayout = *(VkImageLayout*)&newLayout;
+	barrier.subresourceRange.aspectMask = range.aspectMask;
+	barrier.subresourceRange.baseMipLevel = range.baseMipLevel;
+	barrier.subresourceRange.levelCount = range.mipLevels;
+	barrier.subresourceRange.baseArrayLayer = range.baseArrayLayer;
+	barrier.subresourceRange.layerCount = range.layerCount;
 
-    VkPipelineStageFlags sourceStage;
-    VkPipelineStageFlags destinationStage;
-    switch (barrier.oldLayout)
-    {
-    case VK_IMAGE_LAYOUT_UNDEFINED:
-        sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-        break;
-    case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
-        sourceStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
-        break;
-    case VK_IMAGE_LAYOUT_GENERAL:
-        sourceStage = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
-        break;
-    case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-        sourceStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-        break;
-    default:
-        CGDVk::error("unsupported layout transition!");
-        throw std::invalid_argument("unsupported layout transition!");
-        break;
-    }
-    switch (barrier.newLayout)
-    {
-    case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
-        destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
-        break;
-    case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-        destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-        break;
-    case VK_IMAGE_LAYOUT_GENERAL:
-        destinationStage = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
-        break;
-    default:
-        CGDVk::error("unsupported layout transition!");
-        throw std::invalid_argument("unsupported layout transition!");
-        break;
-    }
-    setImageLayout(commandBuffer, ((const GpuResourceVkImage&)texture).image,
-        Transfer(oldLayout), Transfer(newLayout),
-        barrier.subresourceRange,
-        sourceStage, destinationStage);
+	VkPipelineStageFlags sourceStage;
+	VkPipelineStageFlags destinationStage;
+	switch (barrier.oldLayout)
+	{
+	case VK_IMAGE_LAYOUT_UNDEFINED:
+		sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
+		sourceStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_GENERAL:
+		sourceStage = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+		sourceStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+		break;
+	default:
+		CGDVk::error("unsupported layout transition!");
+		throw std::invalid_argument("unsupported layout transition!");
+		break;
+	}
+	switch (barrier.newLayout)
+	{
+	case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
+		destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+		destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+		break;
+	case VK_IMAGE_LAYOUT_GENERAL:
+		destinationStage = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+		break;
+	default:
+		CGDVk::error("unsupported layout transition!");
+		throw std::invalid_argument("unsupported layout transition!");
+		break;
+	}
+	setImageLayout(commandBuffer, ((const GpuResourceVkImage&)texture).image,
+		Transfer(oldLayout), Transfer(newLayout),
+		barrier.subresourceRange,
+		sourceStage, destinationStage);
 }
 
-void CommandBufferVk::GenerateMipmaps(GpuTexture& texture, Format format,
+void CommandBufferGraphicsVk::ResourceBarrier(GpuTexture& texture,
+    const ImageLayout oldLayout, const ImageLayout newLayout,
+    const TextureSubresourceRange& range)
+{
+    resourceBarrier(commandBuffer, texture, oldLayout, newLayout, range);
+}
+void CommandBufferComputeVk::ResourceBarrier(GpuTexture& texture,
+	const ImageLayout oldLayout, const ImageLayout newLayout,
+	const TextureSubresourceRange& range)
+{
+	resourceBarrier(commandBuffer, texture, oldLayout, newLayout, range);
+}
+void CommandBufferCopyVk::ResourceBarrier(GpuTexture& texture,
+	const ImageLayout oldLayout, const ImageLayout newLayout,
+	const TextureSubresourceRange& range)
+{
+	resourceBarrier(commandBuffer, texture, oldLayout, newLayout, range);
+}
+
+void generateMipmaps(VkCommandBuffer& commandBuffer, GpuTexture& texture, Format format,
     uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels)
 {
-	VkFormatProperties formatProperties;
-	vkGetPhysicalDeviceFormatProperties(
-        cgd.GetCGDEntity().physicalDevice, Transfer(format), &formatProperties);
-
-	if (!(formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)) 
-    {
-        CGDVk::error("texture image format does not support linear blitting!");
-		throw std::runtime_error("texture image format does not support linear blitting!");
-	}
-
 	VkImageMemoryBarrier barrier = {};
 	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	barrier.image = ((GpuResourceVkImage&)texture).image;
@@ -567,10 +640,10 @@ void CommandBufferVk::GenerateMipmaps(GpuTexture& texture, Format format,
 		blit.dstSubresource.layerCount = 1;
 
 		vkCmdBlitImage(commandBuffer,
-            ((GpuResourceVkImage&)texture).image, 
-            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-            ((GpuResourceVkImage&)texture).image, 
-            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			((GpuResourceVkImage&)texture).image,
+			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+			((GpuResourceVkImage&)texture).image,
+			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 			1, &blit,
 			VK_FILTER_LINEAR);
 
@@ -602,7 +675,52 @@ void CommandBufferVk::GenerateMipmaps(GpuTexture& texture, Format format,
 		1, &barrier);
 }
 
-void CommandBufferVk::Reset()
+void CommandBufferComputeVk::GenerateMipmaps(GpuTexture& texture, Format format,
+    uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels)
+{
+	VkFormatProperties formatProperties;
+	vkGetPhysicalDeviceFormatProperties(
+		cgd.GetCGDEntity().physicalDevice, Transfer(format), &formatProperties);
+
+	if (!(formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT))
+	{
+		CGDVk::error("texture image format does not support linear blitting!");
+		throw std::runtime_error("texture image format does not support linear blitting!");
+	}
+    generateMipmaps(commandBuffer, texture, format, texWidth, texHeight, mipLevels);
+}
+
+void CommandBufferCopyVk::GenerateMipmaps(GpuTexture& texture, Format format,
+	uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels)
+{
+	VkFormatProperties formatProperties;
+	vkGetPhysicalDeviceFormatProperties(
+		cgd.GetCGDEntity().physicalDevice, Transfer(format), &formatProperties);
+
+	if (!(formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT))
+	{
+		CGDVk::error("texture image format does not support linear blitting!");
+		throw std::runtime_error("texture image format does not support linear blitting!");
+	}
+	generateMipmaps(commandBuffer, texture, format, texWidth, texHeight, mipLevels);
+}
+
+
+void CommandBufferGraphicsVk::Reset()
+{
+	vkResetCommandPool(cgd.GetCGDEntity().device,
+		commandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
+	if (bOpen)
+		End();
+}
+void CommandBufferComputeVk::Reset()
+{
+	vkResetCommandPool(cgd.GetCGDEntity().device,
+		commandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
+	if (bOpen)
+		End();
+}
+void CommandBufferCopyVk::Reset()
 {
     vkResetCommandPool(cgd.GetCGDEntity().device,
         commandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT); 
@@ -610,12 +728,12 @@ void CommandBufferVk::Reset()
         End();
 }
 
-void CommandBufferVk::EndRenderPass()
+void CommandBufferGraphicsVk::EndRenderPass()
 {
     vkCmdEndRenderPass(commandBuffer);
 }
 
-void CommandBufferVk::End()
+void CommandBufferGraphicsVk::End()
 {
     bOpen = false;
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) 
@@ -623,4 +741,22 @@ void CommandBufferVk::End()
         CGDVk::error("Vulkan: failed to record command buffer!");
         throw std::runtime_error("failed to record command buffer!");
     }
+}
+void CommandBufferComputeVk::End()
+{
+	bOpen = false;
+	if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS)
+	{
+		CGDVk::error("Vulkan: failed to record command buffer!");
+		throw std::runtime_error("failed to record command buffer!");
+	}
+}
+void CommandBufferCopyVk::End()
+{
+	bOpen = false;
+	if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS)
+	{
+		CGDVk::error("Vulkan: failed to record command buffer!");
+		throw std::runtime_error("failed to record command buffer!");
+	}
 }

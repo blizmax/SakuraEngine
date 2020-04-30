@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-16 17:02:13
- * @LastEditTime: 2020-04-30 00:23:45
+ * @LastEditTime: 2020-05-01 00:09:31
  */
 #pragma once
 #ifdef SAKURA_TARGET_PLATFORM_OSX
@@ -168,11 +168,11 @@ namespace Sakura::Graphics::Im
 			info.renderArea.extent.width = swapChain->GetExtent().width;
 			info.renderArea.extent.height = swapChain->GetExtent().height;
 			info.clearValueCount = 0;
-			vkCmdBeginRenderPass(((const CommandBufferVk*)cxt)->commandBuffer,
+			vkCmdBeginRenderPass((dynamic_cast<const CommandBufferVk*>(cxt))->commandBuffer,
                 &info, VK_SUBPASS_CONTENTS_INLINE);
             ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(),
-                ((const CommandBufferVk*)cxt)->commandBuffer);
-            vkCmdEndRenderPass(((const CommandBufferVk*)cxt)->commandBuffer);
+                (dynamic_cast<const CommandBufferVk*>(cxt))->commandBuffer);
+            vkCmdEndRenderPass((dynamic_cast<const CommandBufferVk*>(cxt))->commandBuffer);
             return;
         }
         default:
@@ -266,10 +266,10 @@ namespace Sakura::Graphics::Im
                 // Use any command queue
                 auto ctx =
                     ((CGD&)gfxDevice).AllocateContext(*gfxDevice.GetGraphicsQueue(),
-                        ECommandType::CommandBufferGraphics);
+                        ECommandType::ECommandBufferGraphics);
                 ctx->Reset();
                 VkCommandBuffer command_buffer =
-                    ((const CommandBufferVk*)ctx)->commandBuffer;
+                    (dynamic_cast<const CommandBufferVk*>(ctx))->commandBuffer;
                 VkCommandBufferBeginInfo begin_info = {};
                 begin_info.sType =
                     VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-29 11:46:00
- * @LastEditTime: 2020-04-30 17:51:57
+ * @LastEditTime: 2020-05-01 00:06:23
  */
 #pragma once
 #define GLM_FORCE_RADIANS
@@ -252,9 +252,9 @@ private:
 
         TextureSubresourceRange textureSubresource;
         textureSubresource.mipLevels = mipLevels;
-        std::unique_ptr<CommandBuffer> context;
-        context.reset(cgd->CreateContext(*cgd->GetGraphicsQueue(),
-            ECommandType::CommandBufferGraphics));
+        std::unique_ptr<CommandBufferCopy> context;
+        context.reset((CommandBufferCopy*)(cgd->CreateContext(*cgd->GetGraphicsQueue(),
+            ECommandType::ECommandBufferCopy)));
         context->Begin();
         context->ResourceBarrier(*texture.get(),
             ImageLayout::Unknown, ImageLayout::TransferDstOptimal,
@@ -301,22 +301,23 @@ private:
         compAttachments[1].rootArgType = SignatureSlotType::StorageImageSlot;
         compAttachments[1].dstBinding = 1;
         compArgument->UpdateArgument(compAttachments, 2);
-
-        context.reset(cgd->CreateContext(*cgd->GetGraphicsQueue(),
-            ECommandType::CommandBufferGraphics));
-        context->Begin();
-        context->BeginComputePass(compPipeline.get());
+        
+        std::unique_ptr<CommandBufferCompute> gcontext;
+        gcontext.reset((CommandBufferCompute*)cgd->CreateContext(*cgd->GetGraphicsQueue(),
+            ECommandType::ECommandBufferCompute));
+        gcontext->Begin();
+        gcontext->BeginComputePass(compPipeline.get());
         const auto* cmparg = compArgument.get();
-        context->BindRootArguments(PipelineBindPoint::BindPointCompute,
+        gcontext->BindRootArguments(PipelineBindPoint::BindPointCompute,
             &cmparg, 1);
-        context->DispatchCompute(
+        gcontext->DispatchCompute(
             texture->GetExtent().width / 16, 
             texture->GetExtent().height / 16, 1);
-        context->ResourceBarrier(*textureTarget.get(),
+        gcontext->ResourceBarrier(*textureTarget.get(),
             ImageLayout::UAV, ImageLayout::ShaderReadOnlyOptimal,
             textureSubresource);
-        context->End();
-        cgd->GetGraphicsQueue()->Submit(context.get());
+        gcontext->End();
+        cgd->GetGraphicsQueue()->Submit(gcontext.get());
         cgd->WaitIdle();
     }
     
@@ -353,9 +354,9 @@ private:
                 memcpy(ptr, indices.data(), ibsize);
             });
 
-        std::unique_ptr<CommandBuffer> context; 
-        context.reset(cgd->CreateContext(*cgd->GetCopyQueue(),
-            ECommandType::CommandBufferCopy));
+        std::unique_ptr<CommandBufferCopy> context; 
+        context.reset((CommandBufferCopy*)cgd->CreateContext(*cgd->GetCopyQueue(),
+            ECommandType::ECommandBufferCopy));
         context->Begin();
         context->CopyResource(*uploadBufferVB.get(), *vertexBuffer.get(),vbsize);
         context->CopyResource(*uploadBufferIB.get(), *indexBuffer.get(), ibsize);
@@ -489,10 +490,10 @@ private:
         RenderTarget rts[2] = {rt, ds};
         RenderTargetSet rtset{(RenderTarget*)rts, 2};
 
-        context.reset(cgd->CreateContext(
-            *cgd->GetGraphicsQueue(), ECommandType::CommandBufferGraphics));
-		imContext.reset(cgd->CreateContext(
-            *cgd->GetGraphicsQueue(), ECommandType::CommandBufferGraphics));
+        context.reset((CommandBufferGraphics*)cgd->CreateContext(
+            *cgd->GetGraphicsQueue(), ECommandType::ECommandBufferGraphics));
+		imContext.reset((CommandBufferGraphics*)cgd->CreateContext(
+            *cgd->GetGraphicsQueue(), ECommandType::ECommandBufferGraphics));
         
         updateUniformBuffer();
         
@@ -569,7 +570,7 @@ private:
     std::unique_ptr<Sakura::Graphics::CGD> cgd;
     std::unique_ptr<Fence> fence;
     std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
-    std::unique_ptr<CommandBuffer> context, imContext;
+    std::unique_ptr<CommandBufferGraphics> context, imContext;
 
     std::unique_ptr<RootArgument> cbvArgument, compArgument;
     std::unique_ptr<RootSignature> rootSignature, compRootSignature;

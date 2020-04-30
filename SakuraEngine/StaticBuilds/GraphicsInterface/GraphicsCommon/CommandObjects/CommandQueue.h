@@ -21,7 +21,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-02 18:44:11
- * @LastEditTime: 2020-04-30 21:27:22
+ * @LastEditTime: 2020-04-30 21:35:22
  */
 #pragma once
 #include "SakuraEngine/Core/CoreMinimal/CoreMinimal.h"
@@ -36,10 +36,10 @@ namespace Sakura::Graphics
 {
     enum CommandQueueTypes
     {
-        CommandQueueGraphics = 1,
-        CommandQueueCompute = 2,
-        CommandQueueCopy = 4,
-        CommandQueueTypeCount = 3
+        ECommandQueueGraphics = 1,
+        ECommandQueueCompute = 2,
+        ECommandQueueCopy = 4,
+        ECommandQueueTypeCount = 3
     };
 
     sinterface CommandQueue
