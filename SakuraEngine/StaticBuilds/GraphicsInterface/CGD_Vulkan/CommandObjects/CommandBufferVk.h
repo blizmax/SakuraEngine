@@ -8,7 +8,7 @@
  * @LastEditTime: 2020-04-18 02:28:22
  */
 #pragma once
-#include "../../GraphicsCommon/CommandObjects/CommandContext.h"
+#include "../../GraphicsCommon/CommandObjects/CommandBuffer.h"
 #include "vulkan/vulkan.h"
 
 namespace Sakura::Graphics::Vk
@@ -20,11 +20,11 @@ namespace Sakura::Graphics::Vk
 
 namespace Sakura::Graphics::Vk
 {
-    class CommandContextVk : simplements CommandContext
+    class CommandBufferVk : simplements CommandBuffer
     {
         friend class CGDVk;
         friend class CommandQueueVk;
-        virtual ~CommandContextVk() override final;
+        virtual ~CommandBufferVk() override final;
     public:
         virtual void Begin() override final;
         virtual void End() override final;
@@ -75,7 +75,7 @@ namespace Sakura::Graphics::Vk
     public:
         VkCommandBuffer commandBuffer;
     protected:
-        CommandContextVk(const CGDVk& _cgd, ECommandType type,
+        CommandBufferVk(const CGDVk& _cgd, ECommandType type,
             bool bTransiant = false);
     protected:
         const CGDVk& cgd;

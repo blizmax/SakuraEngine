@@ -104,12 +104,12 @@ namespace Sakura::Graphics::Vk
         [[nodiscard]] virtual RenderPass* CreateRenderPass(
             const RenderPassCreateInfo& rpInfo) const override final;
     public:
-    // Implements: See CommandObjects/CommandContextVk.cpp
-        virtual CommandContext* AllocateContext(
+    // Implements: See CommandObjects/CommandBufferVk.cpp
+        virtual CommandBuffer* AllocateContext(
             const CommandQueue& queue, bool bTransiant = true) override final;
-        [[nodiscard]] virtual CommandContext* CreateContext(
+        [[nodiscard]] virtual CommandBuffer* CreateContext(
             const CommandQueue& queue, bool bTransiant = true) const override final;
-        virtual void FreeContext(CommandContext* context) override final;
+        virtual void FreeContext(CommandBuffer* context) override final;
         virtual void FreeAllContexts(ECommandType typeToDestroy) override final;
     public:
     // Implements: See GraphicsObjects/FenceVk.cpp

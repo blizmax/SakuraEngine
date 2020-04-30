@@ -40,14 +40,14 @@ namespace Sakura::Graphics::Vk
     {
         friend class CGDVk;
         friend class CommandQueueVk;
-        friend class CommandContextVk;
+        friend class CommandBufferVk;
         friend struct FenceVk;
     protected:
         CommandQueueVk(const CGDVk& _cgd,
             std::uint32_t queueFramilyIndex, CommandQueueTypes type);
     public:
-        virtual void Submit(CommandContext* commandContext) override final;
-        virtual void Submit(CommandContext* commandContext,
+        virtual void Submit(CommandBuffer* CommandBuffer) override final;
+        virtual void Submit(CommandBuffer* CommandBuffer,
             Fence* fence, uint64 until, uint64 to) override final;
         virtual void Submit(Fence* fence, uint64 completedValue) override final;
         virtual void Wait(Fence* fence, uint64 until) override final;

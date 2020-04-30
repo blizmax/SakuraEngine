@@ -224,8 +224,8 @@ private:
 
         TextureSubresourceRange textureSubresource;
         textureSubresource.mipLevels = mipLevels;
-        std::unique_ptr<CommandContext> context;
-        context.reset(cgd->CreateContext(ECommandType::CommandContext_Graphics));
+        std::unique_ptr<CommandBuffer> context;
+        context.reset(cgd->CreateContext(ECommandType::CommandBufferGraphics));
         context->Begin();
         context->ResourceBarrier(*texture.get(),
             ImageLayout::Unknown, ImageLayout::TransferDstOptimal,
@@ -273,7 +273,7 @@ private:
         compAttachments[1].dstBinding = 1;
         compArgument->UpdateArgument(compAttachments, 2);
 
-        context.reset(cgd->CreateContext(ECommandType::CommandContext_Graphics));
+        context.reset(cgd->CreateContext(ECommandType::CommandBufferGraphics));
         context->Begin();
         context->BeginComputePass(compPipeline.get());
         const auto* cmparg = compArgument.get();
@@ -323,8 +323,8 @@ private:
                 memcpy(ptr, indices.data(), ibsize);
             });
 
-        std::unique_ptr<CommandContext> context; 
-        context.reset(cgd->CreateContext(ECommandType::CommandContext_Copy));
+        std::unique_ptr<CommandBuffer> context; 
+        context.reset(cgd->CreateContext(ECommandType::CommandBufferCopy));
         context->Begin();
         context->CopyResource(*uploadBufferVB.get(), *vertexBuffer.get(),vbsize);
         context->CopyResource(*uploadBufferIB.get(), *indexBuffer.get(), ibsize);
@@ -458,8 +458,8 @@ private:
         RenderTarget rts[2] = {rt, ds};
         RenderTargetSet rtset{(RenderTarget*)rts, 2};
 
-        context.reset(cgd->CreateContext(ECommandType::CommandContext_Graphics));
-		imContext.reset(cgd->CreateContext(ECommandType::CommandContext_Graphics));
+        context.reset(cgd->CreateContext(ECommandType::CommandBufferGraphics));
+		imContext.reset(cgd->CreateContext(ECommandType::CommandBufferGraphics));
         
         updateUniformBuffer();
         
@@ -536,7 +536,7 @@ private:
     std::unique_ptr<Sakura::Graphics::CGD> cgd;
     std::unique_ptr<Fence> fence;
     std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
-    std::unique_ptr<CommandContext> context, imContext;
+    std::unique_ptr<CommandBuffer> context, imContext;
 
     std::unique_ptr<RootArgument> cbvArgument, compArgument;
     std::unique_ptr<RootSignature> rootSignature, compRootSignature;

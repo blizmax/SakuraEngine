@@ -19,7 +19,7 @@ else()
 add_library(CGD_Vulkan  
     STATIC    
     CGD_Vulkan.cpp
-    CommandObjects/CommandContextVk.cpp
+    CommandObjects/CommandBufferVk.cpp
     CommandObjects/CommandQueueVk.cpp
     ResourceObjects/GpuResourceVk.cpp
     ResourceObjects/ResourceViewVk.cpp

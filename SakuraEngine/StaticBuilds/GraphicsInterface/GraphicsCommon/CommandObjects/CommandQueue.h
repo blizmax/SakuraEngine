@@ -21,14 +21,14 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-02 18:44:11
- * @LastEditTime: 2020-04-30 00:51:03
+ * @LastEditTime: 2020-04-30 21:27:22
  */
 #pragma once
 #include "SakuraEngine/Core/CoreMinimal/CoreMinimal.h"
 
 namespace Sakura::Graphics
 {
-    sinterface CommandContext;
+    sinterface CommandBuffer;
     sinterface Fence;
 }
 
@@ -36,10 +36,10 @@ namespace Sakura::Graphics
 {
     enum CommandQueueTypes
     {
-        COMMAND_QUEUE_GRAPHICS,
-        COMMAND_QUEUE_COMPUTE,
-        COMMAND_QUEUE_COPY,
-        CommandQueueTypeCount
+        CommandQueueGraphics = 1,
+        CommandQueueCompute = 2,
+        CommandQueueCopy = 4,
+        CommandQueueTypeCount = 3
     };
 
     sinterface CommandQueue
@@ -49,8 +49,8 @@ namespace Sakura::Graphics
         {
             
         }
-        virtual void Submit(CommandContext* commandContext) = 0;
-        virtual void Submit(CommandContext* commandContext,
+        virtual void Submit(CommandBuffer* CommandBuffer) = 0;
+        virtual void Submit(CommandBuffer* CommandBuffer,
             Fence* fence, uint64 until, uint64 to) = 0;
         virtual void Submit(Fence* fence, uint64 completedValue) = 0;
         virtual void Wait(Fence* fence, uint64 until) = 0;

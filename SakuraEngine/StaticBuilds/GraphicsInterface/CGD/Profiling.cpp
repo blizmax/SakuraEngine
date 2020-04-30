@@ -8,13 +8,13 @@
  * @LastEditTime : 2020-02-11 10:20:25
  */
 #include "../GraphicsCommon/CommandObjects/Profiling.h"
-#include "../GraphicsCommon/CommandObjects/CommandContext.h"
+#include "../GraphicsCommon/CommandObjects/CommandBuffer.h"
 #include "Core/EngineUtils/ConsoleDesk.h"
 
 namespace Sakura::Graphics
 {
     void Profiling::BeginBlock(const sstring& ID,
-        const CommandContext& context)
+        const CommandBuffer& context)
     {
         #ifdef SAKURA_GRAPHICS_PROFILING
         {
@@ -26,7 +26,7 @@ namespace Sakura::Graphics
     }
 
     void Profiling::EndBlock(const sstring& ID,
-        const CommandContext& context)
+        const CommandBuffer& context)
     {
         #ifdef SAKURA_GRAPHICS_PROFILING
         {

@@ -13,7 +13,7 @@
 
 namespace Sakura::Graphics
 {
-    sinterface CommandContext;
+    sinterface CommandBuffer;
 }
 
 namespace Sakura::Graphics
@@ -29,8 +29,8 @@ namespace Sakura::Graphics
     {
     public:
         static void BeginBlock(const sstring& ID,
-            const CommandContext& context);
+            const CommandBuffer& context);
         static void EndBlock(const sstring& ID,
-            const CommandContext& context);
+            const CommandBuffer& context);
     };
 } // Sakura::Graphics

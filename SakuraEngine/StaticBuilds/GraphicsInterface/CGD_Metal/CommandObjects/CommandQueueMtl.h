@@ -35,8 +35,8 @@ namespace Sakura::Graphics::Mtl
     {
     public:
         CommandQueueMtl(mtlpp::CommandQueue _queue, CommandQueueTypes _type);
-        virtual void Submit(CommandContext* commandContext) override final;
-        virtual void Submit(CommandContext* commandContext,
+        virtual void Submit(CommandBuffer* CommandBuffer) override final;
+        virtual void Submit(CommandBuffer* CommandBuffer,
             Fence* fence, uint64 until, uint64 to) override final;
         virtual void Submit(Fence* fence, uint64 completedValue) override final;
         virtual void Wait(Fence* fence, uint64 until) override final;

@@ -25,7 +25,7 @@
  * @LastEditTime: 2020-04-30 00:07:34
  */
 #include "CommandQueueVk.h"
-#include "CommandContextVk.h"
+#include "CommandBufferVk.h"
 #include "../CGD_Vulkan.h"
 #include "../GraphicsObjects/FenceVk.h"
 
@@ -39,7 +39,7 @@ CommandQueueVk::CommandQueueVk(const CGDVk& _cgd,
     type = _type;
 }
 
-void CommandQueueVk::Submit(CommandContext* commandContext,
+void CommandQueueVk::Submit(CommandBuffer* CommandBuffer,
     Fence* fence, uint64 until, uint64 to)
 {
     auto FcVk = (FenceVk*)fence;
@@ -55,7 +55,7 @@ void CommandQueueVk::Submit(CommandContext* commandContext,
 	timelineInfo.pSignalSemaphoreValues = &toValue;
     
     const VkPipelineStageFlags wat = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
-    CommandContextVk* cmdVk = (CommandContextVk*)commandContext;
+    CommandBufferVk* cmdVk = (CommandBufferVk*)CommandBuffer;
     VkSubmitInfo submitInfo;
     {
         submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -81,9 +81,9 @@ void CommandQueueVk::Submit(CommandContext* commandContext,
     }
 }
 
-void CommandQueueVk::Submit(CommandContext* commandContext)
+void CommandQueueVk::Submit(CommandBuffer* CommandBuffer)
 {
-    CommandContextVk* cmdVk = (CommandContextVk*)commandContext;
+    CommandBufferVk* cmdVk = (CommandBufferVk*)CommandBuffer;
     VkSubmitInfo submitInfo;
     {
         submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;

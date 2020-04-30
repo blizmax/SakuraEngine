@@ -73,7 +73,7 @@ namespace Sakura::Graphics::Vk
     {
         friend class CGDVk;
         friend class RootSignatureVk;
-        friend class CommandContextVk;
+        friend class CommandBufferVk;
     public:
         VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
         virtual ~RootArgumentVk() override final;

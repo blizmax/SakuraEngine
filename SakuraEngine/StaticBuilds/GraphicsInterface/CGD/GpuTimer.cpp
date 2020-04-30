@@ -8,7 +8,7 @@
  * @LastEditTime : 2020-02-11 10:20:17
  */
 #include "../GraphicsCommon/GpuTimer.h"
-#include "../GraphicsCommon/CommandObjects/CommandContext.h"
+#include "../GraphicsCommon/CommandObjects/CommandBuffer.h"
 
 using namespace Sakura;
 
@@ -36,12 +36,12 @@ namespace Sakura::Graphics::GpuTimeManager
         return sm_NumTimers++;
     }
 
-    void StartTimer(CommandContext& context, uint32 timerIdx)
+    void StartTimer(CommandBuffer& context, uint32 timerIdx)
     {
         return;
     }
 
-    void StopTimer(CommandContext& context, uint32 timerIdx)
+    void StopTimer(CommandBuffer& context, uint32 timerIdx)
     {
         return;
     }

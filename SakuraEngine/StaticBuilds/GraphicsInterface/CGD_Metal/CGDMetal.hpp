@@ -31,7 +31,7 @@
 namespace Sakura::Graphics::Mtl
 {
     class CommandQueueMtl;
-    class CommandContextMtl;
+    class CommandBufferMtl;
 }
 
 namespace Sakura::Graphics::Mtl
@@ -52,7 +52,7 @@ namespace Sakura::Graphics::Mtl
     public:
         void Initialize(CGDInfo info);
         void InitializeDevice(void* mainSurface);
-        CommandContext* CreateContext(const CommandQueue& queue,
+        CommandBuffer* CreateContext(const CommandQueue& queue,
             bool bTransiant = true) const;
         Shader* CreateShader(
             const char* data, std::size_t dataSize);

@@ -252,9 +252,9 @@ private:
 
         TextureSubresourceRange textureSubresource;
         textureSubresource.mipLevels = mipLevels;
-        std::unique_ptr<CommandContext> context;
+        std::unique_ptr<CommandBuffer> context;
         context.reset(cgd->CreateContext(*cgd->GetGraphicsQueue(),
-            ECommandType::CommandContext_Graphics));
+            ECommandType::CommandBufferGraphics));
         context->Begin();
         context->ResourceBarrier(*texture.get(),
             ImageLayout::Unknown, ImageLayout::TransferDstOptimal,
@@ -303,7 +303,7 @@ private:
         compArgument->UpdateArgument(compAttachments, 2);
 
         context.reset(cgd->CreateContext(*cgd->GetGraphicsQueue(),
-            ECommandType::CommandContext_Graphics));
+            ECommandType::CommandBufferGraphics));
         context->Begin();
         context->BeginComputePass(compPipeline.get());
         const auto* cmparg = compArgument.get();
@@ -353,9 +353,9 @@ private:
                 memcpy(ptr, indices.data(), ibsize);
             });
 
-        std::unique_ptr<CommandContext> context; 
+        std::unique_ptr<CommandBuffer> context; 
         context.reset(cgd->CreateContext(*cgd->GetCopyQueue(),
-            ECommandType::CommandContext_Copy));
+            ECommandType::CommandBufferCopy));
         context->Begin();
         context->CopyResource(*uploadBufferVB.get(), *vertexBuffer.get(),vbsize);
         context->CopyResource(*uploadBufferIB.get(), *indexBuffer.get(), ibsize);
@@ -490,9 +490,9 @@ private:
         RenderTargetSet rtset{(RenderTarget*)rts, 2};
 
         context.reset(cgd->CreateContext(
-            *cgd->GetGraphicsQueue(), ECommandType::CommandContext_Graphics));
+            *cgd->GetGraphicsQueue(), ECommandType::CommandBufferGraphics));
 		imContext.reset(cgd->CreateContext(
-            *cgd->GetGraphicsQueue(), ECommandType::CommandContext_Graphics));
+            *cgd->GetGraphicsQueue(), ECommandType::CommandBufferGraphics));
         
         updateUniformBuffer();
         
@@ -569,7 +569,7 @@ private:
     std::unique_ptr<Sakura::Graphics::CGD> cgd;
     std::unique_ptr<Fence> fence;
     std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
-    std::unique_ptr<CommandContext> context, imContext;
+    std::unique_ptr<CommandBuffer> context, imContext;
 
     std::unique_ptr<RootArgument> cbvArgument, compArgument;
     std::unique_ptr<RootSignature> rootSignature, compRootSignature;

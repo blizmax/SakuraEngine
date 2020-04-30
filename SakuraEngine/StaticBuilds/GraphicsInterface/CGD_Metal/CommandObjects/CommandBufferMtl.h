@@ -22,11 +22,11 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 01:38:54
- * @LastEditTime: 2020-04-30 01:19:10
+ * @LastEditTime: 2020-04-30 21:28:17
  */
 #pragma once
 #include "../CGDMetal.hpp"
-#include "../../GraphicsCommon/CommandObjects/CommandContext.h"
+#include "../../GraphicsCommon/CommandObjects/CommandBuffer.h"
 #include "../mtlpp/mtlpp.hpp"
 
 namespace Sakura::Graphics::Mtl
@@ -49,7 +49,7 @@ namespace Sakura::Graphics::Mtl
     };
 
     using CommandBuffersMtl = mtlpp::CommandBuffer;
-    class CommandContextMtl : simplements CommandContext
+    class CommandBufferMtl : simplements CommandBuffer
     {
         friend class CGDMtl;
     public:
@@ -101,7 +101,7 @@ namespace Sakura::Graphics::Mtl
         virtual void GenerateMipmaps(GpuTexture& texture, Format format,
             uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels) final override;
     private:
-        CommandContextMtl(const CGDEntityMtl& _entity)
+        CommandBufferMtl(const CGDEntityMtl& _entity)
             :entity(_entity)
         {
             

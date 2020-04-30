@@ -27,7 +27,7 @@
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
 #include "Core/CoreMinimal/SDefination.h"
-#include "CommandObjects/CommandContext.h"
+#include "CommandObjects/CommandBuffer.h"
 #include "CommandObjects/CommandQueue.h"
 #include "SakuraEngine/Core/EngineUtils/log.h"
 #include "Flags/CommonFeatures.h"
@@ -109,11 +109,11 @@ namespace Sakura::Graphics
             const ComputePipelineCreateInfo& info) const = 0;
             
         // Create & Destroy Command Contexts
-        virtual CommandContext* CreateContext(
+        virtual CommandBuffer* CreateContext(
             const CommandQueue& queue, bool bTransiant = true) const = 0;
-        virtual CommandContext* AllocateContext(
+        virtual CommandBuffer* AllocateContext(
             const CommandQueue& queue, bool bTransiant = true) = 0;
-        virtual void FreeContext(CommandContext* context) = 0;
+        virtual void FreeContext(CommandBuffer* context) = 0;
         virtual void FreeAllContexts(ECommandType typeToDestroy) = 0;
 
         [[nodiscard]] virtual ResourceView* ViewIntoResource(
@@ -160,9 +160,9 @@ namespace Sakura::Graphics
     public:
         const uint64 contextNum() const {return contextPools[0].size();}
     protected:
-        std::vector<std::unique_ptr<CommandContext>> 
+        std::vector<std::unique_ptr<CommandBuffer>> 
             contextPools[CommandQueueTypes::CommandQueueTypeCount];
-        std::queue<CommandContext*> 
+        std::queue<CommandBuffer*> 
             availableContexts[CommandQueueTypes::CommandQueueTypeCount];
         std::mutex contextAllocationMutex;
     };

@@ -25,7 +25,7 @@
  * @LastEditTime: 2020-03-19 11:51:42
  */
 #include "CGD_Vulkan.cpp"
-#include "CommandObjects/CommandContextVk.cpp"
+#include "CommandObjects/CommandBufferVk.cpp"
 #include "CommandObjects/CommandQueueVk.cpp"
 #include "ResourceObjects/GpuResourceVk.cpp"
 #include "ResourceObjects/ShaderVk.cpp"

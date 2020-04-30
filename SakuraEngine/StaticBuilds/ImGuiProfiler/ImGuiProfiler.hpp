@@ -45,7 +45,7 @@ namespace Sakura::SPA
 #include "SakuraEngine/Core/CoreMinimal/CoreMinimal.h"
 #include "ImGuiVulkanSDL.h"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/CGD_Vulkan.h"
-#include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/CommandObjects/CommandContextVk.h"
+#include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/CommandObjects/CommandBufferVk.h"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/CGD_Vulkan/GraphicsObjects/RenderPassVk.h"
 #include "SakuraEngine/Core/Core.h"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/GraphicsCommon/GraphicsObjects/SwapChain.h"
@@ -93,7 +93,7 @@ namespace Sakura::Graphics::Im
             ImGui_ImplVulkan_Shutdown();
         }
         void BeginFrame(SDL_Window* wd) const;
-        void Record(CommandContext* cxt, RenderTarget&) const;
+        void Record(CommandBuffer* cxt, RenderTarget&) const;
         ImGuiWindow* CreateImGuiWindow(SDL_Window* wind, int width, int height);
         void ImGuiRender(ImGuiWindow* wd);
         void ImGuiPresent(ImGuiWindow* wd);
@@ -154,7 +154,7 @@ namespace Sakura::Graphics::Im
         }
     }
 
-    void ImGuiProfiler::Record(CommandContext* cxt, RenderTarget& rt) const
+    void ImGuiProfiler::Record(CommandBuffer* cxt, RenderTarget& rt) const
     {
         ImGui::Render();
         switch (backend)
@@ -168,11 +168,11 @@ namespace Sakura::Graphics::Im
 			info.renderArea.extent.width = swapChain->GetExtent().width;
 			info.renderArea.extent.height = swapChain->GetExtent().height;
 			info.clearValueCount = 0;
-			vkCmdBeginRenderPass(((const CommandContextVk*)cxt)->commandBuffer,
+			vkCmdBeginRenderPass(((const CommandBufferVk*)cxt)->commandBuffer,
                 &info, VK_SUBPASS_CONTENTS_INLINE);
             ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(),
-                ((const CommandContextVk*)cxt)->commandBuffer);
-            vkCmdEndRenderPass(((const CommandContextVk*)cxt)->commandBuffer);
+                ((const CommandBufferVk*)cxt)->commandBuffer);
+            vkCmdEndRenderPass(((const CommandBufferVk*)cxt)->commandBuffer);
             return;
         }
         default:
@@ -266,10 +266,10 @@ namespace Sakura::Graphics::Im
                 // Use any command queue
                 auto ctx =
                     ((CGD&)gfxDevice).AllocateContext(*gfxDevice.GetGraphicsQueue(),
-                        ECommandType::CommandContext_Graphics);
+                        ECommandType::CommandBufferGraphics);
                 ctx->Reset();
                 VkCommandBuffer command_buffer =
-                    ((const CommandContextVk*)ctx)->commandBuffer;
+                    ((const CommandBufferVk*)ctx)->commandBuffer;
                 VkCommandBufferBeginInfo begin_info = {};
                 begin_info.sType =
                     VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;

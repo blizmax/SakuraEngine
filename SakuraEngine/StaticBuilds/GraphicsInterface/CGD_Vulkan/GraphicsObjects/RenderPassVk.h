@@ -137,7 +137,7 @@ namespace Sakura::Graphics::Vk
     {
         friend class CGDVk;
         friend class GraphicsPipelineVk;
-        friend class CommandContextVk;
+        friend class CommandBufferVk;
     public:
         virtual ~RenderPassVk();
         VkRenderPass renderPass;

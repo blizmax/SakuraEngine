@@ -1,8 +1,8 @@
 set(PLATFORM_SOURCES
     CGDMetal.hpp
     CGDMetal.cpp
-    CommandObjects/CommandContextMtl.h
-    CommandObjects/CommandContextMtl.cpp
+    CommandObjects/CommandBufferMtl.h
+    CommandObjects/CommandBufferMtl.cpp
     CommandObjects/CommandQueueMtl.h
     CommandObjects/CommandQueueMtl.cpp
     ResourceObjects/ShaderMtl.h

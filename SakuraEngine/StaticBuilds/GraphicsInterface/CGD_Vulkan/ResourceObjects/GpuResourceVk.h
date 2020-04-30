@@ -52,7 +52,7 @@ namespace Sakura::Graphics::Vk
     struct GpuResourceVkBuffer final : public GpuBuffer
     {
         friend class CGDVk;
-        friend class CommandContextVk;
+        friend class CommandBufferVk;
         virtual ~GpuResourceVkBuffer() override final;
         virtual void Map(void** data) override final;
         virtual void Unmap() override final;

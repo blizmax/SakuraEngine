@@ -13,7 +13,7 @@
 
 namespace Sakura::Graphics
 {
-    sinterface CommandContext;
+    sinterface CommandBuffer;
 }    
 
 namespace Sakura::Graphics::GpuTimeManager
@@ -26,18 +26,18 @@ namespace Sakura::Graphics::GpuTimeManager
 
     /**
      * @description: Start a gpu timer with timer index 
-     * @param {CommandContext& context, uint32 timerIdx} 
+     * @param {CommandBuffer& context, uint32 timerIdx} 
      * @return: void
      * @author: SaeruHikari
      */
-    void StartTimer(CommandContext& context, uint32 timerIdx);
+    void StartTimer(CommandBuffer& context, uint32 timerIdx);
     /**
      * @description: Stop a gpu timer with timer index 
-     * @param {CommandContext& context, uint32 timerIdx} 
+     * @param {CommandBuffer& context, uint32 timerIdx} 
      * @return: void
      * @author: SaeruHikari
      */
-    void StopTimer(CommandContext& context, uint32 timerIdx);
+    void StopTimer(CommandBuffer& context, uint32 timerIdx);
 
     /**
      * @description: Bookend all calls to GetTime() with

@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-05 23:50:30
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-26 17:13:41
+ * @LastEditTime: 2020-04-30 21:25:59
  */
 #pragma once
 #include <mutex>
@@ -22,7 +22,7 @@
 namespace Sakura::Graphics
 {
     sinterface CommandQueue;
-    sinterface CommandContext;
+    sinterface CommandBuffer;
     sinterface GraphicsPipeline;
     sinterface ComputePipeline;
     sinterface GpuTexture;
@@ -38,18 +38,18 @@ namespace Sakura::Graphics
     using ImageAspectFlags = std::uint32_t;
     enum ECommandType   
     {
-        CommandContext_Graphics = 0,
-        CommandContext_Compute = 1,
-        CommandContext_Copy = 2,
-        CommandContext_Indirect = 3,
-        CommandContext_Count = 4
+        CommandBufferGraphics = 1,
+        CommandBufferCompute = 2,
+        CommandBufferCopy = 4,
+        CommandBufferIndirect = 8,
+        CommandBufferCount = 4
     };
 
-    sinterface CommandContext
+    sinterface CommandBuffer
     {
         friend sinterface CGD;
     public:
-        virtual ~CommandContext() = default;
+        virtual ~CommandBuffer() = default;
         
         /**
          * @description: Ends the encoding, close the cmdlist/buffer 
@@ -117,14 +117,14 @@ namespace Sakura::Graphics
         virtual void GenerateMipmaps(GpuTexture& texture, Format format,
             uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels) = 0;
 
-        sinline ECommandType GetCommandContextType(void)
+        sinline ECommandType GetCommandBufferType(void)
         {
             return this->m_Type;
         }
     protected:
         bool bOpen = false;
         sstring m_ID;
-        ECommandType m_Type = ECommandType::CommandContext_Graphics;    
+        ECommandType m_Type = ECommandType::CommandBufferGraphics;    
     };
 
 

@@ -24,13 +24,13 @@
  * @Date: 2020-02-25 22:25:59
  * @LastEditTime: 2020-03-09 21:22:10
  */
-#include "../GraphicsCommon/CommandObjects/CommandContext.h"
+#include "../GraphicsCommon/CommandObjects/CommandBuffer.h"
 #include "../GraphicsCommon/CGD.h"
 #include "../GraphicsCommon/CommandObjects/Profiling.h"
 
 namespace Sakura::Graphics
 {
-    //void ContextManager::FreeContext(CommandContext* context)
+    //void ContextManager::FreeContext(CommandBuffer* context)
     //{
     //    ASSERT_RUNTIME(context != nullptr);
     //    std::lock_guard<std::mutex> LockGurad(sm_ContextAllocationMutex);

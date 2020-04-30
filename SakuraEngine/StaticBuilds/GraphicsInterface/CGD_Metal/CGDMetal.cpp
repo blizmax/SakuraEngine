@@ -52,11 +52,11 @@ void CGDMtl::Initialize(CGDInfo info)
 void CGDMtl::InitializeDevice(void* mainSurface)
 {
     entity.graphicsQueue = new CommandQueueMtl(
-        entity.device.NewCommandQueue(), CommandQueueTypes::COMMAND_QUEUE_GRAPHICS);
+        entity.device.NewCommandQueue(), CommandQueueTypes::CommandQueueGraphics);
     entity.computeQueue = new CommandQueueMtl(
-        entity.device.NewCommandQueue(), CommandQueueTypes::COMMAND_QUEUE_COMPUTE);
+        entity.device.NewCommandQueue(), CommandQueueTypes::CommandQueueCompute);
     entity.blitQueue = new CommandQueueMtl(
-        entity.device.NewCommandQueue(), CommandQueueTypes::COMMAND_QUEUE_COPY);
+        entity.device.NewCommandQueue(), CommandQueueTypes::CommandQueueCopy);
 }
 
 Shader* CGDMtl::CreateShader(const char* data, std::size_t dataSize)
@@ -70,7 +70,7 @@ Shader* CGDMtl::CreateShader(const char* data, std::size_t dataSize)
     return new ShaderMtl(library);
 }
 
-CommandContext* CGDMtl::CreateContext(const CommandQueue& queue,
+CommandBuffer* CGDMtl::CreateContext(const CommandQueue& queue,
     bool bTransiant) const
 {
     CGDMtl::debug_info("CGDMtl: Create Context");

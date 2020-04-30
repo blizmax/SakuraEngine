@@ -34,7 +34,7 @@
 
 !>&emsp;&emsp;此部分面向不熟知现代图形API流程的用户, 如果您对Vk或者D3D12这些现代图形API有一定了解, 可以直接通过下方的例程进行快速入门。
 
-&emsp;&emsp;要将命令送往GPU, CPU需要预先完成一系列的指令录制工作, 我们把指令相关的一系列接口称为[指令接口/命令族]()。在CGD中, 指令的录制交给接口CommandContext完成, 而提交则交给接口CommandQueue完成, 您也可以申请多个CommandContext, 之后统一的提交给一条CommandQueue。
+&emsp;&emsp;要将命令送往GPU, CPU需要预先完成一系列的指令录制工作, 我们把指令相关的一系列接口称为[指令接口/命令族]()。在CGD中, 指令的录制交给接口CommandBuffer完成, 而提交则交给接口CommandQueue完成, 您也可以申请多个CommandBuffer, 之后统一的提交给一条CommandQueue。
 
 ?>现代图形API都支持并推荐使用AsyncCompute, 这能让您把不同性质的GPU任务交给不同的队列来完成。</br> 
 &emsp;**- GraphicsQueue**: 提交图形绘制任务;</br> 

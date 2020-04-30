@@ -74,7 +74,7 @@ namespace Sakura::RenderGraph
         RootSignatureCreateInfo sigInfo;
         RenderPassCreateInfo rpInfo;
         GraphicsPipelineCreateInfo gpInfo;
-        std::function<void(CommandContext* commandContext)> renderCall;
+        std::function<void(CommandBuffer* CommandBuffer)> renderCall;
     };
     
     struct SGraphPassNode

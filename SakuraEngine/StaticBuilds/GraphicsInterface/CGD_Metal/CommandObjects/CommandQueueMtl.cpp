@@ -38,12 +38,12 @@ CommandQueueMtl::CommandQueueMtl(mtlpp::CommandQueue _queue,
         CGDMtl::debug_error("CGDMtl: Create Metal Queue Failed!");
 }
 
-void CommandQueueMtl::Submit(CommandContext* commandContext)
+void CommandQueueMtl::Submit(CommandBuffer* CommandBuffer)
 {
     
 }
 
-void CommandQueueMtl::Submit(CommandContext* commandContext,
+void CommandQueueMtl::Submit(CommandBuffer* CommandBuffer,
     Fence* fence, uint64 until, uint64 to)
 {
 
