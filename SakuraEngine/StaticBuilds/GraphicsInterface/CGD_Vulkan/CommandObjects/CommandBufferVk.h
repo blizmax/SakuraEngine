@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-11 01:38:49
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-05-01 00:01:53
+ * @LastEditTime: 2020-05-01 13:22:12
  */
 #pragma once
 #include "../../GraphicsCommon/CommandObjects/CommandBuffer.h"
@@ -22,12 +22,13 @@ namespace Sakura::Graphics::Vk
 {
     class CommandBufferVk
     {
-	public:
-		VkCommandBuffer commandBuffer;
-		const CGDVk& cgd;
-		GraphicsPipelineVk* vkGp = nullptr;
-		VkCommandPool commandPool;
-		VkFence recordingFence = VK_NULL_HANDLE;
+    public:
+        VkCommandBuffer commandBuffer;
+        const CGDVk& cgd;
+        GraphicsPipelineVk* vkGp = nullptr;
+        VkCommandPool commandPool;
+        VkFence recordingFence = VK_NULL_HANDLE;
+        static CommandBufferVk* FromCommandBuffer(CommandBuffer* cmdBuffer);
 	protected:
 		CommandBufferVk(const CGDVk& _cgd, std::uint32_t family, bool bTransiant = false);
     };
@@ -134,5 +135,21 @@ namespace Sakura::Graphics::Vk
 	protected:
         CommandBufferCopyVk(const CGDVk& _cgd, std::uint32_t family, bool bTransiant = false);
     };
+
+
+    inline CommandBufferVk* CommandBufferVk::FromCommandBuffer(CommandBuffer* cmdBuffer)
+    {
+        switch (cmdBuffer->GetCommandBufferType())
+        {
+        case ECommandType::ECommandBufferGraphics:
+            return static_cast<CommandBufferGraphicsVk*>(cmdBuffer);
+        case ECommandType::ECommandBufferCompute:
+            return static_cast<CommandBufferComputeVk*>(cmdBuffer);
+        case ECommandType::ECommandBufferCopy:
+            return static_cast<CommandBufferCopyVk*>(cmdBuffer);
+        default:
+            break;
+        }
+    }
 } // namespace Sakura::Graphics
 

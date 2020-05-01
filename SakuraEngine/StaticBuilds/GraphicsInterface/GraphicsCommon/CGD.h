@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-04-30 23:58:56
+ * @LastEditTime: 2020-05-01 13:25:23
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -113,6 +113,32 @@ namespace Sakura::Graphics
             const CommandQueue& queue, ECommandType type, bool bTransiant = true) const = 0;
         virtual CommandBuffer* AllocateContext(
             const CommandQueue& queue, ECommandType type, bool bTransiant = true) = 0;
+        template<ECommandType _type>
+        auto CreateContext(const CommandQueue& queue, bool bTransiant = true)
+        {
+            if constexpr (_type == ECommandType::ECommandBufferGraphics)
+                return static_cast<CommandBufferGraphics*>(CreateContext(queue, _type, bTransiant));
+            else if constexpr (_type == ECommandType::ECommandBufferCopy)
+                return static_cast<CommandBufferCopy*>(CreateContext(queue, _type, bTransiant));
+            else if constexpr (_type == ECommandType::ECommandBufferCompute)
+                return static_cast<CommandBufferCompute*>(CreateContext(queue, _type, bTransiant));
+        }
+        auto CreateCommandBufferGraphics(const CommandQueue& queue, bool bTransiant = true)
+        {
+            return static_cast<CommandBufferGraphics*>(
+                CreateContext(queue, ECommandBufferGraphics, bTransiant));
+        }
+        auto CreateCommandBufferCompute(const CommandQueue& queue, bool bTransiant = true)
+        {
+            return static_cast<CommandBufferCompute*>(
+                CreateContext(queue, ECommandBufferCompute, bTransiant));
+        }
+        auto CreateCommandBufferCopy(const CommandQueue& queue, bool bTransiant = true)
+        {
+            return static_cast<CommandBufferCopy*>(
+                CreateContext(queue, ECommandBufferCopy, bTransiant));
+        }
+
         virtual void FreeContext(CommandBuffer* context) = 0;
         virtual void FreeAllContexts(ECommandType typeToDestroy) = 0;
 

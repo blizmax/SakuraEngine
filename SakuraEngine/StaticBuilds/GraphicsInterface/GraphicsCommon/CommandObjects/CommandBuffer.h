@@ -73,14 +73,10 @@ namespace Sakura::Graphics
             const ImageLayout oldLayout, const ImageLayout newLayout,
             const TextureSubresourceRange& = plainTextureSubresourceRange) = 0;
 
-        sinline ECommandType GetCommandBufferType(void)
-        {
-            return this->m_Type;
-        }
+        virtual ECommandType GetCommandBufferType(void) = 0;
         bool bOpen = false;
     protected:
         sstring m_ID;
-        ECommandType m_Type = ECommandType::ECommandBufferGraphics;    
     };
 
     sinterface CommandBufferGraphics : simplements CommandBuffer
@@ -111,6 +107,11 @@ namespace Sakura::Graphics
 
 		virtual void BindRootArguments(const PipelineBindPoint bindPoint,
 			const RootArgument** arguments, uint32_t argumentNum) = 0;
+
+        virtual ECommandType GetCommandBufferType(void) final override
+        {
+            return ECommandType::ECommandBufferGraphics;
+        }
     };
 
     sinterface CommandBufferCompute : simplements CommandBuffer
@@ -125,6 +126,11 @@ namespace Sakura::Graphics
 
 		virtual void GenerateMipmaps(GpuTexture& texture, Format format,
 			uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels) = 0;
+
+		virtual ECommandType GetCommandBufferType(void) final override
+		{
+			return ECommandType::ECommandBufferCompute;
+		}
     };
 
     sinterface CommandBufferCopy : simplements CommandBuffer
@@ -142,5 +148,10 @@ namespace Sakura::Graphics
 
 		virtual void GenerateMipmaps(GpuTexture& texture, Format format,
 			uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels) = 0;
+
+		virtual ECommandType GetCommandBufferType(void) final override
+		{
+			return ECommandType::ECommandBufferCopy;
+		}
     };
 }

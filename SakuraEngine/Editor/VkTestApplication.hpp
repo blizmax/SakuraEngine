@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-29 11:46:00
- * @LastEditTime: 2020-05-01 00:06:23
+ * @LastEditTime: 2020-05-01 13:20:43
  */
 #pragma once
 #define GLM_FORCE_RADIANS
@@ -253,8 +253,8 @@ private:
         TextureSubresourceRange textureSubresource;
         textureSubresource.mipLevels = mipLevels;
         std::unique_ptr<CommandBufferCopy> context;
-        context.reset((CommandBufferCopy*)(cgd->CreateContext(*cgd->GetGraphicsQueue(),
-            ECommandType::ECommandBufferCopy)));
+        context.reset(
+            cgd->CreateContext<ECommandType::ECommandBufferCopy>(*cgd->GetGraphicsQueue()));
         context->Begin();
         context->ResourceBarrier(*texture.get(),
             ImageLayout::Unknown, ImageLayout::TransferDstOptimal,
@@ -490,8 +490,8 @@ private:
         RenderTarget rts[2] = {rt, ds};
         RenderTargetSet rtset{(RenderTarget*)rts, 2};
 
-        context.reset((CommandBufferGraphics*)cgd->CreateContext(
-            *cgd->GetGraphicsQueue(), ECommandType::ECommandBufferGraphics));
+        context.reset(
+            cgd->CreateContext<ECommandType::ECommandBufferGraphics>(*cgd->GetGraphicsQueue()));
 		imContext.reset((CommandBufferGraphics*)cgd->CreateContext(
             *cgd->GetGraphicsQueue(), ECommandType::ECommandBufferGraphics));
         

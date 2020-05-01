@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-11 01:25:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-05-01 00:03:55
+ * @LastEditTime: 2020-05-01 13:13:58
  */
 #include "../../GraphicsCommon/CommandObjects/CommandBuffer.h"
 #include "../CGD_Vulkan.h"
@@ -41,7 +41,7 @@ CommandBuffer* CGDVk::AllocateContext(const CommandQueue& queue,
     {
         auto res = availableContexts[type].front();
         if(vkGetFenceStatus(entityVk.device, 
-            ((CommandBufferVk*)res)->recordingFence) == VK_SUCCESS)
+            CommandBufferVk::FromCommandBuffer(res)->recordingFence) == VK_SUCCESS)
         {
             availableContexts[type].pop();
             return res;
@@ -151,21 +151,21 @@ CommandBufferGraphicsVk::CommandBufferGraphicsVk(const CGDVk& _cgd,
     std::uint32_t family, bool bTransiant)
     : CommandBufferVk(_cgd, family, bTransiant)
 {
-    this->m_Type = ECommandType::ECommandBufferGraphics;
+    
 }
 
 CommandBufferComputeVk::CommandBufferComputeVk(const CGDVk& _cgd,
     std::uint32_t family, bool bTransiant)
     : CommandBufferVk(_cgd, family, bTransiant)
 {
-    this->m_Type = ECommandType::ECommandBufferCompute;
+   
 }
 
 CommandBufferCopyVk::CommandBufferCopyVk(const CGDVk& _cgd,
     std::uint32_t family, bool bTransiant)
     : CommandBufferVk(_cgd, family, bTransiant)
 {
-    this->m_Type = ECommandType::ECommandBufferCopy;
+    
 }
 
 template<typename Buffer>

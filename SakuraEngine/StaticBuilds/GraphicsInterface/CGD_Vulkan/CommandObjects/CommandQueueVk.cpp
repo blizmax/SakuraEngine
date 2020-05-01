@@ -83,7 +83,7 @@ void CommandQueueVk::Submit(CommandBuffer* CommandBuffer,
 
 void CommandQueueVk::Submit(CommandBuffer* CommandBuffer)
 {
-    CommandBufferVk* cmdVk = dynamic_cast<CommandBufferVk*>(CommandBuffer);
+    CommandBufferVk* cmdVk = CommandBufferVk::FromCommandBuffer(CommandBuffer);
     VkSubmitInfo submitInfo;
     {
         submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;

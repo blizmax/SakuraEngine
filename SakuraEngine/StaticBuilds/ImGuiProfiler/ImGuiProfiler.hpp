@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-16 17:02:13
- * @LastEditTime: 2020-05-01 00:09:31
+ * @LastEditTime: 2020-05-01 13:11:18
  */
 #pragma once
 #ifdef SAKURA_TARGET_PLATFORM_OSX
@@ -168,11 +168,11 @@ namespace Sakura::Graphics::Im
 			info.renderArea.extent.width = swapChain->GetExtent().width;
 			info.renderArea.extent.height = swapChain->GetExtent().height;
 			info.clearValueCount = 0;
-			vkCmdBeginRenderPass((dynamic_cast<const CommandBufferVk*>(cxt))->commandBuffer,
+			vkCmdBeginRenderPass((CommandBufferVk::FromCommandBuffer(cxt))->commandBuffer,
                 &info, VK_SUBPASS_CONTENTS_INLINE);
             ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(),
-                (dynamic_cast<const CommandBufferVk*>(cxt))->commandBuffer);
-            vkCmdEndRenderPass((dynamic_cast<const CommandBufferVk*>(cxt))->commandBuffer);
+                (CommandBufferVk::FromCommandBuffer(cxt))->commandBuffer);
+            vkCmdEndRenderPass((CommandBufferVk::FromCommandBuffer(cxt))->commandBuffer);
             return;
         }
         default:
