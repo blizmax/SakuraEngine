@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-06 16:47:38
- * @LastEditTime: 2020-04-30 17:49:08
+ * @LastEditTime: 2020-05-01 17:25:26
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -252,9 +252,9 @@ namespace Sakura::Graphics
             AddVertexAttribute(attris...);
 		}
 
-		template<typename _VertexInputAttributeDescription, int n>
-		sinline void AddVertexAttribute(
-			std::array<_VertexInputAttributeDescription, n> bindings)
+		template<std::size_t n>
+		sinline void AddVertexAttributes(
+			const std::array<VertexInputAttributeDescription, n>& bindings)
 		{
 			for (auto i = 0; i < n; i++)
 			{

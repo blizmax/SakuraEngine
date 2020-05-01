@@ -105,12 +105,12 @@ namespace Sakura::Graphics::Vk
             const RenderPassCreateInfo& rpInfo) const override final;
     public:
     // Implements: See CommandObjects/CommandBufferVk.cpp
-        virtual CommandBuffer* AllocateContext(
+        virtual CommandBuffer* AllocateCommandBuffer(
             const CommandQueue& queue, ECommandType type, bool bTransiant = true) override final;
-        [[nodiscard]] virtual CommandBuffer* CreateContext(
+        [[nodiscard]] virtual CommandBuffer* CreateCommandBuffer(
             const CommandQueue& queue, ECommandType type, bool bTransiant = true) const override final;
-        virtual void FreeContext(CommandBuffer* context) override final;
-        virtual void FreeAllContexts(ECommandType typeToDestroy) override final;
+        virtual void FreeCommandBuffer(CommandBuffer* context) override final;
+        virtual void FreeAllCommandBuffers(ECommandType typeToDestroy) override final;
     public:
     // Implements: See GraphicsObjects/FenceVk.cpp
         [[nodiscard]] virtual Fence* AllocFence(void) override final;

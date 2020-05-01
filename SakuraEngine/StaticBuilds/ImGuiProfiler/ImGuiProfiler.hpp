@@ -265,7 +265,7 @@ namespace Sakura::Graphics::Im
             {
                 // Use any command queue
                 auto ctx =
-                    ((CGD&)gfxDevice).AllocateContext(*gfxDevice.GetGraphicsQueue(),
+                    ((CGD&)gfxDevice).AllocateCommandBuffer(*gfxDevice.GetGraphicsQueue(),
                         ECommandType::ECommandBufferGraphics);
                 ctx->Reset();
                 VkCommandBuffer command_buffer =
@@ -292,7 +292,7 @@ namespace Sakura::Graphics::Im
                 err = vkDeviceWaitIdle(pack.device);
                 check_vk_result(err);
                 ImGui_ImplVulkan_DestroyFontUploadObjects();
-                 ((CGD&)gfxDevice).FreeContext(ctx);
+                 ((CGD&)gfxDevice).FreeCommandBuffer(ctx);
             }
             return;
         }

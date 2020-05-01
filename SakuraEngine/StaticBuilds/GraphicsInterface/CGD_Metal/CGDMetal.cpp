@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:06:28
- * @LastEditTime: 2020-04-30 02:24:38
+ * @LastEditTime: 2020-05-01 23:16:22
  */
 #include "CGDMetal.hpp"
 #include <iostream>
@@ -70,9 +70,17 @@ Shader* CGDMtl::CreateShader(const char* data, std::size_t dataSize)
     return new ShaderMtl(library);
 }
 
-CommandBuffer* CGDMtl::CreateContext(const CommandQueue& queue,
-    bool bTransiant) const
+CommandQueue* CGDMtl::GetGraphicsQueue() const
 {
-    CGDMtl::debug_info("CGDMtl: Create Context");
-    return nullptr;
+    return entity.graphicsQueue;
+}
+
+CommandQueue* CGDMtl::GetComputeQueue() const
+{
+    return entity.computeQueue;
+}
+
+CommandQueue* CGDMtl::GetCopyQueue() const
+{
+    return entity.blitQueue;
 }

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-05-01 13:25:23
+ * @LastEditTime: 2020-05-01 17:31:42
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -109,38 +109,38 @@ namespace Sakura::Graphics
             const ComputePipelineCreateInfo& info) const = 0;
             
         // Create & Destroy Command Contexts
-        virtual CommandBuffer* CreateContext(
+        virtual CommandBuffer* CreateCommandBuffer(
             const CommandQueue& queue, ECommandType type, bool bTransiant = true) const = 0;
-        virtual CommandBuffer* AllocateContext(
+        virtual CommandBuffer* AllocateCommandBuffer(
             const CommandQueue& queue, ECommandType type, bool bTransiant = true) = 0;
         template<ECommandType _type>
-        auto CreateContext(const CommandQueue& queue, bool bTransiant = true)
+        auto CreateCommandBuffer(const CommandQueue& queue, bool bTransiant = true)
         {
             if constexpr (_type == ECommandType::ECommandBufferGraphics)
-                return static_cast<CommandBufferGraphics*>(CreateContext(queue, _type, bTransiant));
+                return static_cast<CommandBufferGraphics*>(CreateCommandBuffer(queue, _type, bTransiant));
             else if constexpr (_type == ECommandType::ECommandBufferCopy)
-                return static_cast<CommandBufferCopy*>(CreateContext(queue, _type, bTransiant));
+                return static_cast<CommandBufferCopy*>(CreateCommandBuffer(queue, _type, bTransiant));
             else if constexpr (_type == ECommandType::ECommandBufferCompute)
-                return static_cast<CommandBufferCompute*>(CreateContext(queue, _type, bTransiant));
+                return static_cast<CommandBufferCompute*>(CreateCommandBuffer(queue, _type, bTransiant));
         }
         auto CreateCommandBufferGraphics(const CommandQueue& queue, bool bTransiant = true)
         {
             return static_cast<CommandBufferGraphics*>(
-                CreateContext(queue, ECommandBufferGraphics, bTransiant));
+                CreateCommandBuffer(queue, ECommandBufferGraphics, bTransiant));
         }
         auto CreateCommandBufferCompute(const CommandQueue& queue, bool bTransiant = true)
         {
             return static_cast<CommandBufferCompute*>(
-                CreateContext(queue, ECommandBufferCompute, bTransiant));
+                CreateCommandBuffer(queue, ECommandBufferCompute, bTransiant));
         }
         auto CreateCommandBufferCopy(const CommandQueue& queue, bool bTransiant = true)
         {
             return static_cast<CommandBufferCopy*>(
-                CreateContext(queue, ECommandBufferCopy, bTransiant));
+                CreateCommandBuffer(queue, ECommandBufferCopy, bTransiant));
         }
 
-        virtual void FreeContext(CommandBuffer* context) = 0;
-        virtual void FreeAllContexts(ECommandType typeToDestroy) = 0;
+        virtual void FreeCommandBuffer(CommandBuffer* context) = 0;
+        virtual void FreeAllCommandBuffers(ECommandType typeToDestroy) = 0;
 
         [[nodiscard]] virtual ResourceView* ViewIntoResource(
             const GpuResource&, const ResourceViewCreateInfo&) const = 0;

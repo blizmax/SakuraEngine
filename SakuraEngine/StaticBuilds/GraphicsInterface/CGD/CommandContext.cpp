@@ -30,7 +30,7 @@
 
 namespace Sakura::Graphics
 {
-    //void ContextManager::FreeContext(CommandBuffer* context)
+    //void ContextManager::FreeCommandBuffer(CommandBuffer* context)
     //{
     //    ASSERT_RUNTIME(context != nullptr);
     //    std::lock_guard<std::mutex> LockGurad(sm_ContextAllocationMutex);

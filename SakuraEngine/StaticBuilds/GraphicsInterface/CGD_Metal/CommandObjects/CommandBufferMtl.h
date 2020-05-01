@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 01:38:54
- * @LastEditTime: 2020-04-30 21:28:17
+ * @LastEditTime: 2020-05-01 23:57:17
  */
 #pragma once
 #include "../CGDMetal.hpp"
@@ -31,85 +31,46 @@
 
 namespace Sakura::Graphics::Mtl
 {
-    struct SpecifiedEncoder
+    class CommandQueueMtl;
+    class CGDMtl;
+}
+
+namespace Sakura::Graphics::Mtl
+{
+    struct CommandBufferEntityMtl 
     {
-        ~SpecifiedEncoder()
-        {
-            next.reset();
-            // !Warning: to keep the order of encoders' destructiion,
-            // please add extra works below next's reset.
-        }
-        void SpwanNext(ECommandType cmdType)
-        {
-            
-        }
-        std::unique_ptr<mtlpp::CommandEncoder> encoder;
-        ECommandType cmdType;
-        std::unique_ptr<SpecifiedEncoder> next;
-    };
-
-    using CommandBuffersMtl = mtlpp::CommandBuffer;
-    class CommandBufferMtl : simplements CommandBuffer
-    {
-        friend class CGDMtl;
-    public:
-        virtual void Begin() override final;
-
-        virtual void End() override final;
-
-        virtual void BeginRenderPass(
-            GraphicsPipeline* gp, const RenderTargetSet& rts) override final;
-
-        virtual void EndRenderPass() override final;
-
-        virtual void BeginComputePass(ComputePipeline* cp) override final;
-
-        virtual void DispatchCompute(uint32 groupCountX, 
-            uint32 groupCountY, uint32 groupCountZ) override final;
-
-        virtual void Draw(uint32 vertexCount, uint32 instanceCount,
-            uint32 firstVertex, uint32 firstInstance) override final;
-        
-        virtual void DrawIndexed(const uint32 indicesCount,
-            const uint32 instanceCount) override final;
-
-        virtual void BindVertexBuffer(const GpuBuffer& vb) override final;
-
-        virtual void BindIndexBuffer(const GpuBuffer& ib,
-            const IndexBufferStride stride = IndexBufferStride::IndexBufferUINT32) override final;
-        
-        virtual void BindRootArguments(const PipelineBindPoint bindPoint,
-            const RootArgument** arguments, uint32 argumentNum) final override;
-        
-        virtual void CopyResource(GpuBuffer& src, GpuBuffer& dst,
-            const uint64_t srcOffset = 0,
-            const uint64_t dstOffset = 0, const uint64_t size = 0) final override;
-
-        virtual void CopyResource(GpuBuffer& src, GpuTexture& dst,
-            const uint32_t imageWidth, const uint32_t imageHeight,
-            const ImageAspectFlags aspectFlags, const uint64_t srcOffset = 0) final override;
-
-        virtual void CopyResource(GpuBuffer& src, GpuTexture& dst,
-            const BufferImageCopy& info) final override;
-
-        virtual void ResourceBarrier(GpuBuffer& toTransition) final override;
-
-        virtual void ResourceBarrier(GpuTexture& toTransition,
-            const ImageLayout oldLayout, const ImageLayout newLayout,
-            const TextureSubresourceRange& = plainTextureSubresourceRange) final override;
-
-        virtual void GenerateMipmaps(GpuTexture& texture, Format format,
-            uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels) final override;
-    private:
-        CommandBufferMtl(const CGDEntityMtl& _entity)
-            :entity(_entity)
-        {
-            
-        }
-        std::unique_ptr<SpecifiedEncoder> encoderHeader;
-        CommandBuffersMtl commandBuffers;
-        SpecifiedEncoder* cursor = nullptr;
+        CommandBufferEntityMtl(
+            const CGDEntityMtl& _entity, CommandQueueMtl& queue);
+        mtlpp::CommandBuffer commandBuffer;
         const CGDEntityMtl& entity;
     };
 
+    class CommandBufferGraphicsMtl final
+        : public CommandBufferEntityMtl, simplements CommandBufferGraphics
+    {
+        friend class CommandQueueMtl;
+        friend class CGDMtl;
+        CommandBufferGraphicsMtl(
+            const CGDEntityMtl& entity, CommandQueueMtl& queue);
+    public:
+        virtual void Begin() final override;
+        virtual void End() final override;
+        virtual void Reset() final override;
+        virtual void ResourceBarrier(GpuTexture& toTransition,
+            const ImageLayout oldLayout, const ImageLayout newLayout,
+            const TextureSubresourceRange& = plainTextureSubresourceRange) final override;
+        virtual void BeginRenderPass(
+		    GraphicsPipeline* gp, const RenderTargetSet& rts) final override;
+        virtual void EndRenderPass() final override;
+        virtual void Draw(uint32 vertexCount, uint32 instanceCount,
+			uint32 firstVertex, uint32 firstInstance) final override;
+        virtual void DrawIndexed(const uint32_t indicesCount,
+			const uint32_t instanceCount) final override;
+        virtual void BindVertexBuffer(const GpuBuffer& vb) final override;
+        virtual void BindIndexBuffer(const GpuBuffer& ib,
+			const IndexBufferStride stride = IndexBufferStride::IndexBufferUINT32) final override;
+        virtual void BindRootArguments(const PipelineBindPoint bindPoint,
+			const RootArgument** arguments, uint32_t argumentNum) final override;
+        mtlpp::RenderCommandEncoder encoder;
+    };
 }

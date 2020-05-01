@@ -225,7 +225,7 @@ private:
         TextureSubresourceRange textureSubresource;
         textureSubresource.mipLevels = mipLevels;
         std::unique_ptr<CommandBuffer> context;
-        context.reset(cgd->CreateContext(ECommandType::ECommandBufferGraphics));
+        context.reset(cgd->CreateCommandBuffer(ECommandType::ECommandBufferGraphics));
         context->Begin();
         context->ResourceBarrier(*texture.get(),
             ImageLayout::Unknown, ImageLayout::TransferDstOptimal,
@@ -273,7 +273,7 @@ private:
         compAttachments[1].dstBinding = 1;
         compArgument->UpdateArgument(compAttachments, 2);
 
-        context.reset(cgd->CreateContext(ECommandType::ECommandBufferGraphics));
+        context.reset(cgd->CreateCommandBuffer(ECommandType::ECommandBufferGraphics));
         context->Begin();
         context->BeginComputePass(compPipeline.get());
         const auto* cmparg = compArgument.get();
@@ -324,7 +324,7 @@ private:
             });
 
         std::unique_ptr<CommandBuffer> context; 
-        context.reset(cgd->CreateContext(ECommandType::ECommandBufferCopy));
+        context.reset(cgd->CreateCommandBuffer(ECommandType::ECommandBufferCopy));
         context->Begin();
         context->CopyResource(*uploadBufferVB.get(), *vertexBuffer.get(),vbsize);
         context->CopyResource(*uploadBufferIB.get(), *indexBuffer.get(), ibsize);
@@ -458,8 +458,8 @@ private:
         RenderTarget rts[2] = {rt, ds};
         RenderTargetSet rtset{(RenderTarget*)rts, 2};
 
-        context.reset(cgd->CreateContext(ECommandType::ECommandBufferGraphics));
-		imContext.reset(cgd->CreateContext(ECommandType::ECommandBufferGraphics));
+        context.reset(cgd->CreateCommandBuffer(ECommandType::ECommandBufferGraphics));
+		imContext.reset(cgd->CreateCommandBuffer(ECommandType::ECommandBufferGraphics));
         
         updateUniformBuffer();
         

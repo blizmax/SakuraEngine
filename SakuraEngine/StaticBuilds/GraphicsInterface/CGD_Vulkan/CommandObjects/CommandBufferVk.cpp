@@ -25,7 +25,7 @@
 using namespace Sakura::Graphics;
 using namespace Sakura::Graphics::Vk;
 
-CommandBuffer* CGDVk::AllocateContext(const CommandQueue& queue,
+CommandBuffer* CGDVk::AllocateCommandBuffer(const CommandQueue& queue,
     ECommandType type, bool bTransiant)
 {
     std::lock_guard<std::mutex> LockGurad(contextAllocationMutex);
@@ -71,7 +71,7 @@ CommandBuffer* CGDVk::AllocateContext(const CommandQueue& queue,
     return ptr;
 }
 
-CommandBuffer* CGDVk::CreateContext(const CommandQueue& queue, ECommandType type, bool bTransiant) const
+CommandBuffer* CGDVk::CreateCommandBuffer(const CommandQueue& queue, ECommandType type, bool bTransiant) const
 {
 	CommandBuffer* newContext = nullptr;
 	switch (type)
@@ -94,7 +94,7 @@ CommandBuffer* CGDVk::CreateContext(const CommandQueue& queue, ECommandType type
     return newContext;
 }
 
-void CGDVk::FreeAllContexts(ECommandType type)
+void CGDVk::FreeAllCommandBuffers(ECommandType type)
 {
     std::lock_guard<std::mutex> LockGurad(contextAllocationMutex);
     for(auto i = 0; i < contextPools[type].size(); i++)
@@ -103,7 +103,7 @@ void CGDVk::FreeAllContexts(ECommandType type)
     }
 }
 
-void CGDVk::FreeContext(CommandBuffer* context)
+void CGDVk::FreeCommandBuffer(CommandBuffer* context)
 {
     std::lock_guard<std::mutex> LockGurad(contextAllocationMutex);
     auto vkContext = (CommandBufferVk*)context;

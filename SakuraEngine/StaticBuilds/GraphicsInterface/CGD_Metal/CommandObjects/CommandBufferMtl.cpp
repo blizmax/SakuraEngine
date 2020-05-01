@@ -21,109 +21,110 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-04-29 01:39:13
- * @LastEditTime: 2020-04-30 01:15:54
+ * @Date: 2020-05-01 17:06:33
+ * @LastEditTime: 2020-05-02 00:48:15
  */
 #include "CommandBufferMtl.h"
-#include "../mtlpp/mtlpp.hpp"
+#include "CommandQueueMtl.h"
+#include "../CGDMetal.hpp"
 
 using namespace Sakura::Graphics::Mtl;
 
-void CommandBufferMtl::Begin() 
+Sakura::Graphics::CommandBuffer* CGDMtl::CreateCommandBuffer(
+    const CommandQueue& queue, ECommandType type, bool bTransiant) const
+{
+    CGDMtl::debug_info("CGDMtl: Create Context");
+    return new CommandBufferGraphicsMtl(entity,
+        ((CommandQueueMtl&)queue));
+}
+
+CommandBufferEntityMtl::CommandBufferEntityMtl(
+    const CGDEntityMtl& _entity, CommandQueueMtl& queue)
+    :entity(_entity)
+{
+    commandBuffer = queue.queue.CommandBuffer();
+    if(!commandBuffer.Validate())
+    {
+        CGDMtl::debug_error("CGDMtl: Failed to create Metal CommandBuffer!");
+    }
+}
+
+CommandBufferGraphicsMtl::CommandBufferGraphicsMtl(
+    const CGDEntityMtl& entity, CommandQueueMtl& queue)
+    :CommandBufferEntityMtl(entity, queue)
 {
     
 }
 
-void CommandBufferMtl::End()
+void CommandBufferGraphicsMtl::Begin()
 {
-
+    bOpen = true;
 }
 
-void CommandBufferMtl::BeginRenderPass(GraphicsPipeline* gp,
-    const RenderTargetSet& rts)
+void CommandBufferGraphicsMtl::End()
 {
-
+    bOpen = false;
 }
 
-void CommandBufferMtl::EndRenderPass()
+void CommandBufferGraphicsMtl::Reset()
 {
-
+    encoder.EndEncoding();
+    commandBuffer = commandBuffer.GetCommandQueue().CommandBuffer();
 }
 
-void CommandBufferMtl::BeginComputePass(ComputePipeline* cp)
-{
-    
-}
-
-void CommandBufferMtl::DispatchCompute(uint32 groupCountX, 
-    uint32 groupCountY, uint32 groupCountZ)
+void CommandBufferGraphicsMtl::ResourceBarrier(GpuTexture& toTransition,
+    const ImageLayout oldLayout, const ImageLayout newLayout,
+    const TextureSubresourceRange& subresourceRange)
 {
     
 }
 
-void CommandBufferMtl::Draw(uint32 vertexCount, uint32 instanceCount,
+void CommandBufferGraphicsMtl::BeginRenderPass(
+    GraphicsPipeline* gp, const RenderTargetSet& rts)
+{
+    if(bOpen)
+    {
+        //encoder = commandBuffer.RenderCommandEncoder();
+        if(false)
+        {
+            CGDMtl::debug_error("CGDMtl: Failed to create Metal RenderCommandEncoder!");
+        }
+    }
+    else
+        CGDMtl::debug_error("CGDMtl: Please Begin CommandBuffer before BeginRenderPass!");
+}
+
+void CommandBufferGraphicsMtl::EndRenderPass()
+{
+    encoder.EndEncoding();
+}
+
+void CommandBufferGraphicsMtl::Draw(uint32 vertexCount, uint32 instanceCount,
     uint32 firstVertex, uint32 firstInstance)
 {
     
 }
 
-void CommandBufferMtl::DrawIndexed(const uint32 indicesCount,
-    const uint32 instanceCount)
+void CommandBufferGraphicsMtl::DrawIndexed(const uint32_t indicesCount,
+    const uint32_t instanceCount)
+{
+
+}
+
+void CommandBufferGraphicsMtl::BindVertexBuffer(const GpuBuffer& vb)
 {
     
 }
 
-void CommandBufferMtl::BindVertexBuffer(const GpuBuffer& vb)
-{
-    
-}
-
-void CommandBufferMtl::BindIndexBuffer(const GpuBuffer& ib,
+void CommandBufferGraphicsMtl::BindIndexBuffer(const GpuBuffer& ib,
     const IndexBufferStride stride)
 {
-    
-}
-
-void CommandBufferMtl::BindRootArguments(const PipelineBindPoint bindPoint,
-    const RootArgument** arguments, uint32 argumentNum)
-{
-    
-}
-
-void CommandBufferMtl::CopyResource(GpuBuffer& src, GpuBuffer& dst,
-    const uint64_t srcOffset,
-    const uint64_t dstOffset, const uint64_t size)
-{
 
 }
 
-void CommandBufferMtl::CopyResource(GpuBuffer& src, GpuTexture& dst,
-    const uint32_t imageWidth, const uint32_t imageHeight,
-    const ImageAspectFlags aspectFlags, const uint64_t srcOffset)
+void CommandBufferGraphicsMtl::BindRootArguments(
+    const PipelineBindPoint bindPoint,
+    const RootArgument** arguments, uint32_t argumentNum)
 {
 
-}
-
-void CommandBufferMtl::CopyResource(GpuBuffer& src, GpuTexture& dst,
-    const BufferImageCopy& info)
-{
-
-}
-
-void CommandBufferMtl::ResourceBarrier(GpuBuffer& toTransition)
-{
-
-}
-
-void CommandBufferMtl::ResourceBarrier(GpuTexture& toTransition,
-    const ImageLayout oldLayout, const ImageLayout newLayout,
-    const TextureSubresourceRange& subres)
-{
-    
-}
-
-void CommandBufferMtl::GenerateMipmaps(GpuTexture& texture, Format format,
-    uint32_t texWidth, uint32_t texHeight, uint32_t mipLevels)
-{
-    
 }
