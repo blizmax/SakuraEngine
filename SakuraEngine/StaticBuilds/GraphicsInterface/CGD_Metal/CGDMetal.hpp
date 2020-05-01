@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:05:58
- * @LastEditTime: 2020-05-02 01:06:22
+ * @LastEditTime: 2020-05-02 01:12:09
  */
 #pragma once
 #include "../GraphicsCommon/CGD.h"
@@ -78,9 +78,6 @@ namespace Sakura::Graphics::Mtl
 
         [[nodiscard]] virtual ComputePipeline* CreateComputePipeline(
             const ComputePipelineCreateInfo& info) const final override;
-
-        virtual CommandBuffer* CreateCommandBuffer(const CommandQueue& queue, 
-            ECommandType type, bool bTransiant = true) const final override;
         
         virtual CommandBuffer* AllocateCommandBuffer(
             const CommandQueue& queue, ECommandType type, bool bTransiant = true) final override;

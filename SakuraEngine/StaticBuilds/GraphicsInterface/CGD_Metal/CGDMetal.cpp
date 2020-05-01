@@ -84,3 +84,103 @@ CommandQueue* CGDMtl::GetCopyQueue() const
 {
     return entity.blitQueue;
 }
+
+const char* Sakura::Graphics::Mtl::CGDMtl::CompileShader(const char* src, std::size_t)
+{
+    return src;
+}
+
+Sakura::Graphics::RenderPass* Sakura::Graphics::Mtl::CGDMtl::CreateRenderPass(const RenderPassCreateInfo& info) const
+{
+    return nullptr;
+}
+
+Sakura::Graphics::GraphicsPipeline* Sakura::Graphics::Mtl::CGDMtl::CreateGraphicsPipeline(const GraphicsPipelineCreateInfo& info, const RenderPass& progress) const
+{
+    return nullptr;
+}
+
+Sakura::Graphics::ComputePipeline* Sakura::Graphics::Mtl::CGDMtl::CreateComputePipeline(const ComputePipelineCreateInfo& info) const
+{
+    return nullptr;
+}
+
+Sakura::Graphics::CommandBuffer* Sakura::Graphics::Mtl::CGDMtl::AllocateCommandBuffer(const CommandQueue& queue, ECommandType type, bool bTransiant /*= true*/)
+{
+    return nullptr;
+}
+
+void Sakura::Graphics::Mtl::CGDMtl::FreeCommandBuffer(CommandBuffer* context)
+{
+    return;
+}
+
+void Sakura::Graphics::Mtl::CGDMtl::FreeAllCommandBuffers(ECommandType typeToDestroy)
+{
+
+}
+
+Sakura::Graphics::ResourceView* Sakura::Graphics::Mtl::CGDMtl::ViewIntoResource(const GpuResource&, const ResourceViewCreateInfo&) const
+{
+    return nullptr;
+}
+
+Sakura::Graphics::ResourceView* Sakura::Graphics::Mtl::CGDMtl::ViewIntoTexture(const GpuTexture&, const Format, const ImageAspectFlags, uint32 mipLevels /*= 1*/, uint32 baseMip /*= 0*/, uint32 layerCount /*= 1*/, uint32 baseArrayLayer /*= 0*/) const
+{
+    return nullptr;
+}
+
+Sakura::Graphics::CommandQueue* Sakura::Graphics::Mtl::CGDMtl::AllocQueue(CommandQueueTypes type) const
+{
+    return nullptr;
+}
+
+Sakura::Graphics::GpuBuffer* Sakura::Graphics::Mtl::CGDMtl::CreateGpuResource(const BufferCreateInfo&) const
+{
+    return nullptr;
+}
+
+Sakura::Graphics::GpuTexture* Sakura::Graphics::Mtl::CGDMtl::CreateGpuResource(const TextureCreateInfo&) const
+{
+    return nullptr;
+}
+
+void Sakura::Graphics::Mtl::CGDMtl::Wait(Fence* toWait, uint64 until) const
+{
+
+}
+
+void Sakura::Graphics::Mtl::CGDMtl::WaitIdle() const
+{
+
+}
+
+Sakura::Graphics::Fence* Sakura::Graphics::Mtl::CGDMtl::AllocFence(void)
+{
+    return nullptr;
+}
+
+Sakura::Graphics::RootSignature* Sakura::Graphics::Mtl::CGDMtl::CreateRootSignature(const RootSignatureCreateInfo& sigInfo) const
+{
+    return nullptr;
+}
+
+Sakura::Graphics::Sampler* Sakura::Graphics::Mtl::CGDMtl::CreateSampler(const SamplerCreateInfo&) const
+{
+    return nullptr;
+}
+
+const Sakura::Graphics::Format Sakura::Graphics::Mtl::CGDMtl::FindDepthFormat(void) const
+{
+    return Sakura::Graphics::Format::D32_SFLOAT;
+}
+
+void Sakura::Graphics::Mtl::CGDMtl::Present(SwapChain* chain)
+{
+    return;
+}
+
+void Sakura::Graphics::Mtl::CGDMtl::Destroy()
+{
+
+}

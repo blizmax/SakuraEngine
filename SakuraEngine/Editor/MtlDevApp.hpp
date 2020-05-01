@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 11:33:30
- * @LastEditTime: 2020-05-01 23:16:35
+ * @LastEditTime: 2020-05-02 01:18:48
  */
 #pragma once
 extern "C"
@@ -62,7 +62,8 @@ public:
         cgd->InitializeDevice(nullptr);
         shader.reset(cgd->CreateShader(shadersSrc, strlen(shadersSrc)));
         graphicsBuffer.reset(
-            (CommandBufferGraphics*)cgd->CreateCommandBuffer(*cgd->GetGraphicsQueue()));
+            (CommandBufferGraphics*)cgd->CreateCommandBuffer(
+                *cgd->GetGraphicsQueue(), ECommandType::ECommandBufferGraphics));
         vertFunction 
             = ShaderFunction(ShaderStageFlags::VertexStage, shader.get(), "vertFunc");
     };
