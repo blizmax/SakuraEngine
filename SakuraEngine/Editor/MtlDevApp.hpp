@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 11:33:30
- * @LastEditTime: 2020-05-02 03:49:12
+ * @LastEditTime: 2020-05-02 03:50:27
  */
 #pragma once
 extern "C"
@@ -69,6 +69,7 @@ public:
        
         appleWindow = std::make_unique<AppleWindow>(1920, 1080);
         cgd->CreateSwapChain(1080, 1920, (void*)appleWindow->GetNSWindow().GetPtr());
+        appleWindow->Run();
     };
     ShaderFunction vertFunction;
     std::unique_ptr<AppleWindow> appleWindow;

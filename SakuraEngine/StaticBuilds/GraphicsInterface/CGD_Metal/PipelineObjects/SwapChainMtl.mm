@@ -53,7 +53,7 @@ SwapChainMtl::SwapChainMtl(const int width, const int height,
     view.device = (__bridge id<MTLDevice>)_cgd.entity.device.GetPtr();
     view.delegate = viewController;
     view.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-
+    view.clearColor = MTLClearColorMake(0.0, 0.5, 1.0, 1.0);
     [window.contentView addSubview:view];
     [window center];
     [window orderFrontRegardless];
