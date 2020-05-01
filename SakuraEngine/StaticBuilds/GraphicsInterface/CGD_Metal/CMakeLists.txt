@@ -1,18 +1,27 @@
 set(PLATFORM_SOURCES
     CGDMetal.hpp
     CGDMetal.cpp
+    CGDMetal.mm
+    AppleWindow.hpp
+    AppleWindow.mm
     CommandObjects/CommandBufferMtl.h
     CommandObjects/CommandBufferMtl.cpp
     CommandObjects/CommandQueueMtl.h
     CommandObjects/CommandQueueMtl.cpp
     ResourceObjects/ShaderMtl.h
     ResourceObjects/ShaderMtl.cpp
+    PipelineObjects/SwapChainMtl.hpp
+    PipelineObjects/SwapChainMtl.mm
     mtlpp/mtlpp.hpp
     mtlpp/mtlpp.mm
 )
 
 set(PLATFORM_LIBRARIES
     "-framework Metal"
+    "-framework Cocoa"
+    "-framework MetalKit"
+    "-framework CoreFoundation"
+    "-fobjc-link-runtime"
 )
 set(CMAKE_C_FLAGS "-x objective-c")
 set(CMAKE_CXX_FLAGS "-x objective-c++")

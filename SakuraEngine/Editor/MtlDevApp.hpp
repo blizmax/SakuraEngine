@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 11:33:30
- * @LastEditTime: 2020-05-02 01:18:48
+ * @LastEditTime: 2020-05-02 03:49:12
  */
 #pragma once
 extern "C"
@@ -34,7 +34,7 @@ extern "C"
 }
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/GraphicsCommon/CGD.h"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/CGD_Metal/CGDMetal.hpp"
-
+#include "SakuraEngine/StaticBuilds/GraphicsInterface/CGD_Metal/AppleWindow.hpp"
 const char shadersSrc[] = R"""(
     #include <metal_stdlib>
     using namespace metal;
@@ -66,8 +66,12 @@ public:
                 *cgd->GetGraphicsQueue(), ECommandType::ECommandBufferGraphics));
         vertFunction 
             = ShaderFunction(ShaderStageFlags::VertexStage, shader.get(), "vertFunc");
+       
+        appleWindow = std::make_unique<AppleWindow>(1920, 1080);
+        cgd->CreateSwapChain(1080, 1920, (void*)appleWindow->GetNSWindow().GetPtr());
     };
     ShaderFunction vertFunction;
+    std::unique_ptr<AppleWindow> appleWindow;
     std::unique_ptr<CommandBufferGraphics> graphicsBuffer;
     std::unique_ptr<Sakura::Graphics::Mtl::CGDMtl> cgd;
     std::unique_ptr<Sakura::Graphics::Shader> shader;

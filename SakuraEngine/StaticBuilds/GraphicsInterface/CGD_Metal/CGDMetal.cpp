@@ -22,12 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:06:28
- * @LastEditTime: 2020-05-01 23:16:22
+ * @LastEditTime: 2020-05-02 03:13:44
  */
 #include "CGDMetal.hpp"
 #include <iostream>
 #include "CommandObjects/CommandQueueMtl.h"
 #include "ResourceObjects/ShaderMtl.h"
+#include "PipelineObjects/SwapChainMtl.hpp"
 
 using namespace Sakura::Graphics::Mtl;
 using namespace Sakura::Graphics;
@@ -57,6 +58,12 @@ void CGDMtl::InitializeDevice(void* mainSurface)
         entity.device.NewCommandQueue(), CommandQueueTypes::ECommandQueueCompute);
     entity.blitQueue = new CommandQueueMtl(
         entity.device.NewCommandQueue(), CommandQueueTypes::ECommandQueueCopy);
+}
+
+SwapChain* CGDMtl::CreateSwapChain(const int width, const int height, void* mainSurface)
+{
+    SwapChain* result = new SwapChainMtl(width, height, *this, mainSurface);
+    return result;
 }
 
 Shader* CGDMtl::CreateShader(const char* data, std::size_t dataSize)
