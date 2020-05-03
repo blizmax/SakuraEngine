@@ -112,7 +112,7 @@ namespace ns
 #if MTLPP_CONFIG_VALIDATE
             assert(m_ptr);
 #endif
-            return m_ptr != nullptr;
+            return (m_ptr != nullptr);
         }
     protected:
         Object();

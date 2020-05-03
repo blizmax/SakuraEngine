@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-11 01:25:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-05-01 13:13:58
+ * @LastEditTime: 2020-05-02 23:56:07
  */
 #include "../../GraphicsCommon/CommandObjects/CommandBuffer.h"
 #include "../CGD_Vulkan.h"
@@ -296,7 +296,8 @@ void CommandBufferGraphicsVk::BindRootArguments(const PipelineBindPoint bindPoin
     }
 	vkCmdBindDescriptorSets(commandBuffer, Transfer(bindPoint),
 		vkGp->pipelineLayout, set, argumentNum, descriptorSets.data(), 0, nullptr);
-	vkCmdBindDescriptorSets(commandBuffer, Transfer(BindPointGraphics),
+	// static samplers
+    vkCmdBindDescriptorSets(commandBuffer, Transfer(BindPointGraphics),
 		vkGp->pipelineLayout, 3, 1,
 		((RootArgumentVk*)arguments[0])->staticSamplers, 0, nullptr);
 }

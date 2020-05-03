@@ -4,14 +4,22 @@ set(PLATFORM_SOURCES
     CGDMetal.mm
     AppleWindow.hpp
     AppleWindow.mm
+
     CommandObjects/CommandBufferMtl.h
     CommandObjects/CommandBufferMtl.cpp
     CommandObjects/CommandQueueMtl.h
     CommandObjects/CommandQueueMtl.cpp
+
     ResourceObjects/ShaderMtl.h
     ResourceObjects/ShaderMtl.cpp
+
     PipelineObjects/SwapChainMtl.hpp
     PipelineObjects/SwapChainMtl.mm
+    PipelineObjects/GraphicsPipelineMtl.h
+    PipelineObjects/GraphicsPipelineMtl.cpp
+    PipelineObjects/RenderPassMtl.h
+    PipelineObjects/RenderPassMtl.cpp
+
     mtlpp/mtlpp.hpp
     mtlpp/mtlpp.mm
 )

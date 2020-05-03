@@ -1,14 +1,16 @@
 #import "SwapChainMtl.hpp"
 #import <MetalKit/MetalKit.h>
+#import "../CommandObjects/CommandBufferMtl.h"
 #import "../CGDMetal.hpp"
 
 using namespace Sakura::Graphics::Mtl;
+
+extern void call();
 
 @interface WindowViewController : NSViewController<MTKViewDelegate> {
     //@public void (*m_render)(const Window&);
     //@public const Window* m_window;
 }
-
 @end
 
 @implementation WindowViewController
@@ -19,7 +21,7 @@ using namespace Sakura::Graphics::Mtl;
 
 -(void)drawInMTKView:(nonnull MTKView *)view
 {
-    //(*m_render)(*m_window);
+    call();
 }
 @end
 
@@ -46,8 +48,6 @@ SwapChainMtl::SwapChainMtl(const int width, const int height,
     window = (NSWindow*)_window;
     NSRect frame = NSMakeRect(0, 0, width, height);
     WindowViewController* viewController = [WindowViewController new];
-    //viewController->m_render = render;
-    //viewController->m_window = this;
 
     MTKView* view = [[MTKView alloc] initWithFrame:frame];
     view.device = (__bridge id<MTLDevice>)_cgd.entity.device.GetPtr();

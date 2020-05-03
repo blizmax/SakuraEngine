@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 11:33:30
- * @LastEditTime: 2020-05-02 03:50:27
+ * @LastEditTime: 2020-05-02 19:11:22
  */
 #pragma once
 extern "C"
@@ -51,6 +51,22 @@ const char shadersSrc[] = R"""(
         return half4(1.0, 0.0, 0.0, 1.0);
     }
 )""";
+
+ShaderFunction vertFunction;
+std::unique_ptr<SwapChain> swapChain;
+std::unique_ptr<AppleWindow> appleWindow;
+std::unique_ptr<CommandBufferGraphics> graphicsBuffer;
+std::unique_ptr<Sakura::Graphics::Mtl::CGDMtl> cgd;
+std::unique_ptr<Sakura::Graphics::Shader> shader;
+std::unique_ptr<Sakura::Graphics::RenderPass> renderPass;
+std::unique_ptr<Sakura::Graphics::GraphicsPipeline> graphicsPipeline;
+
+
+void call()
+{
+    cgd->Present(swapChain.get());
+}
+
 class MtlDevApp
 {
 public:
@@ -68,12 +84,17 @@ public:
             = ShaderFunction(ShaderStageFlags::VertexStage, shader.get(), "vertFunc");
        
         appleWindow = std::make_unique<AppleWindow>(1920, 1080);
-        cgd->CreateSwapChain(1080, 1920, (void*)appleWindow->GetNSWindow().GetPtr());
+        swapChain.reset(
+            cgd->CreateSwapChain(1920, 1080, (void*)appleWindow->GetNSWindow().GetPtr()));
+        
+        RenderPassCreateInfo rpInfo;
+        AttachmentDescription colorAttachment;
+        colorAttachment.format = R8G8B8A8_UNORM;
+        rpInfo.AttachColor(colorAttachment);
+        renderPass.reset(cgd->CreateRenderPass(rpInfo));
+        GraphicsPipelineCreateInfo pplInfo;
+        graphicsPipeline.reset(
+            cgd->CreateGraphicsPipeline(pplInfo, *renderPass.get()));
         appleWindow->Run();
     };
-    ShaderFunction vertFunction;
-    std::unique_ptr<AppleWindow> appleWindow;
-    std::unique_ptr<CommandBufferGraphics> graphicsBuffer;
-    std::unique_ptr<Sakura::Graphics::Mtl::CGDMtl> cgd;
-    std::unique_ptr<Sakura::Graphics::Shader> shader;
 };

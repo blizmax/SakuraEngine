@@ -22,13 +22,15 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:06:28
- * @LastEditTime: 2020-05-02 03:13:44
+ * @LastEditTime: 2020-05-02 19:17:18
  */
 #include "CGDMetal.hpp"
 #include <iostream>
 #include "CommandObjects/CommandQueueMtl.h"
+#include "CommandObjects/CommandBufferMtl.h"
 #include "ResourceObjects/ShaderMtl.h"
 #include "PipelineObjects/SwapChainMtl.hpp"
+#include "PipelineObjects/RenderPassMtl.h"
 
 using namespace Sakura::Graphics::Mtl;
 using namespace Sakura::Graphics;
@@ -99,7 +101,8 @@ const char* Sakura::Graphics::Mtl::CGDMtl::CompileShader(const char* src, std::s
 
 Sakura::Graphics::RenderPass* Sakura::Graphics::Mtl::CGDMtl::CreateRenderPass(const RenderPassCreateInfo& info) const
 {
-    return nullptr;
+    RenderPassMtl* result = new RenderPassMtl(info, *this);
+    return result;
 }
 
 Sakura::Graphics::GraphicsPipeline* Sakura::Graphics::Mtl::CGDMtl::CreateGraphicsPipeline(const GraphicsPipelineCreateInfo& info, const RenderPass& progress) const
@@ -184,6 +187,14 @@ const Sakura::Graphics::Format Sakura::Graphics::Mtl::CGDMtl::FindDepthFormat(vo
 
 void Sakura::Graphics::Mtl::CGDMtl::Present(SwapChain* chain)
 {
+    auto mtlChain = (SwapChainMtl*)chain;
+    CommandBufferGraphicsMtl* presentCommandBuffer 
+        = (CommandBufferGraphicsMtl*)CreateCommandBuffer(
+            *GetGraphicsQueue(), ECommandType::ECommandBufferGraphics);
+    presentCommandBuffer->commandBuffer.Present(mtlChain->GetDrawable());
+    presentCommandBuffer->commandBuffer.Commit();
+    presentCommandBuffer->commandBuffer.WaitUntilCompleted();
+    delete presentCommandBuffer;
     return;
 }
 

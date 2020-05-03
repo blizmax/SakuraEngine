@@ -21,41 +21,21 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-05-02 02:23:18
- * @LastEditTime: 2020-05-02 12:33:54
+ * @Date: 2020-05-02 18:09:18
+ * @LastEditTime: 2020-05-02 18:41:07
  */
-#pragma once
-#include "../../GraphicsCommon/GraphicsObjects/SwapChain.h"
-#include "../mtlpp/mtlpp.hpp"
-#import <Cocoa/Cocoa.h>
+#include "GraphicsPipelineMtl.h"
 
-namespace Sakura::Graphics::Mtl
+using namespace Sakura::Graphics::Mtl;
+
+GraphicsPipelineMtl::GraphicsPipelineMtl(const GraphicsPipelineCreateInfo& info,
+    const RenderPassMtl& prog, const CGDMtl& _cgd)
+    :cgd(_cgd), pass(prog)
 {
-    class CGDMtl;
-    class CommandBufferGraphicsMtl;
+    
 }
 
-namespace Sakura::Graphics::Mtl
+GraphicsPipelineMtl::~GraphicsPipelineMtl()
 {
-    // Pass NSWindow and create this chaos thing.
-    class SwapChainMtl final : simplements Sakura::Graphics::SwapChain
-    {
-        friend class CGDMtl;
-        SwapChainMtl(const int width,
-            const int height, const CGDMtl&, void* _window);
-    public:
-        class MtlView : public ns::Object
-        {
-        public:
-            MtlView() { }
-            MtlView(const ns::Handle& handle);
-        };
-        virtual Extent2D GetExtent() const final override;
-        mtlpp::Drawable GetDrawable() const;
-        mtlpp::RenderPassDescriptor GetRenderPassDescriptor() const;
-
-        const CGDMtl& cgd;
-        MtlView m_view;
-        NSWindow* window = nullptr;
-    };
+    
 }

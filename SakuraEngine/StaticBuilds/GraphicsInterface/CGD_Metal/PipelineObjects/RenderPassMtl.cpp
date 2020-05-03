@@ -21,41 +21,26 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-05-02 02:23:18
- * @LastEditTime: 2020-05-02 12:33:54
+ * @Date: 2020-05-02 18:44:21
+ * @LastEditTime: 2020-05-03 00:10:47
  */
-#pragma once
-#include "../../GraphicsCommon/GraphicsObjects/SwapChain.h"
-#include "../mtlpp/mtlpp.hpp"
-#import <Cocoa/Cocoa.h>
+#include "RenderPassMtl.h"
+#include "../Flags/FormatMtl.hpp"
 
-namespace Sakura::Graphics::Mtl
+using namespace Sakura::Graphics::Mtl;
+
+RenderPassMtl::RenderPassMtl(
+    const RenderPassCreateInfo& info, const CGDMtl& _cgd)
+    :cgd(_cgd)
 {
-    class CGDMtl;
-    class CommandBufferGraphicsMtl;
+    for(auto i = 0u; i < info.colorAttachments.size(); i++)
+    {
+        renderPipelineDesc.GetColorAttachments()[i].SetPixelFormat(
+            Transfer(info.attachments[info.colorAttachments[i].attachment].format));
+    }
 }
 
-namespace Sakura::Graphics::Mtl
+RenderPassMtl::~RenderPassMtl()
 {
-    // Pass NSWindow and create this chaos thing.
-    class SwapChainMtl final : simplements Sakura::Graphics::SwapChain
-    {
-        friend class CGDMtl;
-        SwapChainMtl(const int width,
-            const int height, const CGDMtl&, void* _window);
-    public:
-        class MtlView : public ns::Object
-        {
-        public:
-            MtlView() { }
-            MtlView(const ns::Handle& handle);
-        };
-        virtual Extent2D GetExtent() const final override;
-        mtlpp::Drawable GetDrawable() const;
-        mtlpp::RenderPassDescriptor GetRenderPassDescriptor() const;
 
-        const CGDMtl& cgd;
-        MtlView m_view;
-        NSWindow* window = nullptr;
-    };
 }

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-01 17:06:33
- * @LastEditTime: 2020-05-02 00:48:15
+ * @LastEditTime: 2020-05-02 19:17:58
  */
 #include "CommandBufferMtl.h"
 #include "CommandQueueMtl.h"
@@ -33,7 +33,6 @@ using namespace Sakura::Graphics::Mtl;
 Sakura::Graphics::CommandBuffer* CGDMtl::CreateCommandBuffer(
     const CommandQueue& queue, ECommandType type, bool bTransiant) const
 {
-    CGDMtl::debug_info("CGDMtl: Create Context");
     return new CommandBufferGraphicsMtl(entity,
         ((CommandQueueMtl&)queue));
 }

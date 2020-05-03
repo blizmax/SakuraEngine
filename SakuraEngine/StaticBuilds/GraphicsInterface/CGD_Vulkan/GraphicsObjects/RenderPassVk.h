@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-08 23:24:08
- * @LastEditTime: 2020-03-22 01:46:13
+ * @LastEditTime: 2020-05-02 18:53:44
  */
 #pragma once
 #include "../../GraphicsCommon/GraphicsObjects/RenderPass.h"
@@ -131,7 +131,6 @@ namespace Sakura::Graphics::Vk
             nullptr : desc.preserveAttachments.data();
         return subpass;
     }
-
 
     class RenderPassVk final : simplements RenderPass
     {
