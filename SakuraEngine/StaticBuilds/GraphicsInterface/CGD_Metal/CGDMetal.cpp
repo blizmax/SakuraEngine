@@ -22,13 +22,14 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:06:28
- * @LastEditTime: 2020-05-02 19:17:18
+ * @LastEditTime: 2020-05-03 22:57:08
  */
 #include "CGDMetal.hpp"
 #include <iostream>
 #include "CommandObjects/CommandQueueMtl.h"
 #include "CommandObjects/CommandBufferMtl.h"
 #include "ResourceObjects/ShaderMtl.h"
+#include "ResourceObjects/GpuResourceMtl.h"
 #include "PipelineObjects/SwapChainMtl.hpp"
 #include "PipelineObjects/RenderPassMtl.h"
 
@@ -135,19 +136,25 @@ Sakura::Graphics::ResourceView* Sakura::Graphics::Mtl::CGDMtl::ViewIntoResource(
     return nullptr;
 }
 
-Sakura::Graphics::ResourceView* Sakura::Graphics::Mtl::CGDMtl::ViewIntoTexture(const GpuTexture&, const Format, const ImageAspectFlags, uint32 mipLevels /*= 1*/, uint32 baseMip /*= 0*/, uint32 layerCount /*= 1*/, uint32 baseArrayLayer /*= 0*/) const
+Sakura::Graphics::ResourceView* Sakura::Graphics::Mtl::CGDMtl::ViewIntoTexture(
+    const GpuTexture&, const Format, const ImageAspectFlags,
+    uint32 mipLevels /*= 1*/, uint32 baseMip /*= 0*/,
+    uint32 layerCount /*= 1*/, uint32 baseArrayLayer /*= 0*/) const
 {
     return nullptr;
 }
 
-Sakura::Graphics::CommandQueue* Sakura::Graphics::Mtl::CGDMtl::AllocQueue(CommandQueueTypes type) const
+Sakura::Graphics::CommandQueue* Sakura::Graphics::Mtl::CGDMtl::AllocQueue(
+    CommandQueueTypes type) const
 {
     return nullptr;
 }
 
-Sakura::Graphics::GpuBuffer* Sakura::Graphics::Mtl::CGDMtl::CreateGpuResource(const BufferCreateInfo&) const
+Sakura::Graphics::GpuBuffer* Sakura::Graphics::Mtl::CGDMtl::CreateGpuResource(
+    const BufferCreateInfo& bufInfo) const
 {
-    return nullptr;
+    auto result = new GpuResourceMtlBuffer(*this, bufInfo);
+    return result;
 }
 
 Sakura::Graphics::GpuTexture* Sakura::Graphics::Mtl::CGDMtl::CreateGpuResource(const TextureCreateInfo&) const

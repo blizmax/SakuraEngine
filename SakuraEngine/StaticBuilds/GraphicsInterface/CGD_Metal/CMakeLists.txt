@@ -12,6 +12,8 @@ set(PLATFORM_SOURCES
 
     ResourceObjects/ShaderMtl.h
     ResourceObjects/ShaderMtl.cpp
+    ResourceObjects/GpuResourceMtl.cpp
+    ResourceObjects/GpuResourceMtl.h
 
     PipelineObjects/SwapChainMtl.hpp
     PipelineObjects/SwapChainMtl.mm

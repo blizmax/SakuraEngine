@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-05 18:01:43
- * @LastEditTime: 2020-03-29 19:47:45
+ * @LastEditTime: 2020-05-04 00:38:25
  */
 #pragma once
 #include "vulkan/vulkan.h"
@@ -40,6 +40,13 @@ namespace Sakura::Graphics::Vk
         virtual ~GpuResourceVkImage() override final;
         virtual void Map(void** data) override final;
         virtual void Unmap() override final;
+        virtual void UpdateValue(std::function<void(void*)> func) final override
+        {
+            void* data;
+            Map(&data);
+            func(data);
+            Unmap();
+        }
         VkImage image;   
         VmaAllocation allocation = VK_NULL_HANDLE;
     protected:
@@ -56,6 +63,13 @@ namespace Sakura::Graphics::Vk
         virtual ~GpuResourceVkBuffer() override final;
         virtual void Map(void** data) override final;
         virtual void Unmap() override final;
+        virtual void UpdateValue(std::function<void(void*)> func) final override
+        {
+            void* data;
+            Map(&data);
+            func(data);
+            Unmap();
+        }
         VkBuffer buffer;
     protected:
         GpuResourceVkBuffer(const CGDVk& _cgd, 

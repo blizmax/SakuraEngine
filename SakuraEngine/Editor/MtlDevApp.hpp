@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 11:33:30
- * @LastEditTime: 2020-05-03 12:37:06
+ * @LastEditTime: 2020-05-04 00:59:49
  */
 #pragma once
 extern "C"
@@ -60,7 +60,14 @@ std::unique_ptr<Sakura::Graphics::Mtl::CGDMtl> cgd;
 std::unique_ptr<Sakura::Graphics::Shader> shader;
 std::unique_ptr<Sakura::Graphics::RenderPass> renderPass;
 std::unique_ptr<Sakura::Graphics::GraphicsPipeline> graphicsPipeline;
+std::unique_ptr<Sakura::Graphics::GpuBuffer> vertexBuffer;
 
+float vertexData[] =
+{
+    0.0f,  1.0f, 0.0f,
+    -1.0f, -1.0f, 0.0f,
+    1.0f, -1.0f, 0.0f
+};
 
 void call()
 {
@@ -96,6 +103,14 @@ public:
         graphicsPipeline.reset(
             cgd->CreateGraphicsPipeline(pplInfo, *renderPass.get()));
         
+        vertexBuffer.reset(cgd->CreateGpuBuffer(sizeof(vertexData),
+            BufferUsage::VertexBuffer, CPUAccessFlags::ReadWrite));
+        vertexBuffer->UpdateValue([&](void* mapped){
+            memcpy(mapped, &vertexData, sizeof(vertexData));
+        });
+        vertexBuffer->UpdateValue([&](void* mapped){
+            std::cout << *(float*)mapped << std::endl;
+        });
         appleWindow->Run();
     };
 };

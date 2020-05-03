@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-05 17:36:56
- * @LastEditTime: 2020-03-20 23:17:50
+ * @LastEditTime: 2020-05-04 00:37:30
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -31,7 +31,7 @@
 #include "../Flags/CommonFeatures.h"
 #include "../Flags/GraphicsPipelineStates.h"
 #include <functional>
-
+#include <iostream>
 namespace Sakura::Graphics
 {
     enum ImageAspectFlag
@@ -91,23 +91,20 @@ namespace Sakura::Graphics
     {
         friend sinterface CGD;
         virtual ~GpuResource() = default;
-        virtual void Map(void** data) = 0;
-        virtual void Unmap() = 0;
-        inline void UpdateValue(std::function<void(void*)> func)
-        {
-            void* data;
-            Map(&data);
-            func(data);
-            Unmap();
-        }
+        virtual void UpdateValue(std::function<void(void*)> func) = 0;
         const Extent2D GetExtent() const
         {
             return extent;
         }
     protected:
+        virtual void Map(void** data) = 0;
+        virtual void Unmap() = 0;
         GpuResource() = default;
         GpuResource(Extent2D _extent)
-            :extent(_extent){}
+            :extent(_extent)
+        {
+            
+        }
         void SetExtent(Extent2D _extent)
         {
             extent = _extent;
