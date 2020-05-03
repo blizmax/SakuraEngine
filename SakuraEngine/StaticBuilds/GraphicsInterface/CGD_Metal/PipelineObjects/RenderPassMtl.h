@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-02 18:44:12
- * @LastEditTime: 2020-05-02 23:59:53
+ * @LastEditTime: 2020-05-03 12:18:17
  */
 #pragma once
 #include "../../GraphicsCommon/GraphicsObjects/RenderPass.h"
@@ -42,7 +42,8 @@ namespace Sakura::Graphics::Mtl
         friend class CommandBufferMtl;
     public:
         virtual ~RenderPassMtl() final override;
-        mtlpp::RenderPipelineDescriptor renderPipelineDesc;
+        mtlpp::RenderPassDescriptor renderPassDesc;
+        const RenderPassCreateInfo rpassCreateInfo;
     protected:
         RenderPassMtl(const RenderPassCreateInfo& info, const CGDMtl& _cgd);
         const CGDMtl& cgd;

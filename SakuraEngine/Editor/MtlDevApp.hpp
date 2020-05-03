@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 11:33:30
- * @LastEditTime: 2020-05-02 19:11:22
+ * @LastEditTime: 2020-05-03 12:37:06
  */
 #pragma once
 extern "C"
@@ -95,6 +95,7 @@ public:
         GraphicsPipelineCreateInfo pplInfo;
         graphicsPipeline.reset(
             cgd->CreateGraphicsPipeline(pplInfo, *renderPass.get()));
+        
         appleWindow->Run();
     };
 };

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-06 16:47:38
- * @LastEditTime: 2020-05-01 17:25:26
+ * @LastEditTime: 2020-05-03 12:43:28
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -109,6 +109,10 @@ namespace Sakura::Graphics
         const std::string& GetEntry() const
         {
             return entry;
+        }
+        const void* GetPlatformFunction()
+        {
+            return funcHandle;
         }
     protected:
         ShaderStageFlags stage;

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-02 18:44:21
- * @LastEditTime: 2020-05-03 00:10:47
+ * @LastEditTime: 2020-05-03 12:17:42
  */
 #include "RenderPassMtl.h"
 #include "../Flags/FormatMtl.hpp"
@@ -31,13 +31,9 @@ using namespace Sakura::Graphics::Mtl;
 
 RenderPassMtl::RenderPassMtl(
     const RenderPassCreateInfo& info, const CGDMtl& _cgd)
-    :cgd(_cgd)
+    :cgd(_cgd), rpassCreateInfo(info)
 {
-    for(auto i = 0u; i < info.colorAttachments.size(); i++)
-    {
-        renderPipelineDesc.GetColorAttachments()[i].SetPixelFormat(
-            Transfer(info.attachments[info.colorAttachments[i].attachment].format));
-    }
+    renderPassDesc.SetRenderTargetArrayLength(info.colorAttachments.size());
 }
 
 RenderPassMtl::~RenderPassMtl()

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:05:58
- * @LastEditTime: 2020-05-02 02:40:58
+ * @LastEditTime: 2020-05-03 12:50:59
  */
 #pragma once
 #include "../GraphicsCommon/CGD.h"
@@ -32,6 +32,7 @@ namespace Sakura::Graphics::Mtl
 {
     class CommandQueueMtl;
     class CommandBufferMtl;
+    class GraphicsPipelineMtl;
     class SwapChainMtl;
 }
 
@@ -51,6 +52,7 @@ namespace Sakura::Graphics::Mtl
     {
         DECLARE_LOGGER("CGDMetal")
         friend class SwapChainMtl;
+        friend class GraphicsPipelineMtl;
     public:
         virtual void Initialize(CGDInfo info) override final;
         virtual void InitializeDevice(void* mainSurface) override final;

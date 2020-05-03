@@ -22,10 +22,11 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-03 00:03:51
- * @LastEditTime: 2020-05-03 12:02:22
+ * @LastEditTime: 2020-05-03 12:53:18
  */
 #pragma once
 #include "../mtlpp/mtlpp.hpp"
+#include "../../GraphicsCommon/Flags/Flags.h"
 
 #define FORMAT_MAPPER_MTL() \
     MTL_FORMAT_MAPPING(UNKNOWN, Invalid);\

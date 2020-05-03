@@ -22,9 +22,11 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-02 18:09:18
- * @LastEditTime: 2020-05-02 18:41:07
+ * @LastEditTime: 2020-05-03 12:51:35
  */
 #include "GraphicsPipelineMtl.h"
+#include "../ResourceObjects/ShaderMtl.h"
+#include "../CGDMetal.hpp"
 
 using namespace Sakura::Graphics::Mtl;
 
@@ -32,7 +34,26 @@ GraphicsPipelineMtl::GraphicsPipelineMtl(const GraphicsPipelineCreateInfo& info,
     const RenderPassMtl& prog, const CGDMtl& _cgd)
     :cgd(_cgd), pass(prog)
 {
-    
+    mtlpp::RenderPipelineDescriptor renderPipelineDesc;
+    for(auto i = 0u; i < info.shaderStages.size(); i++)
+    {   
+        ShaderMtl* shaderMtl = (ShaderMtl*)info.shaderStages[i].GetShader();
+        mtlpp::Function function 
+            = shaderMtl->shaderFunctions[info.shaderStages[i].GetEntry()];
+        switch (info.shaderStages[i].GetStage())
+        {
+        case ShaderStageFlags::VertexStage:
+            renderPipelineDesc.SetVertexFunction(function);
+            break;
+        case ShaderStageFlags::PixelStage:
+            renderPipelineDesc.SetFragmentFunction(function);
+        default:
+            CGDMtl::error("CGDMtl: Shader stage not supported in metal!");
+            break;
+        }
+    }
+    renderPipelineState
+            = cgd.entity.device.NewRenderPipelineState(renderPipelineDesc, nullptr);
 }
 
 GraphicsPipelineMtl::~GraphicsPipelineMtl()

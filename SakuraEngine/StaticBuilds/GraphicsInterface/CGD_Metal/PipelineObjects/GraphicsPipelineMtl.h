@@ -22,10 +22,11 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-02 18:09:00
- * @LastEditTime: 2020-05-02 18:39:55
+ * @LastEditTime: 2020-05-03 12:53:49
  */
 #pragma once
 #include "../../GraphicsCommon/GraphicsObjects/GraphicsPipeline.h"
+#include "../mtlpp/mtlpp.hpp"
 
 namespace Sakura::Graphics::Mtl
 {
@@ -45,6 +46,7 @@ namespace Sakura::Graphics::Mtl
         GraphicsPipelineMtl(const GraphicsPipelineCreateInfo& info,
             const RenderPassMtl& prog, const CGDMtl& cgd);
     protected:
+        mtlpp::RenderPipelineState renderPipelineState;
         const RenderPassMtl& pass;
         const CGDMtl& cgd;
     };
