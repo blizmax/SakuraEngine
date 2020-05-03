@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-03 14:03:28
- * @LastEditTime: 2020-05-04 00:49:33
+ * @LastEditTime: 2020-05-04 01:36:39
  */
 #pragma once
 #include "../../GraphicsCommon/ResourceObjects/Resource.h"
@@ -60,6 +60,7 @@ namespace Sakura::Graphics::Mtl
     protected:
         void** mapped = nullptr;
         mtlpp::Buffer buffer;
+        const BufferUsages usages;
         GpuResourceMtlBuffer(const CGDMtl& _cgd, const BufferCreateInfo& info);
         const CGDMtl& cgd;
     };

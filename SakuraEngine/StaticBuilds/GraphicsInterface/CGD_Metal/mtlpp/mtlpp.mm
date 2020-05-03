@@ -20,6 +20,7 @@ namespace mtlpp
     StructMember::StructMember() :
         ns::Object(ns::Handle{ (__bridge void*)[[MTLStructMember alloc] init] })
     {
+        
     }
 
     ns::String StructMember::GetName() const
@@ -1291,20 +1292,20 @@ namespace mtlpp
 #endif
     }
 
-    Buffer Device::NewBuffer(uint32_t length, ResourceOptions options) const
+    Buffer Device::NewBuffer(uint32_t length, int options) const
     {
         Validate();
-        return ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newBufferWithLength:length options:MTLResourceOptions(options)] };
+        return ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newBufferWithLength:length options:options] };
     }
 
-    Buffer Device::NewBuffer(const void* pointer, uint32_t length, ResourceOptions options) const
+    Buffer Device::NewBuffer(const void* pointer, uint32_t length, int options) const
     {
         Validate();
         return ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newBufferWithBytes:pointer length:length options:MTLResourceOptions(options)] };
     }
 
 
-    Buffer Device::NewBuffer(void* pointer, uint32_t length, ResourceOptions options, std::function<void (void* pointer, uint32_t length)> deallocator) const
+    Buffer Device::NewBuffer(void* pointer, uint32_t length, int options, std::function<void (void* pointer, uint32_t length)> deallocator) const
     {
         Validate();
         return ns::Handle{

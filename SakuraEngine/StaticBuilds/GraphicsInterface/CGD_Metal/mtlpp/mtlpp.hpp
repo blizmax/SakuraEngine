@@ -478,7 +478,7 @@ namespace mtlpp
     }
     MTLPP_AVAILABLE(10_11, 9_0);
 
-    enum class ResourceOptions
+    enum ResourceOptions
     {
         CpuCacheModeDefaultCache                                = uint32_t(CpuCacheMode::DefaultCache)  << ResourceCpuCacheModeShift,
         CpuCacheModeWriteCombined                               = uint32_t(CpuCacheMode::WriteCombined) << ResourceCpuCacheModeShift,
@@ -1171,9 +1171,9 @@ namespace mtlpp
         SizeAndAlign HeapTextureSizeAndAlign(const TextureDescriptor& desc) MTLPP_AVAILABLE(NA, 10_0);
         SizeAndAlign HeapBufferSizeAndAlign(uint32_t length, ResourceOptions options) MTLPP_AVAILABLE(NA, 10_0);
         Heap NewHeap(const HeapDescriptor& descriptor) MTLPP_AVAILABLE(NA, 10_0);
-        Buffer NewBuffer(uint32_t length, ResourceOptions options) const;
-        Buffer NewBuffer(const void* pointer, uint32_t length, ResourceOptions options) const;
-        Buffer NewBuffer(void* pointer, uint32_t length, ResourceOptions options, std::function<void (void* pointer, uint32_t length)> deallocator) const;
+        Buffer NewBuffer(uint32_t length, int options) const;
+        Buffer NewBuffer(const void* pointer, uint32_t length, int options) const;
+        Buffer NewBuffer(void* pointer, uint32_t length, int options, std::function<void (void* pointer, uint32_t length)> deallocator) const;
         DepthStencilState NewDepthStencilState(const DepthStencilDescriptor& descriptor);
         Texture NewTexture(const TextureDescriptor& descriptor);
         //- (id <MTLTexture>)newTextureWithDescriptor:(MTLTextureDescriptor *)descriptor iosurface:(IOSurfaceRef)iosurface plane:(NSUInteger)plane NS_AVAILABLE_MAC(10_11);

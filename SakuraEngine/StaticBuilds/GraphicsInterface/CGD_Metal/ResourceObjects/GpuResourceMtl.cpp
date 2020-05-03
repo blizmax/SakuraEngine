@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-03 14:03:37
- * @LastEditTime: 2020-05-04 00:55:48
+ * @LastEditTime: 2020-05-04 01:41:46
  */
 #include "GpuResourceMtl.h"
 #include "../CGDMetal.hpp"
@@ -62,10 +62,20 @@ GpuResourceMtlBuffer::~GpuResourceMtlBuffer()
 
 GpuResourceMtlBuffer::GpuResourceMtlBuffer(const CGDMtl& _cgd,
     const BufferCreateInfo& info)
-    :cgd(_cgd), GpuBuffer({(uint32)info.size, 1})
+    :cgd(_cgd), usages(info.usage), GpuBuffer({(uint32)info.size, 1})
 {
-    buffer = _cgd.entity.device.NewBuffer(
-        info.size, mtlpp::ResourceOptions::HazardTrackingModeUntracked);
+    auto options = mtlpp::ResourceOptions::HazardTrackingModeUntracked | 0;
+    if(info.cpuAccess != CPUAccessFlags::None)
+        options |= mtlpp::ResourceOptions::StorageModeShared;
+    else
+    {
+        options |= mtlpp::ResourceOptions::StorageModePrivate;
+        if(info.cpuAccess & CPUAccessFlags::Read)
+            options |= mtlpp::ResourceOptions::CpuCacheModeWriteCombined;
+        else
+            options |= mtlpp::ResourceOptions::CpuCacheModeDefaultCache;
+    }
+    buffer = _cgd.entity.device.NewBuffer(info.size, options);
 }
 
 void GpuResourceMtlBuffer::Map(void** data)
