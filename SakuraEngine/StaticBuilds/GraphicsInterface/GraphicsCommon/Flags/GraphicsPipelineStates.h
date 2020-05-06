@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-06 16:47:38
- * @LastEditTime: 2020-05-03 12:43:28
+ * @LastEditTime: 2020-05-05 15:50:48
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -166,8 +166,7 @@ namespace Sakura::Graphics
     {
         bool logicOpEnable = false;
         LogicOp logicOp = LogicOp::LogicOpCopy;
-        const ColorBlendAttachmentState* colorBlendAttachment = &defaultAttachment;
-        uint32_t colorBlendAttachmentCount = 1;
+        std::vector<ColorBlendAttachmentState> colorBlendAttachment = {defaultAttachment};
         float blendConstants[4] = {0.f, 0.f, 0.f, 0.f};
     };
 

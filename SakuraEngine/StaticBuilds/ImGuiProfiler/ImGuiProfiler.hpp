@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-16 17:02:13
- * @LastEditTime: 2020-05-01 13:11:18
+ * @LastEditTime: 2020-05-06 22:25:29
  */
 #pragma once
 #ifdef SAKURA_TARGET_PLATFORM_OSX
@@ -164,7 +164,7 @@ namespace Sakura::Graphics::Im
 			VkRenderPassBeginInfo info = {};
 			info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 			info.renderPass = RenderPass;
-			info.framebuffer = frameBuffers[rt.srv];
+			info.framebuffer = frameBuffers[((RenderTargetVk&)rt).srv];
 			info.renderArea.extent.width = swapChain->GetExtent().width;
 			info.renderArea.extent.height = swapChain->GetExtent().height;
 			info.clearValueCount = 0;

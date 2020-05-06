@@ -22,12 +22,12 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-05 13:54:51
- * @LastEditTime: 2020-03-09 21:21:37
+ * @LastEditTime: 2020-05-05 19:41:12
  -->
 <h1 align="left">CGD设备族</h1>
  
 ## 简介
-&emsp;&emsp;为了不引入全局状态, 现代图形API往往需要用户创建并维护各式各样的对象, 例如VkInstance, D3D12Device, Queue, SwapChain, Fence等。CGD保持了这一特性, 因此所有的CGD函数都是静态无副作用的(就像您在Vk和D3D12看到的任一函数一样)。
+&emsp;&emsp;现代图形API往往需要用户创建并维护各式各样的对象, 例如VkInstance, D3D12Device, Queue, SwapChain, Fence等。CGD保持了这一特性, 因此所有的CGD函数都是静态无副作用的(就像您在Vk和D3D12看到的任一函数一样)。
 
 &emsp;&emsp;CGD设备族就是现代图形API设备的一套抽象接口。
 

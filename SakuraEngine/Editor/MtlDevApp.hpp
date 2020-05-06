@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 11:33:30
- * @LastEditTime: 2020-05-04 01:35:46
+ * @LastEditTime: 2020-05-05 16:31:09
  */
 #pragma once
 extern "C"
@@ -52,7 +52,7 @@ const char shadersSrc[] = R"""(
     }
 )""";
 
-ShaderFunction vertFunction;
+ShaderFunction vertFunction, pixelFunction;
 std::unique_ptr<SwapChain> swapChain;
 std::unique_ptr<AppleWindow> appleWindow;
 std::unique_ptr<CommandBufferGraphics> graphicsBuffer;
@@ -87,9 +87,7 @@ public:
         graphicsBuffer.reset(
             (CommandBufferGraphics*)cgd->CreateCommandBuffer(
                 *cgd->GetGraphicsQueue(), ECommandType::ECommandBufferGraphics));
-        vertFunction 
-            = ShaderFunction(ShaderStageFlags::VertexStage, shader.get(), "vertFunc");
-       
+
         appleWindow = std::make_unique<AppleWindow>(1920, 1080);
         swapChain.reset(
             cgd->CreateSwapChain(1920, 1080, (void*)appleWindow->GetNSWindow().GetPtr()));
@@ -99,7 +97,13 @@ public:
         colorAttachment.format = R8G8B8A8_UNORM;
         rpInfo.AttachColor(colorAttachment);
         renderPass.reset(cgd->CreateRenderPass(rpInfo));
+        
         GraphicsPipelineCreateInfo pplInfo;
+        vertFunction 
+            = ShaderFunction(ShaderStageFlags::VertexStage, shader.get(), "vertFunc");
+        pixelFunction 
+            = ShaderFunction(ShaderStageFlags::PixelStage, shader.get(), "fragFunc");
+        pplInfo.PushShaderStage(vertFunction, pixelFunction);
         graphicsPipeline.reset(
             cgd->CreateGraphicsPipeline(pplInfo, *renderPass.get()));
         
@@ -107,9 +111,6 @@ public:
             BufferUsage::VertexBuffer, CPUAccessFlags::ReadWrite));
         vertexBuffer->UpdateValue([&](void* mapped){
             memcpy(mapped, &vertexData, sizeof(vertexData));
-        });
-        vertexBuffer->UpdateValue([&](void* mapped){
-            std::cout << *(float*)mapped << std::endl;
         });
         appleWindow->Run();
     };

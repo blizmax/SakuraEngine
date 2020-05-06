@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-29 11:46:00
- * @LastEditTime: 2020-05-01 17:21:46
+ * @LastEditTime: 2020-05-06 22:35:17
  */
 #pragma once
 #define GLM_FORCE_RADIANS
@@ -45,11 +45,11 @@ extern "C"
 #include "Extern/include/SDL2Tools/SDL2Vk.hpp"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/Flags/FormatVk.h"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/Flags/GraphicsPipelineStatesVk.h"
+#include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/GraphicsObjects/GraphicsPipelineVk.h"
 #include "SakuraEngine/StaticBuilds/TaskSystem/TaskSystem.h"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/GraphicsObjects/FenceVk.h"
 #include "SakuraEngine/StaticBuilds/ImGuiProfiler/ImGuiProfiler.hpp"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/GraphicsCommon/GraphicsObjects/ComputePipeline.h"
-
 using namespace Sakura;
 using namespace Sakura::Graphics::Vk;
 
@@ -484,10 +484,12 @@ private:
     void mainLoop()
     {
         auto frameCount = swapChain->GetCurrentFrame();
-        RenderTarget rt{&swapChain->GetSwapChainImage(frameCount),
+        Sakura::Graphics::Vk::RenderTargetVk rt{
+            &swapChain->GetSwapChainImage(frameCount),
             &swapChain->GetChainImageView(frameCount), {0.f, 0.f, 0.f, 0.f}};
-        RenderTarget ds{depth.get(), depthView.get(), {1.f, 0.f}};
-        RenderTarget rts[2] = {rt, ds};
+        Sakura::Graphics::Vk::RenderTargetVk ds(
+            depth.get(), depthView.get(), 1.f, 0u);
+        Sakura::Graphics::Vk::RenderTargetVk rts[2] = {rt, ds};
         RenderTargetSet rtset{(RenderTarget*)rts, 2};
 
         context.reset(

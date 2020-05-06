@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-08 21:06:12
- * @LastEditTime: 2020-03-30 00:52:59
+ * @LastEditTime: 2020-05-06 22:11:51
  */
 #include "GraphicsPipelineVk.h"
 #include "../Flags/GraphicsPipelineStatesVk.h"
@@ -104,7 +104,7 @@ GraphicsPipelineVk::GraphicsPipelineVk(const GraphicsPipelineCreateInfo& info,
     pipelineInfo.pMultisampleState = &ms;
     pipelineInfo.pDepthStencilState = &ds;
     std::vector<VkPipelineColorBlendAttachmentState> 
-        attachmentStates(info.colorBlendStateCreateInfo.colorBlendAttachmentCount);
+        attachmentStates(info.colorBlendStateCreateInfo.colorBlendAttachment.size());
     for(auto i = 0u; i < attachmentStates.size(); i++)
         attachmentStates[i] = Transfer(info.colorBlendStateCreateInfo.colorBlendAttachment[i]);
     VkPipelineColorBlendStateCreateInfo colorBlending = {};
@@ -163,11 +163,14 @@ VkFramebuffer GraphicsPipelineVk::createFrameBuffer(const RenderTargetSet& rts)
     framebufferInfo.attachmentCount = rts.rtNum;
     std::vector<VkImageView> images(rts.rtNum);
     for(auto i = 0u; i < rts.rtNum; i++)
-        images[i] = ((const ResourceViewVkImage*)rts.rts[i].srv)->vkImgView;
+        images[i] = ((const ResourceViewVkImage*)
+        ((RenderTargetVk&)rts.rts[i]).srv)->vkImgView;
     const VkImageView* attach = (const VkImageView*)images.data();
     framebufferInfo.pAttachments = attach;
-    framebufferInfo.width = rts.rts[0].resource->GetExtent().width;
-    framebufferInfo.height = rts.rts[0].resource->GetExtent().height;
+    framebufferInfo.width = 
+        ((RenderTargetVk&)rts.rts[0]).resource->GetExtent().width;
+    framebufferInfo.height = 
+        ((RenderTargetVk&)rts.rts[0]).resource->GetExtent().height;
     framebufferInfo.layers = 1;
     
     if (vkCreateFramebuffer(cgd.GetCGDEntity().device, &framebufferInfo,

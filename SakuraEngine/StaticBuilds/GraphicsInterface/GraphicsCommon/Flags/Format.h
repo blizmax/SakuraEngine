@@ -5,11 +5,12 @@
  * @Author: SaeruHikari
  * @Date: 2020-02-02 11:41:23
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-26 17:05:12
+ * @LastEditTime: 2020-05-05 15:46:48
  */
 #pragma once
 #include <cinttypes>
-
+                constexpr static const int src = 2;
+                constexpr static const int dst = src >> 1;
 namespace Sakura
 {
     namespace Graphics

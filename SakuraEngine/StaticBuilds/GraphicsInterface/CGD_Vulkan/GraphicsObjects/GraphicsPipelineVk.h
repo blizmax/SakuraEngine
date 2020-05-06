@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-08 21:04:52
- * @LastEditTime: 2020-04-22 12:36:21
+ * @LastEditTime: 2020-05-06 22:37:09
  */
 #pragma once
 #include "../../GraphicsCommon/GraphicsObjects/GraphicsPipeline.h"
@@ -39,6 +39,35 @@ namespace Sakura::Graphics::Vk
 
 namespace Sakura::Graphics::Vk
 {
+    struct RenderTargetVk final : simplements RenderTarget
+    {
+        inline RenderTargetVk(const GpuResource* _resource,
+            const ResourceView* _view, 
+            const Sakura::Graphics::ClearColorValue& clearColor)
+            :resource(_resource), srv(_view) 
+        {
+            clearValue.clearColor = clearColor;
+        }
+        inline RenderTargetVk(const GpuResource* _resource,
+            const ResourceView* _view, 
+            float depth, uint32_t stencil)
+            :resource(_resource), srv(_view) 
+        {
+            clearValue.clearDepth = {depth, stencil};
+        }
+        virtual const GpuResource* GetResource() const override 
+        {
+            return resource;
+        }
+        const GpuResource* resource = nullptr;
+        const ResourceView* srv = nullptr;
+        union ClearValue
+        {
+            Sakura::Graphics::ClearColorValue clearColor;
+            Sakura::Graphics::ClearDepthStencilValue clearDepth;
+        } clearValue;
+    };
+
     class GraphicsPipelineVk final : simplements GraphicsPipeline
     {
         friend class CGDVk;

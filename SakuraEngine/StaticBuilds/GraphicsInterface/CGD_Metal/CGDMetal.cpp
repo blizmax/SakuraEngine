@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-28 23:06:28
- * @LastEditTime: 2020-05-03 22:57:08
+ * @LastEditTime: 2020-05-05 16:13:46
  */
 #include "CGDMetal.hpp"
 #include <iostream>
@@ -32,6 +32,7 @@
 #include "ResourceObjects/GpuResourceMtl.h"
 #include "PipelineObjects/SwapChainMtl.hpp"
 #include "PipelineObjects/RenderPassMtl.h"
+#include "PipelineObjects/GraphicsPipelineMtl.h"
 
 using namespace Sakura::Graphics::Mtl;
 using namespace Sakura::Graphics;
@@ -106,9 +107,12 @@ Sakura::Graphics::RenderPass* Sakura::Graphics::Mtl::CGDMtl::CreateRenderPass(co
     return result;
 }
 
-Sakura::Graphics::GraphicsPipeline* Sakura::Graphics::Mtl::CGDMtl::CreateGraphicsPipeline(const GraphicsPipelineCreateInfo& info, const RenderPass& progress) const
+Sakura::Graphics::GraphicsPipeline* Sakura::Graphics::Mtl::CGDMtl::CreateGraphicsPipeline(
+    const GraphicsPipelineCreateInfo& info, const RenderPass& progress) const
 {
-    return nullptr;
+    auto result = new Sakura::Graphics::Mtl::GraphicsPipelineMtl(
+        info, (const RenderPassMtl&)progress, *this);
+    return result;
 }
 
 Sakura::Graphics::ComputePipeline* Sakura::Graphics::Mtl::CGDMtl::CreateComputePipeline(const ComputePipelineCreateInfo& info) const

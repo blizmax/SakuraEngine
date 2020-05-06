@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-07 23:25:42
- * @LastEditTime: 2020-03-20 16:13:45
+ * @LastEditTime: 2020-05-06 22:12:25
  */
 #pragma once
 #include "../Flags/GraphicsPipelineStates.h"
@@ -39,20 +39,16 @@ namespace Sakura::Graphics
         int32_t     int32[4];
         uint32_t    uint32[4];
     };
+
     struct ClearDepthStencilValue 
     {
         float       depth;
         uint32_t    stencil;
     };
-    struct RenderTarget
+
+    sinterface RenderTarget
     {
-        const GpuResource* resource = nullptr;
-        const ResourceView* srv = nullptr;
-        union ClearValue
-        {
-            ClearColorValue clearColor;
-            ClearDepthStencilValue clearDepth;
-        } clearValue;
+        virtual const GpuResource* GetResource() const = 0;
     };
 
     struct RenderTargetSet
@@ -60,6 +56,7 @@ namespace Sakura::Graphics
         RenderTarget* rts;
         uint32 rtNum;
     };
+    
     sinterface GraphicsPipeline
     {
         virtual ~GraphicsPipeline() = default;

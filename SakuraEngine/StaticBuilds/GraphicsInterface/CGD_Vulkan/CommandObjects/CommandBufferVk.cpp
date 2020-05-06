@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-11 01:25:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-05-02 23:56:07
+ * @LastEditTime: 2020-05-06 22:11:00
  */
 #include "../../GraphicsCommon/CommandObjects/CommandBuffer.h"
 #include "../CGD_Vulkan.h"
@@ -268,12 +268,13 @@ void CommandBufferGraphicsVk::BeginRenderPass(
     renderPassInfo.framebuffer = vkGp->FindFrameBuffer(rts);
     renderPassInfo.renderArea.offset = {0, 0};
     renderPassInfo.renderArea.extent =
-        Transfer(rts.rts[0].resource->GetExtent());
+        Transfer(((RenderTargetVk&)rts.rts[0]).resource->GetExtent());
 
     std::vector<VkClearValue> clearValues(rts.rtNum);
     for(auto i = 0u; i < rts.rtNum; i++)
     {
-        clearValues[i] = *(VkClearValue*)&(rts.rts[i].clearValue);
+        clearValues[i] = *(VkClearValue*)&(
+            ((RenderTargetVk&)rts.rts[i]).clearValue);
     }
     
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
