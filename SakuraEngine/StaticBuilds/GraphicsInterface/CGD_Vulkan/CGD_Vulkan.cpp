@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-04-30 00:17:36
+ * @LastEditTime: 2020-05-07 00:19:59
  */
 #define API_EXPORTS
 #include "CGD_Vulkan.h"
@@ -137,59 +137,59 @@ void CGDVk::VkInit(Sakura::Graphics::CGDInfo info)
 
 void CGDVk::Present(SwapChain* chain)
 {
-    SwapChainVk* vkChain = (SwapChainVk*)chain;
-    VkSwapchainKHR* swapChains = &vkChain->swapChain;
-    vkChain->currentPresent = vkChain->nextPresent;
-    vkWaitForFences(entityVk.device,
-        1, &vkChain->inFlightFences[vkChain->currentFrame], VK_TRUE, UINT64_MAX);
-    
-    vkAcquireNextImageKHR(
-        entityVk.device,
-        vkChain->swapChain,
-        UINT64_MAX,
-        vkChain->imageAvailableSemaphores[vkChain->currentFrame],
-        VK_NULL_HANDLE,
-        &vkChain->currentPresent
-    );
-    if (vkChain->imagesInFlight[vkChain->currentPresent] != VK_NULL_HANDLE) 
-    {
-        vkWaitForFences(entityVk.device, 1,
-            &vkChain->imagesInFlight[vkChain->currentPresent], VK_TRUE, UINT64_MAX);
-    }
-    vkChain->imagesInFlight[vkChain->currentPresent] =
-        vkChain->inFlightFences[vkChain->currentFrame];
+	SwapChainVk* vkChain = (SwapChainVk*)chain;
+	VkSwapchainKHR* swapChains = &vkChain->swapChain;
+	vkChain->currentPresent = vkChain->nextPresent;
+	vkWaitForFences(entityVk.device,
+		1, &vkChain->inFlightFences[vkChain->currentFrame], VK_TRUE, UINT64_MAX);
 
-    const VkPipelineStageFlags wat = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
-    VkSubmitInfo submitInfo = {};
-    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.pNext = nullptr;
-    submitInfo.commandBufferCount = 0;
-    submitInfo.waitSemaphoreCount = 1;
-	submitInfo.pWaitSemaphores = 
-        &vkChain->imageAvailableSemaphores[vkChain->currentFrame];
-    submitInfo.pWaitDstStageMask = &wat;
+	vkAcquireNextImageKHR(
+		entityVk.device,
+		vkChain->swapChain,
+		UINT64_MAX,
+		vkChain->imageAvailableSemaphores[vkChain->currentFrame],
+		VK_NULL_HANDLE,
+		&vkChain->currentPresent
+	);
+	if (vkChain->imagesInFlight[vkChain->currentPresent] != VK_NULL_HANDLE)
+	{
+		vkWaitForFences(entityVk.device, 1,
+			&vkChain->imagesInFlight[vkChain->currentPresent], VK_TRUE, UINT64_MAX);
+	}
+	vkChain->imagesInFlight[vkChain->currentPresent] =
+		vkChain->inFlightFences[vkChain->currentFrame];
+
+	const VkPipelineStageFlags wat = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+	VkSubmitInfo submitInfo = {};
+	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submitInfo.pNext = nullptr;
+	submitInfo.commandBufferCount = 0;
+	submitInfo.waitSemaphoreCount = 1;
+	submitInfo.pWaitSemaphores =
+		&vkChain->imageAvailableSemaphores[vkChain->currentFrame];
+	submitInfo.pWaitDstStageMask = &wat;
 	submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores 
-        = &vkChain->renderCompleteSemaphores[vkChain->currentFrame];
+	submitInfo.pSignalSemaphores
+		= &vkChain->renderCompleteSemaphores[vkChain->currentFrame];
 
-    vkResetFences(entityVk.device, 1, &vkChain->inFlightFences[vkChain->currentFrame]);
-    vkQueueSubmit(presentQueue, 1,
-        &submitInfo, vkChain->inFlightFences[vkChain->currentFrame]);
-    
-    VkPresentInfoKHR info = { VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
-    info.swapchainCount = 1;
-    info.pSwapchains = swapChains;
-    info.pImageIndices = &vkChain->currentPresent;
-    info.waitSemaphoreCount = 1;
-    info.pWaitSemaphores 
-        = &vkChain->renderCompleteSemaphores[vkChain->currentFrame];
-    if(vkQueuePresentKHR(presentQueue, &info) != VK_SUCCESS)
-    {
-        Sakura::log::error("Vulkan: failed to present Vulkan graphics queue!");
-        throw std::runtime_error("Vulkan:failed to present Vulkan graphics queue!");
-    }
-    vkChain->lastFrame = vkChain->currentFrame;
-    vkChain->currentFrame = (vkChain->currentFrame + 1) % vkChain->swapChainCount;
+	vkResetFences(entityVk.device, 1, &vkChain->inFlightFences[vkChain->currentFrame]);
+	vkQueueSubmit(presentQueue, 1,
+		&submitInfo, vkChain->inFlightFences[vkChain->currentFrame]);
+
+	VkPresentInfoKHR info = { VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
+	info.swapchainCount = 1;
+	info.pSwapchains = swapChains;
+	info.pImageIndices = &vkChain->currentPresent;
+	info.waitSemaphoreCount = 1;
+	info.pWaitSemaphores
+		= &vkChain->renderCompleteSemaphores[vkChain->currentFrame];
+	if (vkQueuePresentKHR(presentQueue, &info) != VK_SUCCESS)
+	{
+		Sakura::log::error("Vulkan: failed to present Vulkan graphics queue!");
+		throw std::runtime_error("Vulkan:failed to present Vulkan graphics queue!");
+	}
+	vkChain->lastFrame = vkChain->currentFrame;
+	vkChain->currentFrame = (vkChain->currentFrame + 1) % vkChain->swapChainCount;
 }
 
 CommandQueue* CGDVk::GetGraphicsQueue() const

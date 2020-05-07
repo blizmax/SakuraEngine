@@ -51,6 +51,7 @@ GpuResourceVkBuffer::~GpuResourceVkBuffer()
 
 GpuResourceVkImage::~GpuResourceVkImage()
 {
+    defaultView.reset();
     if(allocation != VK_NULL_HANDLE)
         vmaDestroyImage(cgd.GetCGDEntity().vmaAllocator, image, allocation);
     else
@@ -76,6 +77,11 @@ void GpuResourceVkImage::Unmap()
 {
     vmaUnmapMemory(cgd.GetCGDEntity().vmaAllocator, allocation);
 }   
+
+ResourceView* GpuResourceVkImage::GetDefaultView() const
+{
+    return defaultView.get();
+}
 
 void CGDVk::createAllocator()
 {
@@ -121,6 +127,18 @@ GpuTexture* CGDVk::CreateGpuResource(const TextureCreateInfo& info) const
     GpuResourceVkImage* vkImg = new GpuResourceVkImage(
         *this, image, {imageInfo.extent.width, imageInfo.extent.height});
     vkImg->allocation = allocation;
+
+	ResourceViewCreateInfo tvinfo = {};
+	tvinfo.viewType = info.defaultViewType;
+	tvinfo.format = info.format;
+	tvinfo.view.texture2D.baseMipLevel = 0;
+    tvinfo.view.texture2D.mipLevels = info.mipLevels;
+	tvinfo.view.texture2D.baseArrayLayer = 0;
+    tvinfo.view.texture2D.layerCount = info.arrayLayers;
+	tvinfo.view.texture2D.aspectMask = 
+        (info.usage & DepthStencilAttachmentImage) ? ImageAspectDepth : ImageAspectColor;
+    vkImg->defaultView.reset(
+        (ResourceViewVkImage*)ViewIntoResource(*vkImg, tvinfo));
     return vkImg;
 }
 

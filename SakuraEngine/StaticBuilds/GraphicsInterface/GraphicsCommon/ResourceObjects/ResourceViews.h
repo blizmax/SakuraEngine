@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-05 17:35:59
- * @LastEditTime: 2020-03-19 19:24:40
+ * @LastEditTime: 2020-05-07 00:08:47
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -42,18 +42,6 @@ struct VkImageViewCreateInfo;
 
 namespace Sakura::Graphics
 {
-    enum ResourceViewType
-    {
-        ImageView1D,
-        ImageView2D,
-        ImageView3D,
-        ImageViewCube,
-        ImageView1DArray,
-        ImageView2DArray,
-        ImageViewCubeArray,
-        ImageViewTypesCount,
-        Buffer
-    };
     inline static bool isImageView(const ResourceViewType type)
     {
         return type <= ImageViewCubeArray;
@@ -67,6 +55,7 @@ namespace Sakura::Graphics
 		uint16 baseArrayLayer = 0;
 		uint16 layerCount = 1;
 	};
+
     const TextureSubresourceRange plainTextureSubresourceRange = 
     {
         ImageAspectFlag::ImageAspectColor,
@@ -75,20 +64,15 @@ namespace Sakura::Graphics
 
     struct ResourceViewCreateInfo
     {
-        struct Tex3DInfo
-        {
-
-        };
         struct Buffer
         {
-            
+               
         };
         Format format;
         ResourceViewType viewType;
         union View
         {
             TextureSubresourceRange texture2D;
-            Tex3DInfo texture3D;
             Buffer buffer;
         } view;
     };

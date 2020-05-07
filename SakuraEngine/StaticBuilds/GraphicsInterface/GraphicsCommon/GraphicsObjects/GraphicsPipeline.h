@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-07 23:25:42
- * @LastEditTime: 2020-05-06 22:12:25
+ * @LastEditTime: 2020-05-06 23:43:04
  */
 #pragma once
 #include "../Flags/GraphicsPipelineStates.h"
@@ -46,9 +46,29 @@ namespace Sakura::Graphics
         uint32_t    stencil;
     };
 
-    sinterface RenderTarget
+    struct RenderTarget
     {
-        virtual const GpuResource* GetResource() const = 0;
+        inline RenderTarget(const GpuResource* _resource,
+            const ResourceView* _view, 
+            const Sakura::Graphics::ClearColorValue& clearColor)
+            :resource(_resource), srv(_view) 
+        {
+            clearValue.clearColor = clearColor;
+        }
+        inline RenderTarget(const GpuResource* _resource,
+            const ResourceView* _view, 
+            float depth, uint32_t stencil)
+            :resource(_resource), srv(_view) 
+        {
+            clearValue.clearDepth = {depth, stencil};
+        }
+        const GpuResource* resource = nullptr;
+        const ResourceView* srv = nullptr;
+        union ClearValue
+        {
+            Sakura::Graphics::ClearColorValue clearColor;
+            Sakura::Graphics::ClearDepthStencilValue clearDepth;
+        } clearValue;
     };
 
     struct RenderTargetSet

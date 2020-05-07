@@ -32,6 +32,12 @@
 #include "../Flags/GraphicsPipelineStates.h"
 #include <functional>
 #include <iostream>
+
+namespace Sakura::Graphics
+{
+    struct ResourceView;
+}
+
 namespace Sakura::Graphics
 {
     enum ImageAspectFlag
@@ -76,9 +82,23 @@ namespace Sakura::Graphics
         uint64 size;
     };
 
+	enum ResourceViewType
+	{
+		ImageView1D,
+		ImageView2D,
+		ImageView3D,
+		ImageViewCube,
+		ImageView1DArray,
+		ImageView2DArray,
+		ImageViewCubeArray,
+		ImageViewTypesCount,
+		Buffer
+	};
+
     struct TextureCreateInfo
     {
         ImageUsages usage;
+        ResourceViewType defaultViewType = ResourceViewType::ImageView2D;
         uint32 width;
         uint32 height;
         Format format;
@@ -125,6 +145,7 @@ namespace Sakura::Graphics
         GpuTexture() = default;
         GpuTexture(Extent2D _extent)
             :GpuResource(_extent){}
+        virtual ResourceView* GetDefaultView() const = 0;
     };
 
     struct SamplerCreateInfo

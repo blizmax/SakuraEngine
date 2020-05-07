@@ -47,6 +47,7 @@ namespace Sakura::Graphics::Vk
             func(data);
             Unmap();
         }
+        virtual ResourceView* GetDefaultView() const final override;
         VkImage image;   
         VmaAllocation allocation = VK_NULL_HANDLE;
     protected:
@@ -54,6 +55,7 @@ namespace Sakura::Graphics::Vk
             const VkImage& img, Extent2D _extent)
             :image(img), cgd(_cgd), GpuTexture(_extent){}
         const CGDVk& cgd;
+        std::unique_ptr<ResourceViewVkImage> defaultView;
     };
     
     struct GpuResourceVkBuffer final : public GpuBuffer

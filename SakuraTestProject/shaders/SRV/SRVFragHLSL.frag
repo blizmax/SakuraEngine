@@ -18,7 +18,7 @@ struct PixelOut
 PixelOut main(PixelIn pin)
 {
     PixelOut pout;
-    pout.outColor = _texture.Sample(staSampler, pin.fragTexCoord);
+    pout.outColor = _texture.Sample(textureSampler, pin.fragTexCoord);
     return pout;
 };
 

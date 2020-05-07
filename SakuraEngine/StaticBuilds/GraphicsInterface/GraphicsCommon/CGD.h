@@ -36,6 +36,7 @@
 #include "GraphicsObjects/GraphicsPipeline.h"
 #include "GraphicsObjects/RenderPass.h"
 #include "GraphicsObjects/RootSignature.h"
+#include "GraphicsObjects/Fence.h"
 
 namespace Sakura::Graphics
 {
@@ -44,7 +45,6 @@ namespace Sakura::Graphics
     sinterface GpuResource;
     sinterface GpuBuffer;
     sinterface GpuTexture;
-    sinterface Fence;
     sinterface ComputePipeline;
     struct BufferCreateInfo;
     struct TextureCreateInfo;

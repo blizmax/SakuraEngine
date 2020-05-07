@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-08 21:06:12
- * @LastEditTime: 2020-05-06 22:11:51
+ * @LastEditTime: 2020-05-06 23:44:59
  */
 #include "GraphicsPipelineVk.h"
 #include "../Flags/GraphicsPipelineStatesVk.h"
@@ -164,13 +164,13 @@ VkFramebuffer GraphicsPipelineVk::createFrameBuffer(const RenderTargetSet& rts)
     std::vector<VkImageView> images(rts.rtNum);
     for(auto i = 0u; i < rts.rtNum; i++)
         images[i] = ((const ResourceViewVkImage*)
-        ((RenderTargetVk&)rts.rts[i]).srv)->vkImgView;
+        rts.rts[i].srv)->vkImgView;
     const VkImageView* attach = (const VkImageView*)images.data();
     framebufferInfo.pAttachments = attach;
     framebufferInfo.width = 
-        ((RenderTargetVk&)rts.rts[0]).resource->GetExtent().width;
+        rts.rts[0].resource->GetExtent().width;
     framebufferInfo.height = 
-        ((RenderTargetVk&)rts.rts[0]).resource->GetExtent().height;
+        rts.rts[0].resource->GetExtent().height;
     framebufferInfo.layers = 1;
     
     if (vkCreateFramebuffer(cgd.GetCGDEntity().device, &framebufferInfo,

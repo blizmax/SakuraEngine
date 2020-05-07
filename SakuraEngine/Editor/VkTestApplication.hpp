@@ -22,14 +22,11 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-29 11:46:00
- * @LastEditTime: 2020-05-06 22:35:17
+ * @LastEditTime: 2020-05-06 23:43:32
  */
 #pragma once
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 #include "SakuraEngine/StaticBuilds/PixelOperators/ImageUtils.h"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/GraphicsCommon/CGD.h"
 #include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/CGD_Vulkan.h"
@@ -43,48 +40,29 @@ extern "C"
 #include "SakuraEngine/Core/Core.h"
 #include "vulkan/vulkan.h"
 #include "Extern/include/SDL2Tools/SDL2Vk.hpp"
-#include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/Flags/FormatVk.h"
-#include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/Flags/GraphicsPipelineStatesVk.h"
-#include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/GraphicsObjects/GraphicsPipelineVk.h"
-#include "SakuraEngine/StaticBuilds/TaskSystem/TaskSystem.h"
-#include "SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/GraphicsObjects/FenceVk.h"
 #include "SakuraEngine/StaticBuilds/ImGuiProfiler/ImGuiProfiler.hpp"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/GraphicsCommon/GraphicsObjects/ComputePipeline.h"
+
 using namespace Sakura;
 using namespace Sakura::Graphics::Vk;
 
-#if defined(CONFINFO_PLATFORM_LINUX) 
-#elif defined(CONFINFO_PLATFORM_MACOS)
-    Sakura::fs::file vs_srv
-    ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVVertex.spv",
-        'r');  
-    Sakura::fs::file fs_srv
-    ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVPixel.spv",
-        'r');
-    Sakura::fs::file cs_avgfilter
-	("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\Compute\\avgfiltering.comp.spv",
-		'r');
-    const std::string texPath =
-        "D:\\Coding\\SakuraEngine\\SakuraTestProject\\textures\\CGBull.jpg";
-#elif defined(CONFINFO_PLATFORM_WIN32)
-    Sakura::fs::file vs_srv
-    ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVVertex.spv",
-        'r');  
-    Sakura::fs::file fs_srv
-    ("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVPixel.spv",
-        'r');
-    Sakura::fs::file cs_avgfilter
-	("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\Compute\\avgfiltering.comp.spv",
-		'r');
-    const std::string texPath =
-        "D:\\Coding\\SakuraEngine\\SakuraTestProject\\textures\\CGBull.jpg";
-#endif
+Sakura::fs::file vs_srv
+("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVVertex.spv",
+	'r');
+Sakura::fs::file fs_srv
+("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\SRV\\SRVPixel.spv",
+	'r');
+Sakura::fs::file cs_avgfilter
+("D:\\Coding\\SakuraEngine\\SakuraTestProject\\shaders\\Compute\\avgfiltering.comp.spv",
+	'r');
+const std::string texPath =
+"D:\\Coding\\SakuraEngine\\SakuraTestProject\\textures\\CGBull.jpg";
 
 struct VertexData
 {
     Sakura::Math::Vector3 pos;
     Sakura::Math::Vector3 color;
-    glm::vec2 texCoord;
+    Sakura::Math::Vector2 texCoord;
     static VertexInputBindingDescription getBindingDescription() {
         VertexInputBindingDescription bindingDescription = {};
         bindingDescription.binding = 0;
@@ -269,32 +247,24 @@ private:
             ImageLayout::Unknown, ImageLayout::UAV, textureSubresource);
         context->End();
         cgd->GetGraphicsQueue()->Submit(context.get());
-        cgd->GetGraphicsQueue()->WaitIdle();
-
-        textureView.reset(
-            cgd->ViewIntoTexture(*texture.get(), Format::R8G8B8A8_UNORM,
-                ImageAspectFlag::ImageAspectColor));
-        textureTargetView.reset(
-           cgd->ViewIntoTexture(*textureTarget.get(), Format::R8G8B8A8_UNORM,
-                ImageAspectFlag::ImageAspectColor));
 
         SamplerCreateInfo samplerInfo;
         samplerInfo.mipmapMode = SamplerMipmapMode::SamplerMipmapModeLinear;
-        samplerInfo.minLod = 0;
+        samplerInfo.minLod = (float)mipLevels / 2;
         samplerInfo.maxLod = (float)mipLevels;
         samplerInfo.mipLodBias = 0;
         sampler.reset(cgd->CreateSampler(samplerInfo));
 
         RootArgumentAttachment compAttachments[2];
         TexSamplerAttachment srcAttach;
-        srcAttach.imageView = textureView.get();
+        srcAttach.imageView = texture->GetDefaultView();
         srcAttach.sampler = sampler.get();
         srcAttach.imageLayout = ImageLayout::UAV;
         compAttachments[0].info = srcAttach;
         compAttachments[0].rootArgType = SignatureSlotType::StorageImageSlot;
         compAttachments[0].dstBinding = 0;
         TexSamplerAttachment dstAttach;
-        dstAttach.imageView = textureTargetView.get();
+        dstAttach.imageView = textureTarget->GetDefaultView();
         dstAttach.sampler = sampler.get();
         dstAttach.imageLayout = ImageLayout::UAV;
         compAttachments[1].info = dstAttach;
@@ -316,6 +286,9 @@ private:
         gcontext->ResourceBarrier(*textureTarget.get(),
             ImageLayout::UAV, ImageLayout::ShaderReadOnlyOptimal,
             textureSubresource);
+		gcontext->ResourceBarrier(*texture.get(),
+			ImageLayout::UAV, ImageLayout::ShaderReadOnlyOptimal,
+			textureSubresource);
         gcontext->End();
         cgd->GetGraphicsQueue()->Submit(gcontext.get());
         cgd->WaitIdle();
@@ -328,8 +301,7 @@ private:
         depth.reset(
             cgd->CreateGpuTexture(depthFormat, extent.width, extent.height,
             ImageUsage::DepthStencilAttachmentImage | ImageUsage::SampledImage));
-        depthView.reset(
-            cgd->ViewIntoTexture(*depth.get(), depthFormat, ImageAspectDepth));
+        depthView = depth->GetDefaultView();
     }
 
     void createBuffer()
@@ -451,8 +423,6 @@ private:
             0.1f, 10.f);
         ubo.model = Matrix4x4::Identity();
         auto offset = ubo.model.Right();
-        //offset = Vector3(0.f, 0.f, 1.f);
-        //ubo.model.Translate(offset);
 
         constantBuffer->UpdateValue([&](void* ptr) -> void
             {
@@ -473,7 +443,7 @@ private:
         attachments[1].info = samplerAttach;
         attachments[1].rootArgType = SignatureSlotType::SamplerSlot;
         attachments[1].dstBinding = 1;
-        texAttach.imageView = textureTargetView.get();
+        texAttach.imageView = texture->GetDefaultView();
         texAttach.imageLayout = ImageLayout::ShaderReadOnlyOptimal;
         attachments[2].info = texAttach;
         attachments[2].rootArgType = SignatureSlotType::SampledImageSlot;
@@ -484,12 +454,12 @@ private:
     void mainLoop()
     {
         auto frameCount = swapChain->GetCurrentFrame();
-        Sakura::Graphics::Vk::RenderTargetVk rt{
+        RenderTarget rt{
             &swapChain->GetSwapChainImage(frameCount),
             &swapChain->GetChainImageView(frameCount), {0.f, 0.f, 0.f, 0.f}};
-        Sakura::Graphics::Vk::RenderTargetVk ds(
-            depth.get(), depthView.get(), 1.f, 0u);
-        Sakura::Graphics::Vk::RenderTargetVk rts[2] = {rt, ds};
+        RenderTarget ds(
+            depth.get(), depthView, 1.f, 0u);
+        RenderTarget rts[2] = {rt, ds};
         RenderTargetSet rtset{(RenderTarget*)rts, 2};
 
         context.reset(
@@ -538,11 +508,8 @@ private:
     {
         cgd->WaitIdle();
         sampler.reset();
-        textureView.reset();
-        depthView.reset();
         texture.reset();
         textureTarget.reset();
-        textureTargetView.reset();
         depth.reset();
         profiler.reset();
         constantBuffer.reset();
@@ -581,14 +548,14 @@ private:
     std::unique_ptr<GpuBuffer> constantBuffer, vertexBuffer, indexBuffer;
 
     std::unique_ptr<GpuTexture> depth, texture, textureTarget;
-    std::unique_ptr<ResourceView> depthView, textureView, textureTargetView;
+    const ResourceView* depthView;
 
     ShaderFunction vsStage, fsStage, csStage;
     std::unique_ptr<Shader> vertshader, fragshader, computeshader;
     std::unique_ptr<GraphicsPipeline> Pipeline;
     std::unique_ptr<ComputePipeline> compPipeline;
     std::unique_ptr<RenderPass> pass;
-
+    
     VkSurfaceKHR surface;
     SDL_Window* win = nullptr;
     std::unique_ptr<Sakura::Graphics::Im::ImGuiProfiler> profiler;
