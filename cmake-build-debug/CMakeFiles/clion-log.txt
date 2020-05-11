@@ -1,0 +1,12 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/huangzheng/Coding/SakuraEngine
+-- /Users/huangzheng/vcpkg
+-- TOOL CHAIN: /Users/huangzheng/vcpkg/scripts/buildsystems/vcpkg.cmake
+-- Use CLANG Compiler lang.exe
+Root ./SakuraEngine
+missing file argument
+-- Graphicsinterface Root: /Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/Graphicsinterface
+Root ./SakuraEngine
+missing file argument
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/huangzheng/Coding/SakuraEngine/cmake-build-debug

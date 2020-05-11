@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-05 17:35:59
- * @LastEditTime: 2020-05-07 00:08:47
+ * @LastEditTime: 2020-05-08 12:03:59
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -85,16 +85,11 @@ namespace Sakura::Graphics
         {
             return viewType;
         }
-        virtual void Attach(const GpuResource&, const ResourceViewCreateInfo&) = 0;
-        virtual void Detach() = 0;
     protected:
-        ResourceView(const CGD& _device,
-            const GpuResource& res, const ResourceViewType vt)
-            :device(_device), viewType(vt), resource(res){}
+        ResourceView(const ResourceViewType vt)
+            :viewType(vt){}
     protected:
-        const GpuResource& resource;
         Format format;
         ResourceViewType viewType;
-        const CGD& device;
     };
 }

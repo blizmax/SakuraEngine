@@ -53,7 +53,8 @@ SwapChainMtl::SwapChainMtl(const int width, const int height,
     view.device = (__bridge id<MTLDevice>)_cgd.entity.device.GetPtr();
     view.delegate = viewController;
     view.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-    view.clearColor = MTLClearColorMake(0.0, 0.5, 1.0, 1.0);
+    view.clearColor = MTLClearColorMake(
+        0.0, 0.5, 1.0, 1.0);
     [window.contentView addSubview:view];
     [window center];
     [window orderFrontRegardless];
@@ -61,7 +62,7 @@ SwapChainMtl::SwapChainMtl(const int width, const int height,
     m_view = ns::Handle{ (__bridge void*)view };
 }
 
-mtlpp::Drawable SwapChainMtl::GetDrawable() const
+mtlpp::Drawable SwapChainMtl::GetMtlDrawable() const
 {
     return ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentDrawable };
 }
@@ -69,4 +70,14 @@ mtlpp::Drawable SwapChainMtl::GetDrawable() const
 mtlpp::RenderPassDescriptor SwapChainMtl::GetRenderPassDescriptor() const
 {
     return ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentRenderPassDescriptor };
+}
+
+const GpuTexture& SwapChainMtl::GetDrawable() const
+{
+
+}
+
+const ResourceView& SwapChainMtl::GetDrawableView() const
+{
+
 }

@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/TaskSystem/TaskSystem.cpp
+TaskSystem.h
+/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/TaskSystem/TaskSystem.h
+
+/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/TaskSystem/TaskSystem.h
+

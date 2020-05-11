@@ -49,16 +49,42 @@ namespace Sakura::Graphics::Vk
         
         virtual ~SwapChainVk() override final;
         virtual Extent2D GetExtent() const override final;
-        inline VkFormat GetVkPixelFormat() 
+        virtual const GpuTexture& GetDrawable() const override final;
+        virtual const ResourceView& GetDrawableView() const override final;
+        inline VkFormat GetVkPixelFormat()
         {
             return Transfer(swapChainImageFormat);
         }
+        const GpuTexture& GetSwapChainImage(std::size_t frameIndex) const
+        {
+            return *swapChainImages[frameIndex];
+        }
+        const ResourceView& GetChainImageView(std::size_t frameIndex) const
+        {
+            return *resourceViews[frameIndex].get();
+        }
+        inline uint32 GetCurrentFrame() const
+        {
+            return currentFrame;
+        }
+        inline uint32 GetLastFrame() const
+        {
+            return lastFrame;
+        }
+
         VkSwapchainKHR swapChain;
         VkExtent2D swapChainExtent;
+        //
         std::vector<VkSemaphore> imageAvailableSemaphores;
         std::vector<VkSemaphore> renderCompleteSemaphores;
         std::vector<VkFence> inFlightFences;
         std::vector<VkFence> imagesInFlight;
+
+        uint32 lastFrame;
+        uint32 currentFrame = 0;
+        std::vector<GpuTexture*> swapChainImages;
+        std::vector<std::unique_ptr<ResourceView>> resourceViews;
+
         uint32_t nextPresent = 0;
         uint32_t currentPresent = 0;
     };

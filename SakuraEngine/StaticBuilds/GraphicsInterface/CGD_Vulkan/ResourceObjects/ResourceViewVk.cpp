@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-06 00:57:40
- * @LastEditTime: 2020-03-19 19:37:43
+ * @LastEditTime: 2020-05-08 12:03:28
  */
 #include "ResourceViewVk.h"
 #include "GpuResourceVk.h"
@@ -38,7 +38,7 @@ void ResourceViewVkImage::Detach()
         vkDestroyImageView(vkdevice.GetCGDEntity().device, vkImgView, nullptr);
     vkImgView = VK_NULL_HANDLE;
 }
-
+/*
 void ResourceViewVkImage::Attach(
     const GpuResource& resource, const ResourceViewCreateInfo& info)
 {
@@ -68,7 +68,7 @@ void ResourceViewVkImage::Attach(
         Sakura::log::error("failed to create image views!");
         throw std::runtime_error("failed to create image views!");
     }
-}
+}*/
 
 ResourceViewVkImage::~ResourceViewVkImage()
 {
@@ -77,7 +77,7 @@ ResourceViewVkImage::~ResourceViewVkImage()
 
 ResourceViewVkImage::ResourceViewVkImage(
     const CGDVk& _device, const GpuResource& res, const ResourceViewType type)
-    :ResourceView(_device, res, type)
+    :device(_device), ResourceView(type)
 {
    
 }

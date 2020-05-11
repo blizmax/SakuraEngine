@@ -148,7 +148,7 @@ namespace Sakura::Graphics::Vk
         case ECommandType::ECommandBufferCopy:
             return static_cast<CommandBufferCopyVk*>(cmdBuffer);
         default:
-            break;
+            return nullptr;
         }
     }
 } // namespace Sakura::Graphics

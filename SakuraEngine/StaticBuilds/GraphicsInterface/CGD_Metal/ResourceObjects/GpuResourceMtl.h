@@ -22,10 +22,11 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-03 14:03:28
- * @LastEditTime: 2020-05-04 01:36:39
+ * @LastEditTime: 2020-05-08 12:19:03
  */
 #pragma once
 #include "../../GraphicsCommon/ResourceObjects/Resource.h"
+#include "../../GraphicsCommon/ResourceObjects/ResourceViews.h"
 #include "../mtlpp/mtlpp.hpp"
 namespace Sakura::Graphics::Mtl
 {
@@ -34,17 +35,31 @@ namespace Sakura::Graphics::Mtl
 
 namespace Sakura::Graphics::Mtl
 {
-    struct GpuResourceMtlImage final : public GpuTexture
+    struct ResourceViewMtlImage final : public ResourceView
+    {
+        ResourceViewMtlImage(const CGDMtl& _cgd,
+            const GpuResource& res, const ResourceViewCreateInfo& info);
+        ResourceViewMtlImage(const CGDMtl& _cgd,
+            const mtlpp::Texture& tex, const ResourceViewCreateInfo& info);
+        const mtlpp::Texture texture;
+        const CGDMtl& cgd;
+    };
+    
+    struct GpuResourceMtlTexture final: public GpuTexture, public ResourceView
     {
         friend class CGDMtl;
         friend struct ResourceViewMtlImage;
-        virtual ~GpuResourceMtlImage() override final;
+        virtual ~GpuResourceMtlTexture() override final;
         virtual void UpdateValue(
             std::function<void(void*)> func) final override;
         virtual void Map(void** data) override final;
         virtual void Unmap() override final;
+        virtual const ResourceView* GetDefaultView() const override final;
+        virtual ResourceView* GetDefaultView() override final;
     protected:
-        GpuResourceMtlImage(const CGDMtl& _cgd, Extent2D _extent);
+        GpuResourceMtlTexture(const CGDMtl& _cgd,
+            const mtlpp::Texture& tex, Extent2D _extent);
+        const mtlpp::Texture texture;
         const CGDMtl& cgd;
     };
 

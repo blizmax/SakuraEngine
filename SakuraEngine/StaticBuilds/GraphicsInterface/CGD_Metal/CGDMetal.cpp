@@ -64,9 +64,11 @@ void CGDMtl::InitializeDevice(void* mainSurface)
         entity.device.NewCommandQueue(), CommandQueueTypes::ECommandQueueCopy);
 }
 
-SwapChain* CGDMtl::CreateSwapChain(const int width, const int height, void* mainSurface)
+SwapChain* CGDMtl::CreateSwapChain(
+    const int width, const int height, void* mainSurface)
 {
-    SwapChain* result = new SwapChainMtl(width, height, *this, mainSurface);
+    SwapChainMtl* result = new SwapChainMtl(width, height, *this, mainSurface);
+
     return result;
 }
 
@@ -202,7 +204,7 @@ void Sakura::Graphics::Mtl::CGDMtl::Present(SwapChain* chain)
     CommandBufferGraphicsMtl* presentCommandBuffer 
         = (CommandBufferGraphicsMtl*)CreateCommandBuffer(
             *GetGraphicsQueue(), ECommandType::ECommandBufferGraphics);
-    presentCommandBuffer->commandBuffer.Present(mtlChain->GetDrawable());
+    presentCommandBuffer->commandBuffer.Present(mtlChain->GetMtlDrawable());
     presentCommandBuffer->commandBuffer.Commit();
     presentCommandBuffer->commandBuffer.WaitUntilCompleted();
     delete presentCommandBuffer;

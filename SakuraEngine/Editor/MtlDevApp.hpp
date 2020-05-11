@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-04-29 11:33:30
- * @LastEditTime: 2020-05-05 16:31:09
+ * @LastEditTime: 2020-05-08 12:31:14
  */
 #pragma once
 extern "C"
@@ -51,9 +51,10 @@ const char shadersSrc[] = R"""(
         return half4(1.0, 0.0, 0.0, 1.0);
     }
 )""";
+using namespace Sakura::Graphics;
 
 ShaderFunction vertFunction, pixelFunction;
-std::unique_ptr<SwapChain> swapChain;
+std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
 std::unique_ptr<AppleWindow> appleWindow;
 std::unique_ptr<CommandBufferGraphics> graphicsBuffer;
 std::unique_ptr<Sakura::Graphics::Mtl::CGDMtl> cgd;
@@ -71,6 +72,12 @@ float vertexData[] =
 
 void call()
 {
+    graphicsBuffer.reset(
+        cgd->CreateCommandBufferGraphics(*cgd->GetGraphicsQueue()));
+    graphicsBuffer->Begin();
+
+    graphicsBuffer->End();
+
     cgd->Present(swapChain.get());
 }
 
@@ -108,7 +115,7 @@ public:
             cgd->CreateGraphicsPipeline(pplInfo, *renderPass.get()));
         
         vertexBuffer.reset(cgd->CreateGpuBuffer(sizeof(vertexData),
-            BufferUsage::VertexBuffer, CPUAccessFlags::ReadWrite));
+            BufferUsage::VertexBuffer, Sakura::Graphics::CPUAccessFlags::ReadWrite));
         vertexBuffer->UpdateValue([&](void* mapped){
             memcpy(mapped, &vertexData, sizeof(vertexData));
         });

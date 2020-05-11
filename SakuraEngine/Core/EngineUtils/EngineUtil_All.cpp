@@ -25,6 +25,8 @@
  * @LastEditTime: 2020-03-16 15:02:22
  */
 #include "Common/T2String.cc"
+#include "xxHash/xxhash.c"
+#include "xxHash/xxhsum.c"
 #ifdef _WIN32
 #include "Win32/fs.cpp"
 #include "Win32/os.cpp"

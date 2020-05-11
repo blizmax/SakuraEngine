@@ -14,13 +14,28 @@
 #include <EASTL/string_view.h>
 //#define SPA_OUTPUT_LOG
 
-inline void* operator new[](size_t size, const char* pName, int flags, unsigned     debugFlags, const char* file, int line) 
+inline void* operator new[](size_t size, const char* pName, int flags,
+        unsigned debugFlags, const char* file, int line)
 {
+    (void)file;
+    (void)line;
+    (void)pName;
+    (void)flags;
+    (void)debugFlags;
     return malloc(size);
 }  
 
-inline void* operator new[](size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line) 
+inline void* operator new[](size_t size, size_t alignment,
+        size_t alignmentOffset, const char* pName, int flags,
+        unsigned debugFlags, const char* file, int line)
 {
+    (void)file;
+    (void)line;
+    (void)alignment;
+    (void)alignmentOffset;
+    (void)pName;
+    (void)flags;
+    (void)debugFlags;
     return malloc(size);
 }
 
@@ -107,9 +122,8 @@ namespace Sakura::SPA
 #endif
         if (sharedLib->hasSymbol(initName.c_str()))
         {
-            auto func =
-                sharedLib->get<IModule*()>(initName);
-            ModulesMap[name] = std::move(std::unique_ptr<IModule>(func()));
+            auto func = sharedLib->get<IModule*()>(initName);
+            ModulesMap[name] = std::unique_ptr<IModule>(func());
             IDynamicModule* module = (IDynamicModule*)ModulesMap[name].get();
             module->sharedLib = std::move(sharedLib);
             

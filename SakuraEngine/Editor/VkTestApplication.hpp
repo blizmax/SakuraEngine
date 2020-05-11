@@ -455,8 +455,8 @@ private:
     {
         auto frameCount = swapChain->GetCurrentFrame();
         RenderTarget rt{
-            &swapChain->GetSwapChainImage(frameCount),
-            &swapChain->GetChainImageView(frameCount), {0.f, 0.f, 0.f, 0.f}};
+            &swapChain-GetDrawable(),
+            &swapChain->GetDrawableView(), {0.f, 0.f, 0.f, 0.f}};
         RenderTarget ds(
             depth.get(), depthView, 1.f, 0u);
         RenderTarget rts[2] = {rt, ds};

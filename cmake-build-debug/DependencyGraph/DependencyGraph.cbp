@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="DependencyGraph"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\SakuraEngine\;CMake Files\SakuraEngine\StaticBuilds\;CMake Files\SakuraEngine\StaticBuilds\Graphicsinterface\;CMake Files\SakuraEngine\StaticBuilds\Graphicsinterface\CGD_Vulkan\;CMake Files\SakuraEngine\StaticBuilds\Graphicsinterface\CGD_Metal\;CMake Files\SakuraEngine\StaticBuilds\Graphicsinterface\CGD\;CMake Files\SakuraEngine\StaticBuilds\TaskSystem\;CMake Files\SakuraEngine\StaticBuilds\PixelOperators\;CMake Files\SakuraEngine\StaticBuilds\ImGuiProfiler\;CMake Files\SakuraEngine\StaticBuilds\ImGuiProfiler\ImGui\;CMake Files\SakuraEngine\StaticBuilds\SakuraWorld\;CMake Files\SakuraEngine\Core\;CMake Files\SakuraEngine\Core\EngineUtils\;CMake Files\SakuraEngine\Modules\;CMake Files\SakuraEngine\UnitTests\;CMake Files\SakuraEngine\UnitTests\UnitTestGraphics\;CMake Files\SakuraEngine\UnitTests\coro\;CMake Files\SakuraEngine\Editor\;CMake Files\SakuraEngine\Framework\;CMake Files\SakuraEngine\Framework\Application\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\vcpkg\;CMake Files\..\..\vcpkg\installed\;CMake Files\..\..\vcpkg\installed\x64-osx\;CMake Files\..\..\vcpkg\installed\x64-osx\share\;CMake Files\..\..\vcpkg\installed\x64-osx\share\unofficial-vulkan-memory-allocator\;CMake Files\..\..\vcpkg\installed\x64-osx\share\glm\;CMake Files\..\..\vcpkg\installed\x64-osx\share\freetype\;CMake Files\..\..\vcpkg\installed\x64-osx\share\entt\;CMake Files\..\..\vcpkg\installed\x64-osx\share\sdl2\;CMake Files\..\..\vcpkg\installed\x64-osx\share\fmt\;CMake Files\..\..\vcpkg\installed\x64-osx\share\eastl\;CMake Files\..\..\vcpkg\installed\x64-osx\share\eabase\;CMake Files\..\..\vcpkg\scripts\;CMake Files\..\..\vcpkg\scripts\buildsystems\;CMake Files\DependencyGraph\;CMake Files\SPA\;CMake Files\cmake\;CMake Files\Extern\;CMake Files\Extern\include\;CMake Files\Extern\xxHash\;CMake Files\SakuraTestProject\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/huangzheng/Coding/SakuraEngine/cmake-build-debug/DependencyGraph"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/huangzheng/Coding/SakuraEngine/cmake-build-debug/DependencyGraph/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/huangzheng/Coding/SakuraEngine/cmake-build-debug/DependencyGraph/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/huangzheng/Coding/SakuraEngine/cmake-build-debug/DependencyGraph/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/huangzheng/Coding/SakuraEngine/cmake-build-debug/DependencyGraph/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\StaticBuilds\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/Graphicsinterface/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\StaticBuilds\Graphicsinterface\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Vulkan/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\StaticBuilds\Graphicsinterface\CGD_Vulkan\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/Graphicsinterface/CGD_Metal/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\StaticBuilds\Graphicsinterface\CGD_Metal\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/Graphicsinterface/CGD/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\StaticBuilds\Graphicsinterface\CGD\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/TaskSystem/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\StaticBuilds\TaskSystem\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/PixelOperators/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\StaticBuilds\PixelOperators\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/ImGuiProfiler/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\StaticBuilds\ImGuiProfiler\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/ImGuiProfiler/ImGui/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\StaticBuilds\ImGuiProfiler\ImGui\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/StaticBuilds/SakuraWorld/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\StaticBuilds\SakuraWorld\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/Core/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\Core\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/Core/EngineUtils/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\Core\EngineUtils\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/Modules/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\Modules\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/UnitTests/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\UnitTests\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/UnitTests/UnitTestGraphics/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\UnitTests\UnitTestGraphics\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/UnitTests/coro/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\UnitTests\coro\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/Editor/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\Editor\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/Framework/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\Framework\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/Framework/Application/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraEngine\Framework\Application\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/unofficial-vulkan-memory-allocator/unofficial-vulkan-memory-allocator-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\unofficial-vulkan-memory-allocator\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/glm/glm-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\glm\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/freetype/freetype-config-debug.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\freetype\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/freetype/freetype-config-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\freetype\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/freetype/freetype-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\freetype\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/freetype/vcpkg-cmake-wrapper.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\freetype\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/entt/EnTTConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\entt\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/entt/EnTTConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\entt\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/entt/EnTTTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\entt\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/sdl2/SDL2Config.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/sdl2/SDL2ConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/sdl2/SDL2Targets-debug.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/sdl2/SDL2Targets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/sdl2/SDL2Targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/sdl2/vcpkg-cmake-wrapper.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/fmt/fmt-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\fmt\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/fmt/fmt-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\fmt\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/fmt/fmt-targets-debug.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\fmt\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/fmt/fmt-targets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\fmt\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/fmt/fmt-targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\fmt\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/eastl/EASTLConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\eastl\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/eastl/EASTLConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\eastl\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/eastl/EASTLTargets-debug.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\eastl\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/eastl/EASTLTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\eastl\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/eastl/EASTLTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\eastl\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/eabase/EABaseConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\eabase\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/eabase/EABaseConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\eabase\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/installed/x64-osx/share/eabase/EABaseTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\installed\x64-osx\share\eabase\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/../../vcpkg/scripts/buildsystems/vcpkg.cmake">
+			<Option virtualFolder="CMake Files\..\..\vcpkg\scripts\buildsystems\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/DependencyGraph/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\DependencyGraph\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SPA/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SPA\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/cmake/PluginBash.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/Extern/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Extern\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/Extern/include/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Extern\include\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/Extern/xxHash/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Extern\xxHash\"/>
+		</Unit>
+		<Unit filename="/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\SakuraTestProject\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

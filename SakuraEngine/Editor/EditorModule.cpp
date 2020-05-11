@@ -9,8 +9,8 @@
  */
 #include "EditorModule.h"
 #include "SakuraEngine/Core/Core.h"
-#include "VkTestApplication.hpp"
-//#include "MtlDevApp.hpp"
+//#include "VkTestApplication.hpp"
+#include "MtlDevApp.hpp"
 
 void EditorModule::OnLoad()
 {
@@ -31,9 +31,9 @@ void EditorModule::MainPluginExec()
     EditorModule::debug_info<Sakura::flags::DEBUG_EDITOR>
         ("Editor Module: Main Plugin Exec!");
 
-    auto app = std::make_unique<VkTestApplication>();
+    //auto app = std::make_unique<VkTestApplication>();
     //auto app = std::make_unique<RenderGraphTestApplication>();
-    //auto app = std::make_unique<MtlDevApp>();
+    auto app = std::make_unique<MtlDevApp>();
 	app->run();
     return;
 }

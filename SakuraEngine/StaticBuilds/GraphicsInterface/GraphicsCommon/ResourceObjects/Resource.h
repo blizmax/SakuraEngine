@@ -145,7 +145,8 @@ namespace Sakura::Graphics
         GpuTexture() = default;
         GpuTexture(Extent2D _extent)
             :GpuResource(_extent){}
-        virtual ResourceView* GetDefaultView() const = 0;
+        virtual const ResourceView* GetDefaultView() const = 0;
+        virtual ResourceView* GetDefaultView() = 0;
     };
 
     struct SamplerCreateInfo

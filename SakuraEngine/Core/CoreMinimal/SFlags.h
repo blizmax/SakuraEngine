@@ -25,11 +25,11 @@ namespace Sakura::flags
     inline bool BuildVarFix()
     {
 #ifdef SAKURA_DEBUG_EDITOR
-    if constexpr ((buildVar && flags::BuildVar::DEBUG_EDITOR) != 0)
+    if constexpr ((buildVar & flags::BuildVar::DEBUG_EDITOR) != 0)
         return true;
 #endif
 #ifdef SAKURA_DEBUG_GAME
-    if constexpr ((buildVar && flags::BuildVar::DEBUG_GAME) != 0)
+    if constexpr ((buildVar & flags::BuildVar::DEBUG_GAME) != 0)
         return true;
 #endif
     }

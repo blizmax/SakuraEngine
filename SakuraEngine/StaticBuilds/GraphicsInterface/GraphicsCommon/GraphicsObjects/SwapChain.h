@@ -45,41 +45,23 @@ namespace Sakura::Graphics
     sinterface SwapChain
     {
         SwapChain(const CGD& _device, const uint32 _chainCount)
-            :device(_device), swapChainCount(_chainCount), lastFrame(swapChainCount - 1)
+            :device(_device), swapChainCount(_chainCount)
             {
-                swapChainImages.resize(_chainCount);
-                resourceViews.resize(_chainCount);
+
             }
         virtual ~SwapChain() {}
+
+        const Format GetPixelFormat() const {return swapChainImageFormat;}
+
         virtual Extent2D GetExtent() const = 0;
-        const Format GetPixelFormat() const {return swapChainImageFormat;};
-        const GpuTexture& GetSwapChainImage(std::size_t frameIndex) const
-        {
-            return *swapChainImages[frameIndex];
-        }
-        const ResourceView& GetChainImageView(std::size_t frameIndex) const
-        {
-            return *resourceViews[frameIndex].get();
-        }
-        inline uint32 GetCurrentFrame() const
-        {
-            return currentFrame;
-        }
-        inline uint32 GetLastFrame() const
-        {
-            return lastFrame;
-        }
+        virtual const GpuTexture& GetDrawable() const = 0;
+        virtual const ResourceView& GetDrawableView() const = 0;
         inline uint32 GetSwapChainCount() const
         {
             return swapChainCount;
         }
     protected:
         uint32 swapChainCount = 2;
-        uint32 lastFrame;
-        uint32 currentFrame = 0;
-        std::vector<GpuTexture*> swapChainImages;
-        std::vector<std::unique_ptr<ResourceView>> resourceViews;
-    protected:
         Format swapChainImageFormat;
         const CGD& device;
     };

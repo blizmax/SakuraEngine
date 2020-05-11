@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:59
- * @LastEditTime: 2020-05-01 17:31:42
+ * @LastEditTime: 2020-05-08 12:32:28
  */
 #pragma once
 #include "Core/CoreMinimal/sinterface.h"
@@ -37,10 +37,10 @@
 #include "GraphicsObjects/RenderPass.h"
 #include "GraphicsObjects/RootSignature.h"
 #include "GraphicsObjects/Fence.h"
+#include "GraphicsObjects/SwapChain.h"
 
 namespace Sakura::Graphics
 {
-    sinterface SwapChain;
     sinterface ResourceView;
     sinterface GpuResource;
     sinterface GpuBuffer;

@@ -51,7 +51,9 @@ namespace Sakura::Graphics::Mtl
             MtlView(const ns::Handle& handle);
         };
         virtual Extent2D GetExtent() const final override;
-        mtlpp::Drawable GetDrawable() const;
+        virtual const GpuTexture& GetDrawable() const final override;
+        virtual const ResourceView& GetDrawableView() const final override;
+        mtlpp::Drawable GetMtlDrawable() const;
         mtlpp::RenderPassDescriptor GetRenderPassDescriptor() const;
 
         const CGDMtl& cgd;

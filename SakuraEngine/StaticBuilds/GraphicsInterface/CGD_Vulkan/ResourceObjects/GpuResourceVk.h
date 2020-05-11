@@ -22,12 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-05 18:01:43
- * @LastEditTime: 2020-05-04 00:38:25
+ * @LastEditTime: 2020-05-08 11:09:52
  */
 #pragma once
 #include "vulkan/vulkan.h"
 #include "../../GraphicsCommon/ResourceObjects/Resource.h"
 #include "vk_mem_alloc.h"
+#include "ResourceViewVk.h"
 
 using namespace Sakura::Graphics;
 
@@ -47,8 +48,9 @@ namespace Sakura::Graphics::Vk
             func(data);
             Unmap();
         }
-        virtual ResourceView* GetDefaultView() const final override;
-        VkImage image;   
+        virtual const ResourceView* GetDefaultView() const final override;
+        virtual ResourceView* GetDefaultView() final override;
+        VkImage image;
         VmaAllocation allocation = VK_NULL_HANDLE;
     protected:
         GpuResourceVkImage(const CGDVk& _cgd,

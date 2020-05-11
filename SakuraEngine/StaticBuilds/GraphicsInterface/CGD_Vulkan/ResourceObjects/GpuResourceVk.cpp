@@ -78,7 +78,12 @@ void GpuResourceVkImage::Unmap()
     vmaUnmapMemory(cgd.GetCGDEntity().vmaAllocator, allocation);
 }   
 
-ResourceView* GpuResourceVkImage::GetDefaultView() const
+ResourceView* GpuResourceVkImage::GetDefaultView()
+{
+    return defaultView.get();
+}
+
+const ResourceView* GpuResourceVkImage::GetDefaultView() const
 {
     return defaultView.get();
 }

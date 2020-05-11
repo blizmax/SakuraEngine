@@ -22,35 +22,47 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-03 14:03:37
- * @LastEditTime: 2020-05-04 01:41:46
+ * @LastEditTime: 2020-05-08 12:09:56
  */
 #include "GpuResourceMtl.h"
 #include "../CGDMetal.hpp"
 
 using namespace Sakura::Graphics::Mtl;
 
-GpuResourceMtlImage::~GpuResourceMtlImage()
+GpuResourceMtlTexture::~GpuResourceMtlTexture()
 {
 
 }
 
-GpuResourceMtlImage::GpuResourceMtlImage(const CGDMtl& _cgd, Extent2D _extent)
-    :cgd(_cgd), GpuTexture(_extent)
+const Sakura::Graphics::ResourceView* GpuResourceMtlTexture::GetDefaultView() const
+{
+    return this;
+}
+
+Sakura::Graphics::ResourceView* GpuResourceMtlTexture::GetDefaultView()
+{
+    return this;
+}
+
+GpuResourceMtlTexture::GpuResourceMtlTexture(const CGDMtl& _cgd,
+    const mtlpp::Texture& tex, Extent2D _extent)
+    :cgd(_cgd), texture(tex), GpuTexture(_extent),
+    ResourceView(ResourceViewType::ImageView2D)
 {
     
 }
 
-void GpuResourceMtlImage::Map(void** data)
+void GpuResourceMtlTexture::Map(void** data)
 {
     
 }
 
-void GpuResourceMtlImage::Unmap()
+void GpuResourceMtlTexture::Unmap()
 {
     
 }
 
-void GpuResourceMtlImage::UpdateValue(std::function<void(void*)> func)
+void GpuResourceMtlTexture::UpdateValue(std::function<void(void*)> func)
 {
     //func(buffer.GetContents());
 }
@@ -92,4 +104,19 @@ void GpuResourceMtlBuffer::Unmap()
 void GpuResourceMtlBuffer::UpdateValue(std::function<void(void*)> func)
 {
     func(buffer.GetContents());
+}
+
+ResourceViewMtlImage::ResourceViewMtlImage(
+    const CGDMtl& _cgd, const GpuResource& res,
+    const ResourceViewCreateInfo& info)
+    :cgd(_cgd), ResourceView(info.viewType)
+{
+
+}
+
+ResourceViewMtlImage::ResourceViewMtlImage(const CGDMtl& _cgd,
+    const mtlpp::Texture& tex, const ResourceViewCreateInfo& info)
+    :cgd(_cgd), ResourceView(info.viewType), texture(tex)
+{
+
 }

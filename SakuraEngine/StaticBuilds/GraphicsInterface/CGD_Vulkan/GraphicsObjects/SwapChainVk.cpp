@@ -34,8 +34,11 @@ using namespace Sakura;
 
 SwapChainVk::SwapChainVk(const VkSwapchainKHR _chain, 
     const CGDVk& _device,const uint32 _chainCount)
-    :swapChain(_chain), SwapChain(_device, _chainCount)
+    :swapChain(_chain), SwapChain(_device, _chainCount), lastFrame(_chainCount - 1)
 {
+    swapChainImages.resize(_chainCount);
+    resourceViews.resize(_chainCount);
+
     VkSemaphoreCreateInfo semaphoreInfo = {};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     imageAvailableSemaphores.resize(_chainCount);
@@ -83,4 +86,14 @@ Extent2D SwapChainVk::GetExtent() const
     extent.width = swapChainExtent.width;
     extent.height = swapChainExtent.height;
     return extent;
+}
+
+const GpuTexture& SwapChainVk::GetDrawable() const
+{
+    return GetSwapChainImage(GetCurrentFrame());
+}
+
+const ResourceView& SwapChainVk::GetDrawableView() const
+{
+    return GetChainImageView(GetCurrentFrame());
 }

@@ -1,3 +1,6 @@
+if(SAKURA_UNITY_BUILD)
+    set(PLATFORM_SOURCES CGDMetalAll.mm)
+else()
 set(PLATFORM_SOURCES
     CGDMetal.hpp
     CGDMetal.cpp
@@ -25,6 +28,7 @@ set(PLATFORM_SOURCES
     mtlpp/mtlpp.hpp
     mtlpp/mtlpp.mm
 )
+endif()
 
 set(PLATFORM_LIBRARIES
     "-framework Metal"
