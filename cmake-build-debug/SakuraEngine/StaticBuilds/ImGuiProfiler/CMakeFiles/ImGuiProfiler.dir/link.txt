@@ -1,2 +1,0 @@
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc ../../../Debug/lib/libImGuiProfilerd.a  CMakeFiles/ImGuiProfiler.dir/ImGuiVulkanSDL.cpp.o
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib ../../../Debug/lib/libImGuiProfilerd.a

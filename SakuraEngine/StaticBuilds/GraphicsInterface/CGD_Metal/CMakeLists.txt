@@ -40,7 +40,6 @@ set(PLATFORM_LIBRARIES
 set(CMAKE_C_FLAGS "-x objective-c")
 set(CMAKE_CXX_FLAGS "-x objective-c++")
 
-# CLANG_ENABLE_OBJC_WEAK = YES
 set_source_files_properties(
     ${PLATFORM_SOURCES}
     PROPERTIES

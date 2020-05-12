@@ -48,6 +48,7 @@ namespace Sakura::Graphics::Mtl
     struct GpuResourceMtlTexture final: public GpuTexture, public ResourceView
     {
         friend class CGDMtl;
+        friend class SwapChainMtl;
         friend struct ResourceViewMtlImage;
         virtual ~GpuResourceMtlTexture() override final;
         virtual void UpdateValue(
@@ -58,7 +59,7 @@ namespace Sakura::Graphics::Mtl
         virtual ResourceView* GetDefaultView() override final;
     protected:
         GpuResourceMtlTexture(const CGDMtl& _cgd,
-            const mtlpp::Texture& tex, Extent2D _extent);
+            const mtlpp::Texture& tex, const Extent2D _extent);
         const mtlpp::Texture texture;
         const CGDMtl& cgd;
     };

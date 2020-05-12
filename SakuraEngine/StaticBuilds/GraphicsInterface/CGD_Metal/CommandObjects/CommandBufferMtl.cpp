@@ -78,13 +78,17 @@ void CommandBufferGraphicsMtl::ResourceBarrier(GpuTexture& toTransition,
     
 }
 
+std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
 void CommandBufferGraphicsMtl::BeginRenderPass(
     GraphicsPipeline* gp, const RenderTargetSet& rts)
 {
     if(bOpen)
     {
-        //encoder = commandBuffer.RenderCommandEncoder();
-        if(false)
+        auto desc = ((SwapChainMtl*)swapChain.get())->GetRenderPassDescriptor();
+        desc.GetColorAttachments()[0].SetClearColor(mtlpp::ClearColor(
+            0.f, 1.f, 1.f, 1.f));
+        encoder = commandBuffer.RenderCommandEncoder(desc);
+        if(swapChain.get() != nullptr)
         {
             CGDMtl::debug_error("CGDMtl: Failed to create Metal RenderCommandEncoder!");
         }
@@ -96,6 +100,8 @@ void CommandBufferGraphicsMtl::BeginRenderPass(
 void CommandBufferGraphicsMtl::EndRenderPass()
 {
     encoder.EndEncoding();
+    commandBuffer.Commit();
+    commandBuffer.WaitUntilCompleted();
 }
 
 void CommandBufferGraphicsMtl::Draw(uint32 vertexCount, uint32 instanceCount,

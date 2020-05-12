@@ -74,10 +74,14 @@ mtlpp::RenderPassDescriptor SwapChainMtl::GetRenderPassDescriptor() const
 
 const GpuTexture& SwapChainMtl::GetDrawable() const
 {
-
+    return GpuResourceMtlTexture(cgd,
+        GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
+        this->GetExtent());
 }
 
 const ResourceView& SwapChainMtl::GetDrawableView() const
 {
-
+    return GpuResourceMtlTexture(cgd,
+        GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
+        this->GetExtent());
 }

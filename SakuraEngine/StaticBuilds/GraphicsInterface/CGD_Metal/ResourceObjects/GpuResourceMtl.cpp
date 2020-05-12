@@ -45,8 +45,8 @@ Sakura::Graphics::ResourceView* GpuResourceMtlTexture::GetDefaultView()
 }
 
 GpuResourceMtlTexture::GpuResourceMtlTexture(const CGDMtl& _cgd,
-    const mtlpp::Texture& tex, Extent2D _extent)
-    :cgd(_cgd), texture(tex), GpuTexture(_extent),
+    const mtlpp::Texture& tex, const Extent2D _extent)
+    :cgd(_cgd), texture(tex), GpuTexture((Extent2D)_extent),
     ResourceView(ResourceViewType::ImageView2D)
 {
     

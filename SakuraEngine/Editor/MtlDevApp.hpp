@@ -54,7 +54,7 @@ const char shadersSrc[] = R"""(
 using namespace Sakura::Graphics;
 
 ShaderFunction vertFunction, pixelFunction;
-std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
+extern std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
 std::unique_ptr<AppleWindow> appleWindow;
 std::unique_ptr<CommandBufferGraphics> graphicsBuffer;
 std::unique_ptr<Sakura::Graphics::Mtl::CGDMtl> cgd;
@@ -74,10 +74,15 @@ void call()
 {
     graphicsBuffer.reset(
         cgd->CreateCommandBufferGraphics(*cgd->GetGraphicsQueue()));
+    RenderTarget rt{
+        &swapChain->GetDrawable(),
+        &swapChain->GetDrawableView(), {0.f, 0.f, 0.f, 0.f}};
+    RenderTargetSet rtset{&rt, 1};
     graphicsBuffer->Begin();
+    graphicsBuffer->BeginRenderPass(graphicsPipeline.get(), rtset);
 
+    graphicsBuffer->EndRenderPass();
     graphicsBuffer->End();
-
     cgd->Present(swapChain.get());
 }
 
