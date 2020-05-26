@@ -4,7 +4,7 @@
 #import "../CGDMetal.hpp"
 #import "../Flags/FormatMtl.hpp"
 
-using namespace Sakura::Graphics::Mtl;
+using namespace Sakura::Graphics::Mtl; 
 
 extern void call();
 
@@ -61,6 +61,15 @@ SwapChainMtl::SwapChainMtl(const int width, const int height,
     [window orderFrontRegardless];
 
     m_view = ns::Handle{ (__bridge void*)view };
+
+    frameCount = ((CAMetalLayer*)((__bridge MTKView*)m_view.GetPtr()).layer).maximumDrawableCount;
+    textures.resize(frameCount);
+    drawableViews.resize(frameCount);
+    for(auto ind = 0; ind < frameCount; ind++)
+    {
+        textures[ind] = nullptr;
+        drawableViews[ind] = nullptr;
+    }
 }
 
 mtlpp::Drawable SwapChainMtl::GetMtlDrawable() const
@@ -70,26 +79,33 @@ mtlpp::Drawable SwapChainMtl::GetMtlDrawable() const
 
 mtlpp::RenderPassDescriptor SwapChainMtl::GetRenderPassDescriptor() const
 {
-    int i = ((CAMetalLayer*)((__bridge MTKView*)m_view.GetPtr()).layer).maximumDrawableCount;
-    std::cout << i << std::endl;
     return ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentRenderPassDescriptor };
 }
 
 const GpuTexture& SwapChainMtl::GetDrawable() const
 {
-    auto d = GpuResourceMtlTexture(cgd,
-                          GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
-                          this->GetExtent(),
-                          Transfer(GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetPixelFormat()),
-                          ResourceViewType::ImageView2D);
-    return d;
+    if(textures[frameIndex] == nullptr)
+    {
+        auto result = new GpuResourceMtlTexture(cgd,
+            GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
+            this->GetExtent(),
+            Transfer(GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetPixelFormat()),
+            ResourceViewType::ImageView2D);
+        textures[frameIndex] = result;
+    }
+    return *textures[frameIndex];
 }
 
 const ResourceView& SwapChainMtl::GetDrawableView() const
 {
-    auto d = ResourceViewMtlImage(cgd,
-                                 GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
-                                 Transfer(GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetPixelFormat()),
-                                 ResourceViewType::ImageView2D);
-    return d;
+
+if(drawableViews[frameIndex] == nullptr)
+    {
+        auto result = new ResourceViewMtlImage(cgd,
+            GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
+            Transfer(GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetPixelFormat()),
+            ResourceViewType::ImageView2D);
+        drawableViews[frameIndex] = result;
+    }
+    return *drawableViews[frameIndex];
 }

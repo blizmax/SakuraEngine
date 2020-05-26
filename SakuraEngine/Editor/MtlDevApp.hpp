@@ -54,7 +54,7 @@ const char shadersSrc[] = R"""(
 using namespace Sakura::Graphics;
 
 ShaderFunction vertFunction, pixelFunction;
-extern std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
+std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
 std::unique_ptr<AppleWindow> appleWindow;
 std::unique_ptr<CommandBufferGraphics> graphicsBuffer;
 std::unique_ptr<Sakura::Graphics::Mtl::CGDMtl> cgd;

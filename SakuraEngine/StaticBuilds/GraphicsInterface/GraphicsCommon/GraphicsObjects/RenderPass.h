@@ -86,12 +86,18 @@ namespace Sakura::Graphics
     {
         Format format;
         SampleCountFlag samples = SampleCount_1Bit;
+        // Color
         AttachmentLoadOp loadOp = AttachmentLoadOp::AttachmentLoadOpClear;
         AttachmentStoreOp storeOp = AttachmentStoreOp::AttachmentStoreOpStore;
+
+        // Stencil
         AttachmentLoadOp stencilLoadOp 
             = AttachmentLoadOp::AttachmentLoadOpDontCare;
         AttachmentStoreOp stencilStoreOp
             = AttachmentStoreOp::AttachmentStoreOpDontCare;
+       
+
+
         ImageLayout initialLayout = ImageLayout::Unknown;
         ImageLayout finalLayout = ImageLayout::PresentSrc;
     };

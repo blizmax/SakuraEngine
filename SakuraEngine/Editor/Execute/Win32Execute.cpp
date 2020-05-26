@@ -11,7 +11,6 @@
 #include "SPA/include/modulemanager.h"
 #include "SakuraEngine/Core/CoreModule.h"
 #include "SakuraEngine/StaticBuilds/TaskSystem/TaskSystem.h"
-#include "StaticBuilds/PixelOperators/ImageUtils.h"
 #include <iostream>
 #include <thread>
 

@@ -68,7 +68,6 @@ SwapChain* CGDMtl::CreateSwapChain(
     const int width, const int height, void* mainSurface)
 {
     SwapChainMtl* result = new SwapChainMtl(width, height, *this, mainSurface);
-
     return result;
 }
 
@@ -207,6 +206,7 @@ void Sakura::Graphics::Mtl::CGDMtl::Present(SwapChain* chain)
     presentCommandBuffer->commandBuffer.Present(mtlChain->GetMtlDrawable());
     presentCommandBuffer->commandBuffer.Commit();
     presentCommandBuffer->commandBuffer.WaitUntilCompleted();
+    mtlChain->frameIndex = (mtlChain->frameIndex + 1) % mtlChain->frameCount;
     delete presentCommandBuffer;
     return;
 }

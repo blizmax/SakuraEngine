@@ -187,3 +187,76 @@ namespace Sakura::Graphics::Mtl
         }
     }
 }
+
+
+#define BLEND_FACTOR_CASE(factor, mtlppf)\
+case Sakura::Graphics::BlendFactor::factor:\
+    return mtlpp::BlendFactor::mtlppf;
+
+namespace Sakura::Graphics::Mtl
+{
+    inline mtlpp::BlendFactor Transfer(Sakura::Graphics::BlendFactor factor)
+    {
+        switch (factor)
+        {
+        BLEND_FACTOR_CASE(BlendFactorZero, Zero);
+        BLEND_FACTOR_CASE(BlendFactorOne, One);
+        BLEND_FACTOR_CASE(BlendFactorSrcColor, SourceColor);
+        BLEND_FACTOR_CASE(BlendFactorOneMinusSrcColor, SourceColor);
+        BLEND_FACTOR_CASE(BlendFactorSrcAlpha, SourceAlpha);
+        BLEND_FACTOR_CASE(BlendFactorOneMinusSrcAlpha, OneMinusSourceAlpha);
+        BLEND_FACTOR_CASE(BlendFactorDstColor, DestinationColor);
+        BLEND_FACTOR_CASE(BlendFactorOneMinusDstColor, OneMinusDestinationColor);
+        BLEND_FACTOR_CASE(BlendFactorDstAlpha, DestinationAlpha);
+        BLEND_FACTOR_CASE(BlendFactorOneMinusDstAlpha, OneMinusDestinationAlpha);
+        BLEND_FACTOR_CASE(BlendFactorSrcAlphaSaturate, SourceAlphaSaturated);
+        BLEND_FACTOR_CASE(BlendFactorConstantColor, BlendColor);
+        BLEND_FACTOR_CASE(BlendFactorOneMinusConstantColor, OneMinusBlendColor);
+        BLEND_FACTOR_CASE(BlendFactorConstantAlpha, BlendAlpha);
+        BLEND_FACTOR_CASE(BlendFactorOneMinusConstantAlpha, OneMinusBlendAlpha);
+        BLEND_FACTOR_CASE(BlendFactorSrc1Color, Source1Color);
+        BLEND_FACTOR_CASE(BlendFactorOneMinusSrc1Color, OneMinusSource1Color);
+        BLEND_FACTOR_CASE(BlendFactorSrc1Alpha, Source1Alpha);
+        BLEND_FACTOR_CASE(BlendFactorOneMinusSrc1Alpha, OneMinusSource1Alpha);
+        default:
+            CGDMtl::error("Metal do not support the blend factor!");
+        }
+    }
+
+    inline mtlpp::BlendOperation Transfer(Sakura::Graphics::BlendOp op)
+    {
+        if(op > 4)
+            CGDMtl::error("Metal do not support the blend operation!");
+        return (mtlpp::BlendOperation)op;
+    }
+
+    inline mtlpp::LoadAction Transfer(Sakura::Graphics::AttachmentLoadOp loadOp)
+    {
+        switch (loadOp)
+        {
+        case AttachmentLoadOpLoad:
+            return mtlpp::LoadAction::Load;
+        case AttachmentLoadOpClear:
+            return mtlpp::LoadAction::Clear;
+        case AttachmentLoadOpDontCare:
+            return mtlpp::LoadAction::DontCare;
+        default:
+            CGDMtl::error("Metal do not support the load operation!");
+            break;
+        }
+    }
+
+    inline mtlpp::StoreAction Transfer(Sakura::Graphics::AttachmentStoreOp storeOp)
+    {
+        switch (storeOp)
+        {
+        case AttachmentStoreOpDontCare:
+            return mtlpp::StoreAction::DontCare;
+        case AttachmentStoreOpStore:
+            return mtlpp::StoreAction::Store;
+        default:
+            CGDMtl::error("Metal do not support the load operation!");
+            break;
+        }
+    }
+}

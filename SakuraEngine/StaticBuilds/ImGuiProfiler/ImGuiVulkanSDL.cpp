@@ -25,7 +25,7 @@
  * @LastEditTime: 2020-03-21 21:52:37
  */
 #include "ImGuiVulkanSDL.h"
-#include "SakuraEngine/StaticBuilds/Graphicsinterface/GraphicsCommon/CGD.h"
+#include "SakuraEngine/StaticBuilds/GraphicsInterface/GraphicsCommon/CGD.h"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/CGD_Vulkan/GraphicsObjects/SwapChainVk.h"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/CGD_Vulkan/ResourceObjects/GpuResourceVk.h"
 #include "SakuraEngine/StaticBuilds/GraphicsInterface/CGD_Vulkan/ResourceObjects/ResourceViewVk.h"

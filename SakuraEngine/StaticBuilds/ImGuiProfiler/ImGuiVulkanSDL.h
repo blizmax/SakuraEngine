@@ -25,9 +25,9 @@
  * @LastEditTime: 2020-03-21 21:42:52
  */
 #pragma once
-#include "SakuraEngine/StaticBuilds/ImGuiProfiler/imgui/imgui.h"
-#include "SakuraEngine/StaticBuilds/ImGuiProfiler/imgui/imgui_impl_sdl.h"
-#include "SakuraEngine/StaticBuilds/ImGuiProfiler/imgui/imgui_impl_vulkan.h"
+#include "SakuraEngine/StaticBuilds/ImGuiProfiler/ImGui/imgui.h"
+#include "SakuraEngine/StaticBuilds/ImGuiProfiler/ImGui/imgui_impl_sdl.h"
+#include "SakuraEngine/StaticBuilds/ImGuiProfiler/ImGui/imgui_impl_vulkan.h"
 #include "vulkan/vulkan.h"
 #include <memory>
 #include <map>

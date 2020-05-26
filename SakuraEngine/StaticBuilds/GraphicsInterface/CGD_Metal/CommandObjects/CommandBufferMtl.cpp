@@ -27,6 +27,7 @@
 #include "CommandBufferMtl.h"
 #include "CommandQueueMtl.h"
 #include "../CGDMetal.hpp"
+#include "../Flags/FormatMtl.hpp"
 
 using namespace Sakura::Graphics::Mtl;
 
@@ -78,28 +79,29 @@ void CommandBufferGraphicsMtl::ResourceBarrier(GpuTexture& toTransition,
     
 }
 
-std::unique_ptr<Sakura::Graphics::SwapChain> swapChain;
 void CommandBufferGraphicsMtl::BeginRenderPass(
     GraphicsPipeline* gp, const RenderTargetSet& rts)
 {
     if(bOpen)
     {
-        mtlpp::RenderPassDescriptor desc2
-            = ((SwapChainMtl*)swapChain.get())->GetRenderPassDescriptor();
-        for(size_t i = 0; i < ((GraphicsPipelineMtl*)gp)->pass.rpassCreateInfo.attachments.size(); i++)
+        auto gpMtl = (GraphicsPipelineMtl*)gp;
+        auto attachmentSize = gpMtl->pass.rpassCreateInfo.attachments.size();
+        for(size_t i = 0; i < attachmentSize; i++)
         {
-            ((GraphicsPipelineMtl*)gp)->pass.renderPassDesc.GetColorAttachments()[i].SetTexture(
-                desc2.GetColorAttachments()[i].GetTexture());
-            ((GraphicsPipelineMtl*)gp)->pass.renderPassDesc.GetColorAttachments()[i].SetLoadAction(
-                mtlpp::LoadAction::Clear);
-            ((GraphicsPipelineMtl*)gp)->pass.renderPassDesc.GetColorAttachments()[i].SetClearColor(
+            gpMtl->pass.renderPassDesc.GetColorAttachments()[i].SetTexture(
+                ((const GpuResourceMtlTexture&)rts.rts[i].resource).texture);
+            gpMtl->pass.renderPassDesc.GetColorAttachments()[i].SetLoadAction(
+                Transfer(gpMtl->pass.rpassCreateInfo.attachments[i].loadOp));
+            gpMtl->pass.renderPassDesc.GetColorAttachments()[i].SetStoreAction(
+                Transfer(gpMtl->pass.rpassCreateInfo.attachments[i].storeOp));
+            gpMtl->pass.renderPassDesc.GetColorAttachments()[i].SetClearColor(
                 mtlpp::ClearColor(
                     rts.rts[i].clearValue.clearColor.float32[0],
                     rts.rts[i].clearValue.clearColor.float32[1],
                     rts.rts[i].clearValue.clearColor.float32[2],
                     rts.rts[i].clearValue.clearColor.float32[3]));
         }
-        encoder = commandBuffer.RenderCommandEncoder(((GraphicsPipelineMtl*)gp)->pass.renderPassDesc);
+        encoder = commandBuffer.RenderCommandEncoder(gpMtl->pass.renderPassDesc);
         if(encoder.Validate() != true)
         {
             CGDMtl::debug_error("CGDMtl: Failed to create Metal RenderCommandEncoder!");

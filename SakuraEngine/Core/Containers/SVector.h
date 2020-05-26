@@ -11,12 +11,6 @@
 #include "Core/CoreMinimal/SDefination.h"
 #include <vector>
 #include <boost/container/small_vector.hpp>
-#ifdef SAKURA_TARGET_PLATFORM_OSX
-#include <experimental/vector>
-using namespace std::experimental;
-#else
-#include <memory_resource>
-#endif
 
 namespace Sakura
 {
@@ -24,13 +18,5 @@ namespace Sakura
     using SSmallVector = boost::container::small_vector<T, N>;
 
     template<class T>
-    using SVector = std::vector<T>;
-
-    template<class T, size_t N>
-    using SPmrSmallVector 
-        = boost::container::small_vector<T, N, pmr::polymorphic_allocator<T>>;
-
-    template<class T>
-    using SPmrVector
-        = pmr::vector<T>;
+    using SVector = eastl::vector<T>;
 }

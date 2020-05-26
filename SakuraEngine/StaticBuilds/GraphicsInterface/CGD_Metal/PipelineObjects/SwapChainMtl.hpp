@@ -26,6 +26,7 @@
  */
 #pragma once
 #include "../../GraphicsCommon/GraphicsObjects/SwapChain.h"
+#import "SakuraEngine/Core/Containers/SVector.h"
 #include "../mtlpp/mtlpp.hpp"
 #import <Cocoa/Cocoa.h>
 
@@ -59,5 +60,9 @@ namespace Sakura::Graphics::Mtl
         const CGDMtl& cgd;
         MtlView m_view;
         NSWindow* window = nullptr;
+        mutable Sakura::SVector<GpuTexture*> textures;
+        mutable Sakura::SVector<ResourceView*> drawableViews;
+        uint8 frameIndex = 0;
+        uint8 frameCount = 0;
     };
 }
