@@ -42,12 +42,12 @@ namespace Sakura::Graphics::Mtl
         friend class RenderPassMtl;
     public:
         virtual ~GraphicsPipelineMtl() override final;
+        const RenderPassMtl& pass;
+        mtlpp::RenderPipelineState renderPipelineState;
     protected:
         GraphicsPipelineMtl(const GraphicsPipelineCreateInfo& info,
             const RenderPassMtl& prog, const CGDMtl& cgd);
     protected:
-        mtlpp::RenderPipelineState renderPipelineState;
-        const RenderPassMtl& pass;
         const CGDMtl& cgd;
     };
 }

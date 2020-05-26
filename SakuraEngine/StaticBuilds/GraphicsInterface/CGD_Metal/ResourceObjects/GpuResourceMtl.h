@@ -38,14 +38,16 @@ namespace Sakura::Graphics::Mtl
     struct ResourceViewMtlImage final : public ResourceView
     {
         ResourceViewMtlImage(const CGDMtl& _cgd,
-            const GpuResource& res, const ResourceViewCreateInfo& info);
+            const GpuResource& res, const Format fmt, const ResourceViewType type);
         ResourceViewMtlImage(const CGDMtl& _cgd,
-            const mtlpp::Texture& tex, const ResourceViewCreateInfo& info);
+            const mtlpp::Texture& tex, const Format fmt, const ResourceViewType type);
         const mtlpp::Texture texture;
         const CGDMtl& cgd;
     };
-    
-    struct GpuResourceMtlTexture final: public GpuTexture, public ResourceView
+
+    [[maybe_unused]] inline static const constexpr int siz = sizeof(ResourceViewMtlImage);
+
+    struct GpuResourceMtlTexture final: public GpuTexture
     {
         friend class CGDMtl;
         friend class SwapChainMtl;
@@ -57,10 +59,12 @@ namespace Sakura::Graphics::Mtl
         virtual void Unmap() override final;
         virtual const ResourceView* GetDefaultView() const override final;
         virtual ResourceView* GetDefaultView() override final;
+        const mtlpp::Texture texture;
+        ResourceViewMtlImage defaultView;
     protected:
         GpuResourceMtlTexture(const CGDMtl& _cgd,
-            const mtlpp::Texture& tex, const Extent2D _extent);
-        const mtlpp::Texture texture;
+            const mtlpp::Texture& tex, const Extent2D _extent,
+            const Format fmt, const ResourceViewType viewType);
         const CGDMtl& cgd;
     };
 

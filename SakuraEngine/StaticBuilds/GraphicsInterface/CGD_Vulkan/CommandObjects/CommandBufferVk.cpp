@@ -268,7 +268,7 @@ void CommandBufferGraphicsVk::BeginRenderPass(
     renderPassInfo.framebuffer = vkGp->FindFrameBuffer(rts);
     renderPassInfo.renderArea.offset = {0, 0};
     renderPassInfo.renderArea.extent =
-        Transfer(rts.rts[0].resource->GetExtent());
+        Transfer(rts.rts[0].resource.GetExtent());
 
     std::vector<VkClearValue> clearValues(rts.rtNum);
     for(auto i = 0u; i < rts.rtNum; i++)

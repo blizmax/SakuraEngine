@@ -84,11 +84,23 @@ void CommandBufferGraphicsMtl::BeginRenderPass(
 {
     if(bOpen)
     {
-        auto desc = ((SwapChainMtl*)swapChain.get())->GetRenderPassDescriptor();
-        desc.GetColorAttachments()[0].SetClearColor(mtlpp::ClearColor(
-            0.f, 1.f, 1.f, 1.f));
-        encoder = commandBuffer.RenderCommandEncoder(desc);
-        if(swapChain.get() != nullptr)
+        mtlpp::RenderPassDescriptor desc2
+            = ((SwapChainMtl*)swapChain.get())->GetRenderPassDescriptor();
+        for(size_t i = 0; i < ((GraphicsPipelineMtl*)gp)->pass.rpassCreateInfo.attachments.size(); i++)
+        {
+            ((GraphicsPipelineMtl*)gp)->pass.renderPassDesc.GetColorAttachments()[i].SetTexture(
+                desc2.GetColorAttachments()[i].GetTexture());
+            ((GraphicsPipelineMtl*)gp)->pass.renderPassDesc.GetColorAttachments()[i].SetLoadAction(
+                mtlpp::LoadAction::Clear);
+            ((GraphicsPipelineMtl*)gp)->pass.renderPassDesc.GetColorAttachments()[i].SetClearColor(
+                mtlpp::ClearColor(
+                    rts.rts[i].clearValue.clearColor.float32[0],
+                    rts.rts[i].clearValue.clearColor.float32[1],
+                    rts.rts[i].clearValue.clearColor.float32[2],
+                    rts.rts[i].clearValue.clearColor.float32[3]));
+        }
+        encoder = commandBuffer.RenderCommandEncoder(((GraphicsPipelineMtl*)gp)->pass.renderPassDesc);
+        if(encoder.Validate() != true)
         {
             CGDMtl::debug_error("CGDMtl: Failed to create Metal RenderCommandEncoder!");
         }

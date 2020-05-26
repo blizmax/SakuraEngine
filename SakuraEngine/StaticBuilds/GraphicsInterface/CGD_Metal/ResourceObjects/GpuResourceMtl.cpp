@@ -36,18 +36,19 @@ GpuResourceMtlTexture::~GpuResourceMtlTexture()
 
 const Sakura::Graphics::ResourceView* GpuResourceMtlTexture::GetDefaultView() const
 {
-    return this;
+    return &defaultView;
 }
 
 Sakura::Graphics::ResourceView* GpuResourceMtlTexture::GetDefaultView()
 {
-    return this;
+    return &defaultView;
 }
 
 GpuResourceMtlTexture::GpuResourceMtlTexture(const CGDMtl& _cgd,
-    const mtlpp::Texture& tex, const Extent2D _extent)
-    :cgd(_cgd), texture(tex), GpuTexture((Extent2D)_extent),
-    ResourceView(ResourceViewType::ImageView2D)
+    const mtlpp::Texture& tex, const Extent2D _extent,
+    const Format fmt, const ResourceViewType viewType)
+    :cgd(_cgd), texture(tex),
+    GpuTexture((Extent2D)_extent), defaultView(_cgd, tex, fmt, viewType)
 {
     
 }
@@ -74,7 +75,8 @@ GpuResourceMtlBuffer::~GpuResourceMtlBuffer()
 
 GpuResourceMtlBuffer::GpuResourceMtlBuffer(const CGDMtl& _cgd,
     const BufferCreateInfo& info)
-    :cgd(_cgd), usages(info.usage), GpuBuffer({(uint32)info.size, 1})
+    :cgd(_cgd), usages(info.usage),
+    GpuBuffer({(uint32)info.size, 1})
 {
     auto options = mtlpp::ResourceOptions::HazardTrackingModeUntracked | 0;
     if(info.cpuAccess != CPUAccessFlags::None)
@@ -108,15 +110,16 @@ void GpuResourceMtlBuffer::UpdateValue(std::function<void(void*)> func)
 
 ResourceViewMtlImage::ResourceViewMtlImage(
     const CGDMtl& _cgd, const GpuResource& res,
-    const ResourceViewCreateInfo& info)
-    :cgd(_cgd), ResourceView(info.viewType)
+    const Format fmt, const ResourceViewType viewType)
+    :cgd(_cgd), ResourceView(viewType, fmt)
 {
 
 }
 
 ResourceViewMtlImage::ResourceViewMtlImage(const CGDMtl& _cgd,
-    const mtlpp::Texture& tex, const ResourceViewCreateInfo& info)
-    :cgd(_cgd), ResourceView(info.viewType), texture(tex)
+    const mtlpp::Texture& tex,
+    const Format fmt, const ResourceViewType viewType)
+    :cgd(_cgd), ResourceView(viewType, fmt), texture(tex)
 {
 
 }

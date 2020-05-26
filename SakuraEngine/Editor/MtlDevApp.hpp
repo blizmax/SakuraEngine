@@ -75,8 +75,8 @@ void call()
     graphicsBuffer.reset(
         cgd->CreateCommandBufferGraphics(*cgd->GetGraphicsQueue()));
     RenderTarget rt{
-        &swapChain->GetDrawable(),
-        &swapChain->GetDrawableView(), {0.f, 0.f, 0.f, 0.f}};
+        swapChain->GetDrawable(),
+        swapChain->GetDrawableView(), {0.f, 1.f, 1.f, 0.f}};
     RenderTargetSet rtset{&rt, 1};
     graphicsBuffer->Begin();
     graphicsBuffer->BeginRenderPass(graphicsPipeline.get(), rtset);

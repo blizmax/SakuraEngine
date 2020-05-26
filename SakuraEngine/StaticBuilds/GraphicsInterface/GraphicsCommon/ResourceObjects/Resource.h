@@ -143,6 +143,7 @@ namespace Sakura::Graphics
     sinterface GpuTexture : simplements GpuResource
     {
         GpuTexture() = default;
+        virtual ~GpuTexture() {};
         GpuTexture(Extent2D _extent)
             :GpuResource(_extent){}
         virtual const ResourceView* GetDefaultView() const = 0;

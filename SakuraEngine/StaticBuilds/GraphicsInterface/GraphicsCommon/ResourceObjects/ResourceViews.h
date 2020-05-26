@@ -86,8 +86,8 @@ namespace Sakura::Graphics
             return viewType;
         }
     protected:
-        ResourceView(const ResourceViewType vt)
-            :viewType(vt){}
+        ResourceView(const ResourceViewType vt, const Format fmt)
+            :viewType(vt), format(fmt){}
     protected:
         Format format;
         ResourceViewType viewType;

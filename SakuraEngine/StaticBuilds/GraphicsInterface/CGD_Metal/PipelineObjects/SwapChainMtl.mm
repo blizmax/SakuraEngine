@@ -2,6 +2,7 @@
 #import <MetalKit/MetalKit.h>
 #import "../CommandObjects/CommandBufferMtl.h"
 #import "../CGDMetal.hpp"
+#import "../Flags/FormatMtl.hpp"
 
 using namespace Sakura::Graphics::Mtl;
 
@@ -69,19 +70,26 @@ mtlpp::Drawable SwapChainMtl::GetMtlDrawable() const
 
 mtlpp::RenderPassDescriptor SwapChainMtl::GetRenderPassDescriptor() const
 {
+    int i = ((CAMetalLayer*)((__bridge MTKView*)m_view.GetPtr()).layer).maximumDrawableCount;
+    std::cout << i << std::endl;
     return ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentRenderPassDescriptor };
 }
 
 const GpuTexture& SwapChainMtl::GetDrawable() const
 {
-    return GpuResourceMtlTexture(cgd,
-        GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
-        this->GetExtent());
+    auto d = GpuResourceMtlTexture(cgd,
+                          GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
+                          this->GetExtent(),
+                          Transfer(GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetPixelFormat()),
+                          ResourceViewType::ImageView2D);
+    return d;
 }
 
 const ResourceView& SwapChainMtl::GetDrawableView() const
 {
-    return GpuResourceMtlTexture(cgd,
-        GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
-        this->GetExtent());
+    auto d = ResourceViewMtlImage(cgd,
+                                 GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
+                                 Transfer(GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetPixelFormat()),
+                                 ResourceViewType::ImageView2D);
+    return d;
 }

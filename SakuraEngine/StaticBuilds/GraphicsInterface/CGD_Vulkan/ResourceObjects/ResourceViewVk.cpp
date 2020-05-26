@@ -76,8 +76,9 @@ ResourceViewVkImage::~ResourceViewVkImage()
 }
 
 ResourceViewVkImage::ResourceViewVkImage(
-    const CGDVk& _device, const GpuResource& res, const ResourceViewType type)
-    :device(_device), ResourceView(type)
+    const CGDVk& _device, const GpuResource& res,
+    const ResourceViewType type, const Format fmt)
+    :device(_device), ResourceView(type, fmt)
 {
    
 }
@@ -85,7 +86,7 @@ ResourceViewVkImage::ResourceViewVkImage(
 ResourceView* CGDVk::ViewIntoResource(
     const GpuResource& resource, const ResourceViewCreateInfo& info) const
 {
-    auto res = new ResourceViewVkImage(*this, resource, info.viewType);
+    auto res = new ResourceViewVkImage(*this, resource, info.viewType, info.format);
     VkImageViewCreateInfo viewCreateInfo = {};
     viewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     viewCreateInfo.viewType = Transfer(info.viewType);

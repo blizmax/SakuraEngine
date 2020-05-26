@@ -269,7 +269,7 @@ namespace mtlpp
 
 namespace mtlpp
 {
-    enum class PixelFormat
+    enum PixelFormat
     {
         Invalid                                            = 0,
 

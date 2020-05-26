@@ -42,7 +42,7 @@ namespace Sakura::Graphics::Vk
     struct ResourceViewVkImage final : public ResourceView
     {
         ResourceViewVkImage(const CGDVk&,
-            const GpuResource&, const ResourceViewType);
+            const GpuResource&, const ResourceViewType, const Format);
         virtual ~ResourceViewVkImage() override final;
         void Detach();
         VkImageView vkImgView = VK_NULL_HANDLE;

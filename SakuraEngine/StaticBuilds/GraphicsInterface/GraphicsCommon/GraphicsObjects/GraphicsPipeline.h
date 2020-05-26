@@ -48,22 +48,22 @@ namespace Sakura::Graphics
 
     struct RenderTarget
     {
-        inline RenderTarget(const GpuResource* _resource,
-            const ResourceView* _view, 
+        inline RenderTarget(const GpuTexture& _resource,
+            const ResourceView& _view,
             const Sakura::Graphics::ClearColorValue& clearColor)
             :resource(_resource), srv(_view) 
         {
             clearValue.clearColor = clearColor;
         }
-        inline RenderTarget(const GpuResource* _resource,
-            const ResourceView* _view, 
+        inline RenderTarget(const GpuTexture& _resource,
+            const ResourceView& _view,
             float depth, uint32_t stencil)
             :resource(_resource), srv(_view) 
         {
             clearValue.clearDepth = {depth, stencil};
         }
-        const GpuResource* resource = nullptr;
-        const ResourceView* srv = nullptr;
+        const GpuTexture& resource;
+        const ResourceView& srv;
         union ClearValue
         {
             Sakura::Graphics::ClearColorValue clearColor;

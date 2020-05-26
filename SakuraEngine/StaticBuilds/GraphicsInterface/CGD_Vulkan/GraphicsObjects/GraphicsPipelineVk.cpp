@@ -163,14 +163,14 @@ VkFramebuffer GraphicsPipelineVk::createFrameBuffer(const RenderTargetSet& rts)
     framebufferInfo.attachmentCount = rts.rtNum;
     std::vector<VkImageView> images(rts.rtNum);
     for(auto i = 0u; i < rts.rtNum; i++)
-        images[i] = ((const ResourceViewVkImage*)
-        rts.rts[i].srv)->vkImgView;
+        images[i] = ((const ResourceViewVkImage&)
+        rts.rts[i].srv).vkImgView;
     const VkImageView* attach = (const VkImageView*)images.data();
     framebufferInfo.pAttachments = attach;
     framebufferInfo.width = 
-        rts.rts[0].resource->GetExtent().width;
+        rts.rts[0].resource.GetExtent().width;
     framebufferInfo.height = 
-        rts.rts[0].resource->GetExtent().height;
+        rts.rts[0].resource.GetExtent().height;
     framebufferInfo.layers = 1;
     
     if (vkCreateFramebuffer(cgd.GetCGDEntity().device, &framebufferInfo,
