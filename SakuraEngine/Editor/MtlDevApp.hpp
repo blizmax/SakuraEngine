@@ -81,8 +81,13 @@ void call()
     graphicsBuffer->Begin();
     graphicsBuffer->BeginRenderPass(graphicsPipeline.get(), rtset);
 
+    graphicsBuffer->BindVertexBuffer(*vertexBuffer.get());
+    graphicsBuffer->Draw(
+        3, 1, 0, 0);
+
     graphicsBuffer->EndRenderPass();
     graphicsBuffer->End();
+    //cgd->GetGraphicsQueue()->Submit(graphicsBuffer.get());
     cgd->Present(swapChain.get());
 }
 
@@ -120,7 +125,8 @@ public:
             cgd->CreateGraphicsPipeline(pplInfo, *renderPass.get()));
         
         vertexBuffer.reset(cgd->CreateGpuBuffer(sizeof(vertexData),
-            BufferUsage::VertexBuffer, Sakura::Graphics::CPUAccessFlags::ReadWrite));
+            BufferUsage::VertexBuffer,
+            Sakura::Graphics::CPUAccessFlags::ReadWrite));
         vertexBuffer->UpdateValue([&](void* mapped){
             memcpy(mapped, &vertexData, sizeof(vertexData));
         });

@@ -40,7 +40,9 @@ CommandQueueMtl::CommandQueueMtl(mtlpp::CommandQueue _queue,
 
 void CommandQueueMtl::Submit(CommandBuffer* CommandBuffer)
 {
-    
+    CommandBufferGraphicsMtl* toSubmit =
+        (CommandBufferGraphicsMtl*)CommandBuffer;
+    toSubmit->commandBuffer.Commit();
 }
 
 void CommandQueueMtl::Submit(CommandBuffer* CommandBuffer,

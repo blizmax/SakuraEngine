@@ -106,6 +106,7 @@ void CommandBufferGraphicsMtl::BeginRenderPass(
         {
             CGDMtl::debug_error("CGDMtl: Failed to create Metal RenderCommandEncoder!");
         }
+        encoder.SetRenderPipelineState(gpMtl->renderPipelineState);
     }
     else
         CGDMtl::debug_error("CGDMtl: Please Begin CommandBuffer before BeginRenderPass!");
@@ -121,7 +122,8 @@ void CommandBufferGraphicsMtl::EndRenderPass()
 void CommandBufferGraphicsMtl::Draw(uint32 vertexCount, uint32 instanceCount,
     uint32 firstVertex, uint32 firstInstance)
 {
-    
+    encoder.Draw(mtlpp::PrimitiveType::Triangle,
+        firstVertex, vertexCount);
 }
 
 void CommandBufferGraphicsMtl::DrawIndexed(const uint32_t indicesCount,
@@ -132,7 +134,9 @@ void CommandBufferGraphicsMtl::DrawIndexed(const uint32_t indicesCount,
 
 void CommandBufferGraphicsMtl::BindVertexBuffer(const GpuBuffer& vb)
 {
-    
+    encoder.SetVertexBuffer(
+        ((const GpuResourceMtlBuffer&)vb).buffer,
+        0, 0);
 }
 
 void CommandBufferGraphicsMtl::BindIndexBuffer(const GpuBuffer& ib,

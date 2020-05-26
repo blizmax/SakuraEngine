@@ -77,9 +77,9 @@ namespace Sakura::Graphics::Mtl
         // !!! BAD PERFORMANCE
         virtual void Map(void** data) override final;
         virtual void Unmap() override final;
+        mtlpp::Buffer buffer;
     protected:
         void** mapped = nullptr;
-        mtlpp::Buffer buffer;
         const BufferUsages usages;
         GpuResourceMtlBuffer(const CGDMtl& _cgd, const BufferCreateInfo& info);
         const CGDMtl& cgd;
