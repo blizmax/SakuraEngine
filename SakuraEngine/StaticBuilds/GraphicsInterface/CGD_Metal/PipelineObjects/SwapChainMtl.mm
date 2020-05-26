@@ -84,8 +84,14 @@ mtlpp::RenderPassDescriptor SwapChainMtl::GetRenderPassDescriptor() const
 
 const GpuTexture& SwapChainMtl::GetDrawable() const
 {
-    if(textures[frameIndex] == nullptr)
+    if(textures[frameIndex] == nullptr||
+       textures[frameIndex]->GetExtent().height !=
+       GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetHeight() ||
+       textures[frameIndex]->GetExtent().width !=
+       GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetWidth())
     {
+        delete textures[frameIndex];
+        textures[frameIndex] = nullptr;
         auto result = new GpuResourceMtlTexture(cgd,
             GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
             this->GetExtent(),
@@ -98,9 +104,14 @@ const GpuTexture& SwapChainMtl::GetDrawable() const
 
 const ResourceView& SwapChainMtl::GetDrawableView() const
 {
-
-if(drawableViews[frameIndex] == nullptr)
+    if(drawableViews[frameIndex] == nullptr ||
+       textures[frameIndex]->GetExtent().height !=
+            GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetHeight() ||
+        textures[frameIndex]->GetExtent().width !=
+        GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetWidth())
     {
+        delete drawableViews[frameIndex];
+        drawableViews[frameIndex] = nullptr;
         auto result = new ResourceViewMtlImage(cgd,
             GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture(),
             Transfer(GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetPixelFormat()),

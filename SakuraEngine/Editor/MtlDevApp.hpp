@@ -78,7 +78,6 @@ void call()
         swapChain->GetDrawable(),
         swapChain->GetDrawableView(), {0.f, 1.f, 1.f, 0.f}};
     RenderTargetSet rtset{&rt, 1};
-    graphicsBuffer->Begin();
     graphicsBuffer->BeginRenderPass(graphicsPipeline.get(), rtset);
 
     graphicsBuffer->BindVertexBuffer(*vertexBuffer.get());
@@ -86,8 +85,9 @@ void call()
         3, 1, 0, 0);
 
     graphicsBuffer->EndRenderPass();
-    graphicsBuffer->End();
-    //cgd->GetGraphicsQueue()->Submit(graphicsBuffer.get());
+    cgd->GetGraphicsQueue()->Submit(graphicsBuffer.get());
+    cgd->Wait(graphicsBuffer.get());
+
     cgd->Present(swapChain.get());
 }
 

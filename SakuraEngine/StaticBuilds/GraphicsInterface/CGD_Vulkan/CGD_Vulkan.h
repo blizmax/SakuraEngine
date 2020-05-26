@@ -116,6 +116,10 @@ namespace Sakura::Graphics::Vk
         [[nodiscard]] virtual Fence* AllocFence(void) override final;
         virtual void Wait(Fence* toWait, uint64 until) const override final;
         virtual void WaitIdle() const override final;
+        virtual void Wait(CommandBuffer* cmdBuffer) const override final
+        {
+            assert(0);
+        }
     public:
     // Implements: See ResourceObjects/GpuResourceVk.cpp
         [[nodiscard]] virtual GpuBuffer* CreateGpuResource(

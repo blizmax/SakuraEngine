@@ -53,8 +53,6 @@ namespace Sakura::Graphics::Mtl
         CommandBufferGraphicsMtl(
             const CGDEntityMtl& entity, CommandQueueMtl& queue);
     public:
-        virtual void Begin() final override;
-        virtual void End() final override;
         virtual void Reset() final override;
         virtual void ResourceBarrier(GpuTexture& toTransition,
             const ImageLayout oldLayout, const ImageLayout newLayout,

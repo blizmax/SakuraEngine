@@ -177,6 +177,12 @@ void Sakura::Graphics::Mtl::CGDMtl::WaitIdle() const
 
 }
 
+void Sakura::Graphics::Mtl::CGDMtl::Wait(CommandBuffer* cmdBuffer) const
+{
+    CommandBufferGraphicsMtl* MtlCmdBuffer = (CommandBufferGraphicsMtl*)cmdBuffer;
+    MtlCmdBuffer->commandBuffer.WaitUntilCompleted();
+}
+
 Sakura::Graphics::Fence* Sakura::Graphics::Mtl::CGDMtl::AllocFence(void)
 {
     return nullptr;

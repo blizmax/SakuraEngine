@@ -25,7 +25,6 @@ namespace Sakura::Graphics::Vk
     public:
         VkCommandBuffer commandBuffer;
         const CGDVk& cgd;
-        GraphicsPipelineVk* vkGp = nullptr;
         VkCommandPool commandPool;
         VkFence recordingFence = VK_NULL_HANDLE;
         static CommandBufferVk* FromCommandBuffer(CommandBuffer* cmdBuffer);
@@ -39,8 +38,8 @@ namespace Sakura::Graphics::Vk
         friend class CommandQueueVk;
         virtual ~CommandBufferGraphicsVk() override final;
     public:
-        virtual void Begin() override final;
-        virtual void End() override final;
+        void Begin();
+        void End();
         virtual void Reset() override final;
 
 		virtual void ResourceBarrier(GpuTexture& toTransition,

@@ -109,7 +109,9 @@ namespace Sakura::Graphics::Mtl
             const TextureCreateInfo&) const final override;
 
         virtual void Wait(Fence* toWait, uint64 until) const final override;
+        virtual void Wait(CommandBuffer* cmdBuffer) const final override;
         virtual void WaitIdle() const final override;
+
         [[nodiscard]] virtual Fence* AllocFence(void) final override;
 
         [[nodiscard]] virtual RootSignature* CreateRootSignature(

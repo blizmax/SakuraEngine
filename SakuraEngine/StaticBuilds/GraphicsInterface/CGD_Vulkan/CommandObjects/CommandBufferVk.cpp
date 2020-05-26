@@ -254,6 +254,7 @@ void CommandBufferComputeVk::DispatchCompute(uint32 groupCountX,
 void CommandBufferGraphicsVk::BeginRenderPass(
     GraphicsPipeline* gp, const RenderTargetSet& rts)
 {
+    this->Begin();
     vkGp = (GraphicsPipelineVk*)gp;
     if(vkGp->graphicsPipeline == VK_NULL_HANDLE)
     {
@@ -731,6 +732,7 @@ void CommandBufferCopyVk::Reset()
 
 void CommandBufferGraphicsVk::EndRenderPass()
 {
+    this->End();
     vkCmdEndRenderPass(commandBuffer);
 }
 

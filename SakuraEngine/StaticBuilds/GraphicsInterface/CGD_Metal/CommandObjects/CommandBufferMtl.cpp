@@ -56,16 +56,6 @@ CommandBufferGraphicsMtl::CommandBufferGraphicsMtl(
     
 }
 
-void CommandBufferGraphicsMtl::Begin()
-{
-    bOpen = true;
-}
-
-void CommandBufferGraphicsMtl::End()
-{
-    bOpen = false;
-}
-
 void CommandBufferGraphicsMtl::Reset()
 {
     encoder.EndEncoding();
@@ -82,6 +72,7 @@ void CommandBufferGraphicsMtl::ResourceBarrier(GpuTexture& toTransition,
 void CommandBufferGraphicsMtl::BeginRenderPass(
     GraphicsPipeline* gp, const RenderTargetSet& rts)
 {
+    bOpen = true;
     if(bOpen)
     {
         auto gpMtl = (GraphicsPipelineMtl*)gp;
@@ -114,9 +105,10 @@ void CommandBufferGraphicsMtl::BeginRenderPass(
 
 void CommandBufferGraphicsMtl::EndRenderPass()
 {
+    bOpen = false;
     encoder.EndEncoding();
-    commandBuffer.Commit();
-    commandBuffer.WaitUntilCompleted();
+    //commandBuffer.Commit();
+    //commandBuffer.WaitUntilCompleted();
 }
 
 void CommandBufferGraphicsMtl::Draw(uint32 vertexCount, uint32 instanceCount,

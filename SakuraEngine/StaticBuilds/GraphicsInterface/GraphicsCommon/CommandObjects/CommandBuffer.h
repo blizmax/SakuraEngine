@@ -50,18 +50,6 @@ namespace Sakura::Graphics
         friend sinterface CGD;
     public:
         virtual ~CommandBuffer() = default;
-        
-        /**
-         * @description: Ends the encoding, close the cmdlist/buffer 
-         * @author: SaeruHikari
-         */
-        virtual void End() = 0;
-
-        /**
-         * @description: Begins the encoding, open the cmdlist/buffer 
-         * @author: SaeruHikari
-         */
-        virtual void Begin() = 0;
 
         /**
          * @description: Resets the encoding, close the cmdlist/buffer
@@ -116,6 +104,18 @@ namespace Sakura::Graphics
 
     sinterface CommandBufferCompute : simplements CommandBuffer
     {
+        /**
+         * @description: Ends the encoding, close the cmdlist/buffer
+         * @author: SaeruHikari
+         */
+        virtual void End() = 0;
+
+        /**
+         * @description: Begins the encoding, open the cmdlist/buffer
+         * @author: SaeruHikari
+         */
+        virtual void Begin() = 0;
+
 		virtual void BeginComputePass(ComputePipeline* gp) = 0;
         
 	    virtual void BindRootArguments(const PipelineBindPoint bindPoint,
@@ -135,6 +135,18 @@ namespace Sakura::Graphics
 
     sinterface CommandBufferCopy : simplements CommandBuffer
     {
+        /**
+         * @description: Ends the encoding, close the cmdlist/buffer
+         * @author: SaeruHikari
+         */
+        virtual void End() = 0;
+
+        /**
+         * @description: Begins the encoding, open the cmdlist/buffer
+         * @author: SaeruHikari
+         */
+        virtual void Begin() = 0;
+
 		virtual void CopyResource(GpuBuffer& src, GpuBuffer& dst,
 			const uint64_t srcOffset = 0,
 			const uint64_t dstOffset = 0, const uint64_t size = 0) = 0;

@@ -164,6 +164,8 @@ namespace Sakura::Graphics
 
         virtual void Wait(Fence* toWait, uint64 until) const = 0;
         virtual void WaitIdle() const = 0;
+        virtual void Wait(CommandBuffer* cmdBuffer) const = 0;
+
         [[nodiscard]] virtual Fence* AllocFence(void) = 0;
 
         [[nodiscard]] virtual RootSignature*
