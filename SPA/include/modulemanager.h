@@ -25,6 +25,7 @@
  * @LastEditTime: 2020-04-30 17:24:08
  */
 #pragma once
+#define EA_CPP14_CONSTEXPR constexpr
 #include "../../Extern/include/version/version.h"
 #include "../../DependencyGraph/Graph.h"
 #include <functional>

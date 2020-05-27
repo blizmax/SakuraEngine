@@ -8,8 +8,10 @@
  * @LastEditTime: 2020-03-30 11:53:00
  */
 #pragma once
+#define EA_CPP14_CONSTEXPR constexpr
 #include "Core/CoreMinimal/CoreMinimal.h"
 #include "SVariant.h"
 #include "SMap.h"
 #include "SString.h"
 #include "SVector.h"
+#include <EASTL/unique_ptr.h>

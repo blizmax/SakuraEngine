@@ -8,9 +8,10 @@
  * @LastEditTime: 2020-04-17 03:40:41
  */
 #pragma once
+#define EA_CPP14_CONSTEXPR constexpr
 #include "Core/CoreMinimal/SDefination.h"
-#include <vector>
 #include <boost/container/small_vector.hpp>
+#include <EASTL/vector.h>
 
 namespace Sakura
 {

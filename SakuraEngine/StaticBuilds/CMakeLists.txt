@@ -1,4 +1,5 @@
-add_subdirectory(Graphicsinterface)
+#add_subdirectory(Graphicsinterface)
+add_subdirectory(Painter)
 add_subdirectory(TaskSystem)
 add_subdirectory(ImGuiProfiler)
 #add_subdirectory(RenderGraph)

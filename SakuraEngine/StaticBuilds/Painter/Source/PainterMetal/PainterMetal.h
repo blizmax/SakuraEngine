@@ -21,31 +21,43 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-04-30 01:54:35
- * @LastEditTime: 2020-05-28 02:06:19
- */
-#include "ShaderMtl.h"
-#include "../CGDMetal.hpp"
+ * @Date: 2020-05-27 20:31:41
+ * @LastEditTime: 2020-05-28 01:53:18
+ */ 
+#pragma once
+#include "../../Include/Painter.h"
+#include "mtlpp/device.hpp"
 
-using namespace Sakura::Graphics::Mtl;
-
-ShaderMtl::ShaderMtl(mtlpp::Library library)
-    :shaderLib(library)
+namespace Sakura::Graphics::Metal
 {
-    
-}
-
-const void* ShaderMtl::GetFunction(const std::string& entryName)
-{
-    if(shaderFunctions.find(entryName) == shaderFunctions.end())
+    struct PainterMetal final : public Painter
     {
-        mtlpp::Function func = shaderLib.NewFunction(entryName.c_str());
-        if(!func.Validate())
+        friend class Painter;
+        DECLARE_LOGGER("PainterMetal")
+    public:
+        inline static constexpr eastl::string_view GetBackEndName()
         {
-            CGDMtl::debug_error("CGDMtl: Create Metal Shader Function Failed!");
+            return Sakura::Graphics::DefaultBackEndNames::Metal;
+        } 
+
+        // Implementations
+        [[nodiscard]] virtual Fence* CreateFence() override;
+        [[nodiscard]] virtual RenderPass* CreateRenderPass(
+            const RenderPassDesc& desc) override;
+        [[nodiscard]] virtual Shader* CreateShader(
+            const char* data, const std::size_t dataSize,
+            const Shader::MacroTable& macroTable = _Shader::nullTable) override;
+            
+    protected:
+        PainterMetal(bool bEnableDebugLayer) 
+            :Painter(bEnableDebugLayer)
+        {
+            device = mtlpp::Device::CreateSystemDefaultDevice();
+            if(device.GetPtr() == nullptr)
+                PainterMetal::error("Failed to create Metal Device!");
         }
-        shaderFunctions[entryName] = func;
-    }
-    assert(shaderFunctions[entryName].GetPtr() == nullptr);
-    return shaderFunctions[entryName].GetPtr();
+    public:
+        mtlpp::Device device;
+    };
+
 }

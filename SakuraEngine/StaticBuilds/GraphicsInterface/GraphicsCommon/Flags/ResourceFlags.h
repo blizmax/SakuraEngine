@@ -48,7 +48,7 @@ namespace Sakura::Graphics
         ShaderReadOnlyOptimal = 5,
         TransferSrcOptimal = 6,
         TransferDstOptimal = 7,
-        Preinitialized = 8,
+        //Preinitialized = 8,
         DepthReadOnlyStencilAttachment = 1000117000,
         DepthAttachmentStencilReadOnly = 1000117001,
         DepthAttachment = 1000241000,

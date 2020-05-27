@@ -21,31 +21,32 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-04-30 01:54:35
- * @LastEditTime: 2020-05-28 02:06:19
- */
-#include "ShaderMtl.h"
-#include "../CGDMetal.hpp"
+ * @Date: 2020-05-28 00:38:26
+ * @LastEditTime: 2020-05-28 00:39:32
+ */ 
+#pragma once
 
-using namespace Sakura::Graphics::Mtl;
-
-ShaderMtl::ShaderMtl(mtlpp::Library library)
-    :shaderLib(library)
+namespace Sakura::Graphics
 {
-    
+    struct Fence;
 }
 
-const void* ShaderMtl::GetFunction(const std::string& entryName)
+namespace Sakura::Graphics
 {
-    if(shaderFunctions.find(entryName) == shaderFunctions.end())
+    struct CommandBuffer
     {
-        mtlpp::Function func = shaderLib.NewFunction(entryName.c_str());
-        if(!func.Validate())
-        {
-            CGDMtl::debug_error("CGDMtl: Create Metal Shader Function Failed!");
-        }
-        shaderFunctions[entryName] = func;
-    }
-    assert(shaderFunctions[entryName].GetPtr() == nullptr);
-    return shaderFunctions[entryName].GetPtr();
+        /**
+         * @description: Signal a Fence.
+         * @param {Fence&} reference of the fence to be signaled
+         * @author: SaeruHikari
+         */
+        virtual void Signal(Fence& fence) = 0;
+
+        /**
+         * @description: Wait for a Fence.
+         * @param {Fence&} reference of the fence to wait
+         * @author: SaeruHikari
+         */
+        virtual void Wait(Fence& fence) = 0;
+    };
 }

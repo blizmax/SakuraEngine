@@ -21,31 +21,24 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-04-30 01:54:35
- * @LastEditTime: 2020-05-28 02:06:19
- */
-#include "ShaderMtl.h"
-#include "../CGDMetal.hpp"
+ * @Date: 2020-05-27 23:39:43
+ * @LastEditTime: 2020-05-28 01:26:52
+ */ 
+#pragma once
 
-using namespace Sakura::Graphics::Mtl;
-
-ShaderMtl::ShaderMtl(mtlpp::Library library)
-    :shaderLib(library)
+namespace Sakura::Graphics
 {
-    
+    struct Painter;
 }
 
-const void* ShaderMtl::GetFunction(const std::string& entryName)
+namespace Sakura::Graphics
 {
-    if(shaderFunctions.find(entryName) == shaderFunctions.end())
+    struct Fence 
     {
-        mtlpp::Function func = shaderLib.NewFunction(entryName.c_str());
-        if(!func.Validate())
-        {
-            CGDMtl::debug_error("CGDMtl: Create Metal Shader Function Failed!");
-        }
-        shaderFunctions[entryName] = func;
-    }
-    assert(shaderFunctions[entryName].GetPtr() == nullptr);
-    return shaderFunctions[entryName].GetPtr();
+        static Fence* Create(Painter& painter);
+        // Fence interface
+        virtual void Signal() = 0;
+        virtual void Wait() = 0;
+        virtual void Flush() = 0;
+    };
 }

@@ -21,31 +21,24 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-04-30 01:54:35
- * @LastEditTime: 2020-05-28 02:06:19
- */
-#include "ShaderMtl.h"
-#include "../CGDMetal.hpp"
+ * @Date: 2020-05-28 01:39:22
+ * @LastEditTime: 2020-05-28 02:09:01
+ */ 
+#pragma once
+#include "../../Include/Shader.h"
 
-using namespace Sakura::Graphics::Mtl;
-
-ShaderMtl::ShaderMtl(mtlpp::Library library)
-    :shaderLib(library)
+namespace Sakura::Graphics::Metal
 {
-    
-}
-
-const void* ShaderMtl::GetFunction(const std::string& entryName)
-{
-    if(shaderFunctions.find(entryName) == shaderFunctions.end())
+    struct ShaderMetal final : public Shader
     {
-        mtlpp::Function func = shaderLib.NewFunction(entryName.c_str());
-        if(!func.Validate())
-        {
-            CGDMtl::debug_error("CGDMtl: Create Metal Shader Function Failed!");
-        }
-        shaderFunctions[entryName] = func;
-    }
-    assert(shaderFunctions[entryName].GetPtr() == nullptr);
-    return shaderFunctions[entryName].GetPtr();
+        friend struct PainterMetal;
+    protected:
+        ShaderMetal(mtlpp::Library lib);
+    public:
+        virtual const void* NewFunctionHandle(
+            const eastl::string& functionName) override;
+
+        mtlpp::Library library;
+        eastl::unordered_map<eastl::string, mtlpp::Function> shaderFunctions;
+    };
 }

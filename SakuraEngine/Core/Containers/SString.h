@@ -42,8 +42,8 @@
  * @LastEditTime: 2020-03-30 12:18:46
  */
 #pragma once
+#define EA_CPP14_CONSTEXPR constexpr
 #include "../CoreMinimal/SKeyWords.h"
-#include <string>
 #include "SVariant.h"
 #include <EASTL/string.h>
 #include <EASTL/vector.h>

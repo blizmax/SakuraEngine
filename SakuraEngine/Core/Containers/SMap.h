@@ -11,8 +11,9 @@
 // https://github.com/star-e/StarEngine/blob/master/Star/SMap.h
 // Thanks for the great idea and work !
 #pragma once
-#include <map>
-#include <unordered_map>
+#define EA_CPP14_CONSTEXPR constexpr
+#include <EASTL/unordered_map.h>
+#include <EASTL/map.h>
 #include "Core/EngineUtils/SHash.h"
 #include "Core/CoreMinimal/SKeyWords.h"
 
