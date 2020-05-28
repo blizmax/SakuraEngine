@@ -22,19 +22,26 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 00:38:26
- * @LastEditTime: 2020-05-28 00:39:32
+ * @LastEditTime: 2020-05-28 18:06:49
  */ 
 #pragma once
 
 namespace Sakura::Graphics
 {
     struct Fence;
+    struct Painter;
 }
 
 namespace Sakura::Graphics
 {
     struct CommandBuffer
     {
+        CommandBuffer() = default;
+        virtual ~CommandBuffer() = default;
+
+
+
+    public:
         /**
          * @description: Signal a Fence.
          * @param {Fence&} reference of the fence to be signaled
@@ -48,5 +55,19 @@ namespace Sakura::Graphics
          * @author: SaeruHikari
          */
         virtual void Wait(Fence& fence) = 0;
+
+        /**
+         * @description: Commit command buffer to the queue.
+         * @author: SaeruHikari
+         */
+        virtual void Commit() = 0;
+    };
+
+    struct RenderCommandBuffer : public CommandBuffer
+    {
+        virtual ~RenderCommandBuffer() = default;
+        static RenderCommandBuffer* Create(Painter&);
+    protected:
+        RenderCommandBuffer() = default;
     };
 }

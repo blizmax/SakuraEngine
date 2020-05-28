@@ -21,23 +21,27 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-05-27 20:33:10
- * @LastEditTime: 2020-05-29 01:37:12
+ * @Date: 2020-05-28 17:46:20
+ * @LastEditTime: 2020-05-28 18:52:10
  */ 
 #pragma once
-#include "../Source/PainterMetal/PainterMetal.h"
-#include "../Source/PainterMetal/SwapChainMetal.h"
-#include "CommandBuffer.h"
+#include "../../Include/GPUResource.h"
+#include "mtlpp/buffer.hpp"
 
-namespace Sakura::Graphics
+namespace Sakura::Graphics::Metal
 {
-    struct AsyncComputeExtension : public Extension
+    struct PainterMetal;
+}
+
+namespace Sakura::Graphics::Metal
+{
+    struct BufferMetal final : public GPUBuffer
     {
-        AsyncComputeExtension() = default;
-        static bool EnableIf(Painter* painter)
-        {
-            return true;
-        }
-        inline static constexpr const char* name = "AsyncComputeExtension";
+        friend class PainterMetal;
+        virtual ~BufferMetal() = default;
+        virtual std::uint32_t GetSize() const override;
+    protected:
+        BufferMetal(mtlpp::Buffer, const BufferUsage);
+        mtlpp::Buffer buffer;
     };
 }

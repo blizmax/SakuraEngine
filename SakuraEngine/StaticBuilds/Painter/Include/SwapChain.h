@@ -21,23 +21,25 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-05-27 20:33:10
- * @LastEditTime: 2020-05-29 01:37:12
+ * @Date: 2020-05-28 22:43:31
+ * @LastEditTime: 2020-05-29 01:26:33
  */ 
 #pragma once
-#include "../Source/PainterMetal/PainterMetal.h"
-#include "../Source/PainterMetal/SwapChainMetal.h"
-#include "CommandBuffer.h"
+#include <iostream>
 
 namespace Sakura::Graphics
 {
-    struct AsyncComputeExtension : public Extension
+    struct Painter;
+}
+struct SDL_Window;
+
+namespace Sakura::Graphics
+{
+    struct SwapChain
     {
-        AsyncComputeExtension() = default;
-        static bool EnableIf(Painter* painter)
-        {
-            return true;
-        }
-        inline static constexpr const char* name = "AsyncComputeExtension";
+        friend struct Painter;
+        
+    protected:
+        SwapChain(Painter&){}
     };
 }

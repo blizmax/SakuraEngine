@@ -22,17 +22,20 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:35:56
- * @LastEditTime: 2020-05-28 01:53:57
+ * @LastEditTime: 2020-05-29 01:35:24
  */ 
 #pragma once
 #include "Extension.h"
 #include "Shader.h"
+#include "GPUResource.h"
 
 namespace Sakura::Graphics
 {
     struct Fence;
     struct RenderPass;
     struct RenderPassDesc;
+    struct RenderCommandBuffer;
+    struct SwapChain;
 }
 
 namespace Sakura::Graphics
@@ -70,7 +73,33 @@ namespace Sakura::Graphics
             const char* data, const std::size_t dataSize,
             const Shader::MacroTable& macroTable = _Shader::nullTable) = 0;
 
-            
+        /**
+         * @description: 
+         * @param {const GPUResource::ResourceOptions} CPU Access(or optiions) of this buffer
+         * @param {std::uint32_t} length of the buffer.
+         * @param {const void*} pointer of init data.
+         * @return: Pointer of resource created.
+         * @author: SaeruHikari
+         */
+        [[nodiscard]] virtual GPUBuffer* CreateBuffer(
+            const GPUBuffer::BufferUsage usage, 
+            const GPUResource::ResourceOptions options, 
+            std::uint32_t length, const void* pointer) = 0;
+
+        /**
+         * @description: Create a command buffer that is used to encode render commands.
+         * @return: Render Command Buffer Pointer.
+         * @author: SaeruHikari
+         */
+        [[nodiscard]] virtual RenderCommandBuffer* CreateRenderCommandBuffer() = 0;
+
+        /**
+         * @description: Returns the backend name of this painter.
+         * @return: BackEnd Name
+         * @author: SaeruHikari
+         */
+        virtual const eastl::string_view GetBackEndName() const = 0;
+
     public:
         template<typename PainterClass, typename... Args>
         [[nodiscard]] static PainterClass* Create(Args... args)

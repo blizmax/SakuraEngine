@@ -5,7 +5,7 @@
  * @Author: SaeruHikari
  * @Date: 2020-02-02 17:25:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-30 11:53:00
+ * @LastEditTime: 2020-05-28 18:11:32
  */
 #pragma once
 #define EA_CPP14_CONSTEXPR constexpr
@@ -15,3 +15,4 @@
 #include "SString.h"
 #include "SVector.h"
 #include <EASTL/unique_ptr.h>
+#include <EASTL/bitset.h>

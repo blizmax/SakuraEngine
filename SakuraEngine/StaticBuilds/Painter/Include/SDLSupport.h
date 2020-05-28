@@ -21,23 +21,23 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-05-27 20:33:10
- * @LastEditTime: 2020-05-29 01:37:12
+ * @Date: 2020-05-28 22:35:14
+ * @LastEditTime: 2020-05-29 02:31:08
  */ 
 #pragma once
-#include "../Source/PainterMetal/PainterMetal.h"
 #include "../Source/PainterMetal/SwapChainMetal.h"
-#include "CommandBuffer.h"
 
-namespace Sakura::Graphics
+struct SDL_Window;
+
+namespace Sakura::Graphics::Metal
 {
-    struct AsyncComputeExtension : public Extension
+    SwapChainMetal::CAMetalLayer GetMtlLayer(SDL_Window* window);
+    
+    template<>
+    inline SwapChainMetal::SwapChainMetal(Painter& painter, SDL_Window* window)
+        :SwapChain(painter)
     {
-        AsyncComputeExtension() = default;
-        static bool EnableIf(Painter* painter)
-        {
-            return true;
-        }
-        inline static constexpr const char* name = "AsyncComputeExtension";
-    };
+        auto layer = GetMtlLayer(window);
+        SwapChainMetal(painter, layer);
+    }
 }

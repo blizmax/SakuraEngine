@@ -22,11 +22,16 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:31:41
- * @LastEditTime: 2020-05-28 01:53:18
+ * @LastEditTime: 2020-05-28 18:37:34
  */ 
 #pragma once
 #include "../../Include/Painter.h"
 #include "mtlpp/device.hpp"
+
+namespace Sakura::Graphics
+{
+    struct RenderCommandBuffer;
+}
 
 namespace Sakura::Graphics::Metal
 {
@@ -35,7 +40,7 @@ namespace Sakura::Graphics::Metal
         friend class Painter;
         DECLARE_LOGGER("PainterMetal")
     public:
-        inline static constexpr eastl::string_view GetBackEndName()
+        virtual const eastl::string_view GetBackEndName() const override 
         {
             return Sakura::Graphics::DefaultBackEndNames::Metal;
         } 
@@ -47,7 +52,11 @@ namespace Sakura::Graphics::Metal
         [[nodiscard]] virtual Shader* CreateShader(
             const char* data, const std::size_t dataSize,
             const Shader::MacroTable& macroTable = _Shader::nullTable) override;
-            
+        [[nodiscard]] virtual RenderCommandBuffer* CreateRenderCommandBuffer() override;
+        [[nodiscard]] virtual GPUBuffer* CreateBuffer( 
+            const GPUBuffer::BufferUsage usage, 
+            const GPUResource::ResourceOptions options, 
+            std::uint32_t length, const void* pointer = nullptr) override;
     protected:
         PainterMetal(bool bEnableDebugLayer) 
             :Painter(bEnableDebugLayer)

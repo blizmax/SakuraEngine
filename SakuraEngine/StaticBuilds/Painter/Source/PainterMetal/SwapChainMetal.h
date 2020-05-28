@@ -21,23 +21,43 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-05-27 20:33:10
- * @LastEditTime: 2020-05-29 01:37:12
+ * @Date: 2020-05-28 23:07:52
+ * @LastEditTime: 2020-05-29 02:16:08
  */ 
 #pragma once
-#include "../Source/PainterMetal/PainterMetal.h"
-#include "../Source/PainterMetal/SwapChainMetal.h"
-#include "CommandBuffer.h"
+#include "../../Include/SwapChain.h"
+#include "PainterMetal.h"
 
-namespace Sakura::Graphics
+namespace Sakura::Graphics::Metal
 {
-    struct AsyncComputeExtension : public Extension
+    struct SwapChainMetal final : public SwapChain
     {
-        AsyncComputeExtension() = default;
-        static bool EnableIf(Painter* painter)
+        friend struct PainterMetal;
+        template<typename... Args>
+        static SwapChain* Create(Painter& painter, Args... args) 
         {
-            return true;
+            return new SwapChainMetal(painter, args...);
         }
-        inline static constexpr const char* name = "AsyncComputeExtension";
+        struct CAMetalLayer
+        {
+            void* layerPtr;
+        };
+    protected:
+        template<typename... Args>
+        SwapChainMetal(Painter& painter, Args... args)
+            :SwapChain(painter)
+        {
+            PainterMetal::error("Please specify your template with the new constructor params.");
+        }
+
+        void initWithCAMetalLayer(Painter& painter, void* layer);
     };
+
+    template<>
+    inline SwapChainMetal::SwapChainMetal(
+        Painter& painter, SwapChainMetal::CAMetalLayer val)
+        :SwapChain(painter)
+    {
+        initWithCAMetalLayer(painter, val.layerPtr);
+    }
 }

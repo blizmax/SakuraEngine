@@ -22,11 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:36:03
- * @LastEditTime: 2020-05-28 01:48:57
+ * @LastEditTime: 2020-05-28 18:36:55
  */ 
 #include "Fence.h"
 #include "Painter.h"
 #include "Shader.h"
+#include "GPUResource.h"
+#include "CommandBuffer.h"
 
 using namespace Sakura::Graphics;
 
@@ -39,4 +41,16 @@ Shader* Shader::Create(Painter& painter,
     const char* data, const std::size_t dataSize, const Shader::MacroTable& tbl)
 {
     return painter.CreateShader(data, dataSize);
+}
+
+GPUBuffer* GPUBuffer::Create(Painter& painter,
+    const BufferUsage usage, const GPUResource::ResourceOptions options, 
+    std::uint32_t length, const void* pointer)
+{
+    return painter.CreateBuffer(usage, options, length, pointer);
+}
+
+RenderCommandBuffer* RenderCommandBuffer::Create(Painter& painter)
+{
+    return painter.CreateRenderCommandBuffer();
 }

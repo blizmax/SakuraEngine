@@ -21,23 +21,29 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-05-27 20:33:10
- * @LastEditTime: 2020-05-29 01:37:12
+ * @Date: 2020-05-28 02:32:38
+ * @LastEditTime: 2020-05-28 18:05:25
  */ 
 #pragma once
-#include "../Source/PainterMetal/PainterMetal.h"
-#include "../Source/PainterMetal/SwapChainMetal.h"
-#include "CommandBuffer.h"
+#include "../../Include/CommandBuffer.h"
+#include "mtlpp/command_buffer.hpp"
 
-namespace Sakura::Graphics
+namespace Sakura::Graphics::Metal
 {
-    struct AsyncComputeExtension : public Extension
+    struct CommandQueueMetal;
+}
+
+namespace Sakura::Graphics::Metal
+{
+    struct RenderCommandBufferMetal final : public RenderCommandBuffer
     {
-        AsyncComputeExtension() = default;
-        static bool EnableIf(Painter* painter)
-        {
-            return true;
-        }
-        inline static constexpr const char* name = "AsyncComputeExtension";
+        friend class PainterMetal;
+        virtual ~RenderCommandBufferMetal() = default;
+        virtual void Signal(Fence& fence) override;
+        virtual void Wait(Fence& fence) override;
+        virtual void Commit() override;
+        mtlpp::CommandBuffer buffer;
+    protected:
+        RenderCommandBufferMetal(mtlpp::CommandQueue& MetalQueue);
     };
 }

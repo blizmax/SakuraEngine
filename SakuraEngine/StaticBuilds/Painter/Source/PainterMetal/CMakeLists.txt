@@ -5,10 +5,10 @@ file (
     mtlpp/*.h
     mtlpp/*.hpp
     mtlpp/*.mm
-    *.mm
-    *.h
-    *.cpp
-    *.hpp
+    ./*.mm
+    ./*.h
+    ./*.cpp
+    ./*.hpp
 )
 
 set(PLATFORM_LIBRARIES
