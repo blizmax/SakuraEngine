@@ -5,9 +5,10 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 
 #/home/saeruhikari/OpenLib/vcpkg/vcpkg install --triplet x64-linux eigen3 boost gtest spdlog glfw3 SDL2 fmt xxHash SDL2[vulkan]
-set(VCPKG_PKGS SDL2 SDL2[vulkan] freetype glm 
+set(VCPKG_PKGS SDL2 freetype 
 tinyobjloader tinyobjloader[double]
-fmt vulkan-memory-allocator entt cpp-taskflow)
+fmt entt 
+SDL2[vulkan] vulkan-memory-allocator)
 
 set(SAKURA_UNITY_BUILD on)
 
@@ -33,7 +34,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin)
 
 enable_testing()
-find_package(glm CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
 
 find_package(EnTT CONFIG REQUIRED)

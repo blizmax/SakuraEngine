@@ -22,22 +22,26 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 22:35:14
- * @LastEditTime: 2020-05-29 02:31:08
+ * @LastEditTime: 2020-05-29 18:14:51
  */ 
 #pragma once
-#include "../Source/PainterMetal/SwapChainMetal.h"
+#include "../Source/PainterMetal/SwapChainMetal.hpp"
 
 struct SDL_Window;
 
 namespace Sakura::Graphics::Metal
 {
-    SwapChainMetal::CAMetalLayer GetMtlLayer(SDL_Window* window);
+    SwapChainMetal::NSWindowH GetNSWindow(SDL_Window* window);
     
     template<>
-    inline SwapChainMetal::SwapChainMetal(Painter& painter, SDL_Window* window)
-        :SwapChain(painter)
+    inline SwapChain* SwapChainMetal::Create(
+        Painter& painter, const std::uint32_t frameCount, SDL_Window* window)
     {
-        auto layer = GetMtlLayer(window);
-        SwapChainMetal(painter, layer);
+        if(window == nullptr)
+        {
+            PainterMetal::error("SwapChainMetal: null SDL_Window received!");
+        }
+        auto result = GetNSWindow(window);
+        return SwapChainMetal::Create(painter, frameCount, result);
     }
 }

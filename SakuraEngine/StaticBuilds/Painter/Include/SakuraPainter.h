@@ -22,21 +22,34 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:33:10
- * @LastEditTime: 2020-05-29 01:37:12
+ * @LastEditTime: 2020-05-29 18:45:54
  */ 
 #pragma once
 #include "../Source/PainterMetal/PainterMetal.h"
-#include "../Source/PainterMetal/SwapChainMetal.h"
+#include "../Source/PainterMetal/SwapChainMetal.hpp"
 #include "CommandBuffer.h"
 
 namespace Sakura::Graphics
 {
     struct AsyncComputeExtension : public Extension
     {
+        struct QueueSet
+        {
+            
+        };
         AsyncComputeExtension() = default;
         static bool EnableIf(Painter* painter)
         {
             return true;
+        }
+        static QueueSet& GetQueueSet(Painter& painter)
+        {
+            if(painter.GetDataRef<AsyncComputeExtension>().ptr == nullptr)
+            {
+                painter.GetDataRef<AsyncComputeExtension>().ptr
+                     = new QueueSet();
+            }
+            return *((QueueSet*)painter.GetDataRef<AsyncComputeExtension>().ptr);
         }
         inline static constexpr const char* name = "AsyncComputeExtension";
     };

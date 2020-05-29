@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 23:07:52
- * @LastEditTime: 2020-05-29 02:16:08
+ * @LastEditTime: 2020-05-29 18:04:44
  */ 
 #pragma once
 #include "../../Include/SwapChain.h"
@@ -30,34 +30,35 @@
 
 namespace Sakura::Graphics::Metal
 {
-    struct SwapChainMetal final : public SwapChain
+    class SwapChainMetal final : public SwapChain
     {
         friend struct PainterMetal;
+    public:
         template<typename... Args>
-        static SwapChain* Create(Painter& painter, Args... args) 
+        static SwapChain* Create(Painter& painter,
+            const std::uint32_t frameCount, Args... args) 
         {
-            return new SwapChainMetal(painter, args...);
+            return new SwapChainMetal(painter, frameCount, args...);
         }
-        struct CAMetalLayer
+        class NSWindowH : public ns::Object
         {
-            void* layerPtr;
+        public:
+            NSWindowH() { }
+            NSWindowH(const ns::Handle& handle) : ns::Object(handle) { }
         };
-    protected:
-        template<typename... Args>
-        SwapChainMetal(Painter& painter, Args... args)
-            :SwapChain(painter)
+        class MtlView : public ns::Object
         {
-            PainterMetal::error("Please specify your template with the new constructor params.");
-        }
+        public:
+            MtlView() { }
+            MtlView(const ns::Handle& handle) : ns::Object(handle) { }
+        };
+        int wtf = 1;
+        std::uint32_t GetFrameCount() const;
+    protected:
+        SwapChainMetal(
+            Painter& painter, const std::uint32_t frameCount, 
+            SwapChainMetal::NSWindowH val);
 
-        void initWithCAMetalLayer(Painter& painter, void* layer);
+        MtlView m_view;
     };
-
-    template<>
-    inline SwapChainMetal::SwapChainMetal(
-        Painter& painter, SwapChainMetal::CAMetalLayer val)
-        :SwapChain(painter)
-    {
-        initWithCAMetalLayer(painter, val.layerPtr);
-    }
 }

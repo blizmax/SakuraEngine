@@ -4,7 +4,7 @@
 #import "Fence.h"
 #import "mtlpp/library.hpp"
 #import "BufferMetal.h"
-#import "SwapChainMetal.h"
+#import "SwapChainMetal.hpp"
 #import <MetalKit/MetalKit.h>
 
 using namespace Sakura::Graphics;
@@ -20,7 +20,7 @@ RenderPass* PainterMetal::CreateRenderPass(const RenderPassDesc& desc)
     return nullptr;
 }
 
-
+//---------------Shader Create---------------
 ShaderMetal::ShaderMetal(mtlpp::Library lib)
     :library(lib)
 {
@@ -55,7 +55,7 @@ Shader* PainterMetal::CreateShader(
 
 
 
-
+//---------------GPU Resource Create---------------
 GPUBuffer* PainterMetal::CreateBuffer( 
     const GPUBuffer::BufferUsage usage, 
     const GPUResource::ResourceOptions options, 
@@ -73,11 +73,45 @@ GPUBuffer* PainterMetal::CreateBuffer(
             mtlpp::ResourceOptions::HazardTrackingModeUntracked | flag),
         usage);
 }
-
+#import <iostream>
 
 //---------------SwapChain Create and Initialization---------------
-void SwapChainMetal::initWithCAMetalLayer(Painter& painter, void* layer)
+SwapChainMetal::SwapChainMetal(
+    Painter& painter, const std::uint32_t frameCount, 
+    SwapChainMetal::NSWindowH _window)
+    :SwapChain(painter, frameCount)
 {
-    PainterMetal::debug_info("Init a swap chain with CAMetalLayer!");
+    mtlpp::Device& device = ((PainterMetal&)painter).device;
+    if(_window.GetPtr() == nullptr)
+    {
+        PainterMetal::error("SwapChainMetal: inValid NSWindow Received!");
+        return;
+    }
+    NSWindow* window = (__bridge NSWindow*)_window.GetPtr();
 
+    NSRect frame = NSMakeRect(0, 0,
+        window.frame.size.width, window.frame.size.height);
+
+    MTKView* view = [[MTKView alloc] initWithFrame:frame];
+    view.device = (__bridge id<MTLDevice>)device.GetPtr();
+    view.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+
+    [window.contentView addSubview:view];
+    [window orderFrontRegardless];
+    m_view = ns::Handle{ (__bridge void*)view };
+    if(m_view.GetPtr() == nullptr)
+    {
+        PainterMetal::error("SwapChainMetal: MTLView Create Failed!");
+        return;
+    }
+}
+
+std::uint32_t SwapChainMetal::GetFrameCount() const
+{
+    if(m_view.GetPtr() == nullptr)
+    {
+        PainterMetal::error("SwapChainMetal: CAMetal Layer Ref Lost!");
+        return 999999;
+    }
+    return ((CAMetalLayer*)((__bridge MTKView*)m_view.GetPtr()).layer).maximumDrawableCount;
 }

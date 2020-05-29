@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:35:56
- * @LastEditTime: 2020-05-29 01:35:24
+ * @LastEditTime: 2020-05-29 18:33:01
  */ 
 #pragma once
 #include "Extension.h"
@@ -127,19 +127,24 @@ namespace Sakura::Graphics
         {
             return std::decay_t<ExtensionType>::EnableIf(this);
         }
-        using ExtensionsMap = eastl::unordered_map<eastl::string, eastl::unique_ptr<Extension>>;
+        using ExtensionsMap
+            = eastl::unordered_map<eastl::string, eastl::unique_ptr<Extension>>;
+        using ExtensionsDataMap 
+            = eastl::unordered_map<eastl::string, Extension::Data>;
         template<typename ExtensionType, typename... Args>
         inline ExtensionType* EnableExtension(Args... args)
         {
-            if(Support<ExtensionType>() && 
-               extensions.find(std::decay_t<ExtensionType>::name) == extensions.end())
+            if(!Support<ExtensionType>())
+                return nullptr;
+            if(extensions.find(std::decay_t<ExtensionType>::name) == extensions.end())
             {
+                Extension::Data dt;
+                extensionsData[std::decay_t<ExtensionType>::name] = dt;
                 extensions[std::decay_t<ExtensionType>::name] =
                     eastl::make_unique<std::decay_t<ExtensionType>>(eastl::move(args)...);
-                return static_cast<ExtensionType*>(
-                    extensions[std::decay_t<ExtensionType>::name].get());
             }
-            return nullptr;
+            return static_cast<ExtensionType*>(
+                    extensions[std::decay_t<ExtensionType>::name].get());
         }
         template<typename ExtensionType>
         inline ExtensionType* FindActivatedExtension()
@@ -160,6 +165,12 @@ namespace Sakura::Graphics
             }
             return nullptr;
         }
+        template<typename ExtensionType>
+        inline Extension::Data& GetDataRef()
+        {
+            return extensionsData[std::decay_t<ExtensionType>::name];
+        }
         ExtensionsMap extensions;
+        ExtensionsDataMap extensionsData;
     };
 }

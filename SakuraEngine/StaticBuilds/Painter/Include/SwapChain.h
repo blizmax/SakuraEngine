@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 22:43:31
- * @LastEditTime: 2020-05-29 01:26:33
+ * @LastEditTime: 2020-05-29 17:58:08
  */ 
 #pragma once
 #include <iostream>
@@ -38,8 +38,7 @@ namespace Sakura::Graphics
     struct SwapChain
     {
         friend struct Painter;
-        
     protected:
-        SwapChain(Painter&){}
+        SwapChain(Painter& painter, const std::uint32_t frameCount){}
     };
 }
