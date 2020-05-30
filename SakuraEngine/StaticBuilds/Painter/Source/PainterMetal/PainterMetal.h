@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:31:41
- * @LastEditTime: 2020-05-28 18:37:34
+ * @LastEditTime: 2020-05-29 19:48:47
  */ 
 #pragma once
 #include "../../Include/Painter.h"
@@ -40,11 +40,11 @@ namespace Sakura::Graphics::Metal
         friend class Painter;
         DECLARE_LOGGER("PainterMetal")
     public:
+        virtual ~PainterMetal() = default;
         virtual const eastl::string_view GetBackEndName() const override 
         {
             return Sakura::Graphics::DefaultBackEndNames::Metal;
         } 
-
         // Implementations
         [[nodiscard]] virtual Fence* CreateFence() override;
         [[nodiscard]] virtual RenderPass* CreateRenderPass(

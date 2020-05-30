@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 02:32:38
- * @LastEditTime: 2020-05-28 18:05:25
+ * @LastEditTime: 2020-05-29 20:08:59
  */ 
 #pragma once
 #include "../../Include/CommandBuffer.h"
@@ -42,6 +42,7 @@ namespace Sakura::Graphics::Metal
         virtual void Signal(Fence& fence) override;
         virtual void Wait(Fence& fence) override;
         virtual void Commit() override;
+        virtual void Present(const Drawable& drawable);
         mtlpp::CommandBuffer buffer;
     protected:
         RenderCommandBufferMetal(mtlpp::CommandQueue& MetalQueue);

@@ -54,7 +54,6 @@ Shader* PainterMetal::CreateShader(
 }
 
 
-
 //---------------GPU Resource Create---------------
 GPUBuffer* PainterMetal::CreateBuffer( 
     const GPUBuffer::BufferUsage usage, 
@@ -73,7 +72,7 @@ GPUBuffer* PainterMetal::CreateBuffer(
             mtlpp::ResourceOptions::HazardTrackingModeUntracked | flag),
         usage);
 }
-#import <iostream>
+
 
 //---------------SwapChain Create and Initialization---------------
 SwapChainMetal::SwapChainMetal(
@@ -114,4 +113,19 @@ std::uint32_t SwapChainMetal::GetFrameCount() const
         return 999999;
     }
     return ((CAMetalLayer*)((__bridge MTKView*)m_view.GetPtr()).layer).maximumDrawableCount;
+}
+
+const Drawable& SwapChainMetal::GetDrawable() const
+{
+    //mtlpp::Drawable db = ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentDrawable };
+    id<MTLDrawable> drawable = ((__bridge MTKView*)m_view.GetPtr()).currentDrawable;
+    uint64_t _id = drawable.drawableID;
+    //uint64_t _id = db.GetDrawableID();
+    if(currentDrawable.drawable.GetPtr() == nullptr ||
+       _id != currentDrawable.drawable.GetDrawableID() )
+    {
+        currentDrawable.drawable = 
+            ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentDrawable };
+    }
+    return currentDrawable;
 }

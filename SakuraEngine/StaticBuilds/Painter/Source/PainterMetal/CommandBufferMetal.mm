@@ -1,4 +1,5 @@
 #import "CommandBufferMetal.h"
+#import "SwapChainMetal.hpp"
 #import "PainterMetal.h"
 #import "Fence.h"
 #import "mtlpp/command_queue.hpp"
@@ -17,6 +18,11 @@ void RenderCommandBufferMetal::Wait(Fence& fence)
 }
 
 void RenderCommandBufferMetal::Commit()
+{
+
+}
+
+void RenderCommandBufferMetal::Present(const Drawable& drawable)
 {
 
 }

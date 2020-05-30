@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 00:38:26
- * @LastEditTime: 2020-05-28 18:06:49
+ * @LastEditTime: 2020-05-29 20:08:24
  */ 
 #pragma once
 
@@ -30,6 +30,7 @@ namespace Sakura::Graphics
 {
     struct Fence;
     struct Painter;
+    struct Drawable;
 }
 
 namespace Sakura::Graphics
@@ -61,6 +62,13 @@ namespace Sakura::Graphics
          * @author: SaeruHikari
          */
         virtual void Commit() = 0;
+
+        /**
+         * @description: Present the drawable to screen.
+         * @param {const Drawable&} Drawable Handle to present.
+         * @author: SaeruHikari
+         */
+        virtual void Present(const Drawable& drawable) = 0;
     };
 
     struct RenderCommandBuffer : public CommandBuffer

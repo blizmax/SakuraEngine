@@ -9,3 +9,6 @@ target_link_libraries(Editor SPA CoreModule EditorModule)
 
 engine_plugin_bash(${CMAKE_CURRENT_SOURCE_DIR})
 reflection_target(EditorModule)
+
+add_executable(TestMap Common/Main.cpp)
+target_link_libraries(TestMap EASTL)

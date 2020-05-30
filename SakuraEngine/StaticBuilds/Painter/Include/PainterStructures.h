@@ -22,10 +22,16 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 17:32:48
- * @LastEditTime: 2020-05-28 17:35:07
+ * @LastEditTime: 2020-05-29 20:30:57
  */ 
 #pragma once
+#include "SakuraEngine/Core/Containers/Containers.h"
 #include <cstdint>
+
+namespace Sakura::Graphics
+{
+    struct GPUTexture;
+}
 
 namespace Sakura::Graphics
 {
@@ -40,5 +46,62 @@ namespace Sakura::Graphics
         std::uint32_t width;
         std::uint32_t length;
         std::uint32_t height;
+    };
+
+    enum class LoadAction
+    {
+        DontCare = 0,
+        Load     = 1,
+        Clear    = 2,
+    };
+
+    enum class StoreAction
+    {
+        DontCare = 0,
+        Store = 1,
+        //MultisampleResolve = 2, ?
+        //StoreAndMultisampleResolve = 3, ?
+        //Unknown = 4, ??
+    };
+
+    struct RenderPassAttachmentDescriptor
+    {
+        LoadAction loadAction = LoadAction::Clear;
+        StoreAction storeAction = StoreAction::Store;
+        GPUTexture* texture = nullptr;
+        bool isValid() const
+        {
+            return texture != nullptr;
+        }
+    };
+
+    struct Color
+    {
+        double Red;
+        double Green;
+        double Blue;
+        double Alpha;
+    };
+
+    struct RenderPassColorAttachmentDescriptor : public RenderPassAttachmentDescriptor
+    {
+        Color clearColor;
+    };
+
+    struct RenderPassDepthAttachmentDescriptor : public RenderPassAttachmentDescriptor
+    {
+        double clearDepth;
+    };
+
+    struct RenderPassStencilAttachmentDescriptor : public RenderPassAttachmentDescriptor
+    {
+        uint32_t clearStencil;
+    };
+
+    struct RenderPassDescriptor
+    {
+        Sakura::SVector<RenderPassColorAttachmentDescriptor> colorAttachments;
+        RenderPassDepthAttachmentDescriptor depthAttachment;
+        RenderPassStencilAttachmentDescriptor stencilAttachment;
     };
 }

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:35:56
- * @LastEditTime: 2020-05-29 18:33:01
+ * @LastEditTime: 2020-05-29 19:20:32
  */ 
 #pragma once
 #include "Extension.h"
@@ -111,6 +111,13 @@ namespace Sakura::Graphics
         {
             
         }
+        virtual ~Painter()
+        {
+            for(auto iter = extensionsData.begin(); iter != extensionsData.end(); iter++)
+            {
+                delete iter->second.ptr;
+            }
+        }
         // Check and Add Extensions
     public:
         template<typename ExtensionType, typename std::enable_if<
@@ -130,7 +137,7 @@ namespace Sakura::Graphics
         using ExtensionsMap
             = eastl::unordered_map<eastl::string, eastl::unique_ptr<Extension>>;
         using ExtensionsDataMap 
-            = eastl::unordered_map<eastl::string, Extension::Data>;
+            = eastl::unordered_map<eastl::string, Extension::DataSlot>;
         template<typename ExtensionType, typename... Args>
         inline ExtensionType* EnableExtension(Args... args)
         {
@@ -138,7 +145,7 @@ namespace Sakura::Graphics
                 return nullptr;
             if(extensions.find(std::decay_t<ExtensionType>::name) == extensions.end())
             {
-                Extension::Data dt;
+                Extension::DataSlot dt;
                 extensionsData[std::decay_t<ExtensionType>::name] = dt;
                 extensions[std::decay_t<ExtensionType>::name] =
                     eastl::make_unique<std::decay_t<ExtensionType>>(eastl::move(args)...);
@@ -166,7 +173,7 @@ namespace Sakura::Graphics
             return nullptr;
         }
         template<typename ExtensionType>
-        inline Extension::Data& GetDataRef()
+        inline Extension::DataSlot& GetDataRef()
         {
             return extensionsData[std::decay_t<ExtensionType>::name];
         }

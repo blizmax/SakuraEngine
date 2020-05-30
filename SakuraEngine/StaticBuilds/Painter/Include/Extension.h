@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:53:14
- * @LastEditTime: 2020-05-29 18:30:24
+ * @LastEditTime: 2020-05-29 18:50:39
  */ 
 #pragma once
 #include "SakuraEngine/Core/Core.h"
@@ -45,7 +45,11 @@ namespace Sakura::Graphics
     {
         struct Data
         {
-            void* ptr = nullptr;
+
+        };
+        struct DataSlot
+        {
+            Data* ptr = nullptr;
         };
         static bool EnableIf(Painter* painter)
         {

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-05-29 18:43:07
+ * @LastEditTime: 2020-05-29 20:57:25
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -84,11 +84,14 @@ public:
         // Create Painter Objects
         Painter* painter = Painter::Create<Metal::PainterMetal>(true);
         auto asyncExt = painter->EnableExtension<AsyncComputeExtension>();
-       
+        if(!asyncExt)
+        {
+            Sakura::log::debug_error<Sakura::flags::DEBUG_GAME_AND_EDITOR>
+                ("Failed to enable Async Compute Extension.");
+        }
         // Create SwapChain
         SwapChainMetal* chain 
             = (SwapChainMetal*)Metal::SwapChainMetal::Create(*painter, 3, win);
-        std::cout << chain->GetFrameCount() << std::endl;
         // Create Shader
         auto shader = Shader::Create(*painter, shadersSrc, strlen(shadersSrc));
         auto vertFunction 
@@ -121,6 +124,7 @@ public:
                     break;
                 }
             }
+            std::cout << "WTF" << std::endl;
         }
         //SDL_Metal_CreateView
         return;

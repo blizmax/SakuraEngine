@@ -22,34 +22,60 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:33:10
- * @LastEditTime: 2020-05-29 18:45:54
+ * @LastEditTime: 2020-05-29 19:15:14
  */ 
 #pragma once
 #include "../Source/PainterMetal/PainterMetal.h"
 #include "../Source/PainterMetal/SwapChainMetal.hpp"
 #include "CommandBuffer.h"
+#include "CommandQueue.h"
 
 namespace Sakura::Graphics
 {
     struct AsyncComputeExtension : public Extension
     {
-        struct QueueSet
+        struct QueueSet : public Extension::Data
         {
-            
+            eastl::unique_ptr<CommandQueue> computeQueue;
+            eastl::unique_ptr<CommandQueue> blitQueue;
         };
         AsyncComputeExtension() = default;
+        inline static const eastl::vector<eastl::string_view> supportedBackEnds = {
+            "Metal",
+            "Direct3D12",
+            "Vulkan",
+        };
         static bool EnableIf(Painter* painter)
         {
-            return true;
+            if(eastl::find(
+                supportedBackEnds.begin(),
+                supportedBackEnds.end(), painter->GetBackEndName())
+                    != supportedBackEnds.end())
+                return true;
+            else return false;
         }
         static QueueSet& GetQueueSet(Painter& painter)
         {
             if(painter.GetDataRef<AsyncComputeExtension>().ptr == nullptr)
             {
                 painter.GetDataRef<AsyncComputeExtension>().ptr
-                     = new QueueSet();
+                    = new QueueSet();
             }
             return *((QueueSet*)painter.GetDataRef<AsyncComputeExtension>().ptr);
+        }
+        static CommandQueue& GetComputeQueue(Painter& painter)
+        {
+            if(GetQueueSet(painter).computeQueue.get() != nullptr)
+                return *GetQueueSet(painter).computeQueue.get();
+            else 
+                assert(0 && "AsyncComputeExtension: No Valide Compute Queue!");
+        }
+        static CommandQueue& GetBlitQueue(Painter& painter)
+        {
+            if(GetQueueSet(painter).blitQueue.get() != nullptr)
+                return *GetQueueSet(painter).blitQueue.get();
+            else 
+                assert(0 && "AsyncComputeExtension: No Valide Blit Queue!");
         }
         inline static constexpr const char* name = "AsyncComputeExtension";
     };

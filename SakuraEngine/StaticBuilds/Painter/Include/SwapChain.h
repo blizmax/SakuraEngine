@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 22:43:31
- * @LastEditTime: 2020-05-29 17:58:08
+ * @LastEditTime: 2020-05-29 20:13:11
  */ 
 #pragma once
 #include <iostream>
@@ -35,9 +35,30 @@ struct SDL_Window;
 
 namespace Sakura::Graphics
 {
+    struct Drawable
+    {
+
+    };
+    
     struct SwapChain
     {
         friend struct Painter;
+
+        /**
+         * @description: Drawable is a handle that stands for the backbuffer index.
+         * @return: Drawable Handle of the back-buffer.
+         * @author: SaeruHikari
+         */
+        virtual const Drawable& GetDrawable() const = 0;
+
+        /**
+         * @description: Get Frame Count of the SwapChain.
+         * When tripleBufferring is on this returns 3, else returns 2.
+         * @return: Maximum Frame Count
+         * @author: SaeruHikari
+         */
+        virtual std::uint32_t GetFrameCount() const = 0;
+        //virtual RenderPassDescriptor GetDefaultRenderPassDescriptor() const = 0;
     protected:
         SwapChain(Painter& painter, const std::uint32_t frameCount){}
     };
