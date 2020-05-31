@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:31:41
- * @LastEditTime: 2020-05-29 19:48:47
+ * @LastEditTime: 2020-06-01 01:06:11
  */ 
 #pragma once
 #include "../../Include/Painter.h"
@@ -57,6 +57,8 @@ namespace Sakura::Graphics::Metal
             const GPUBuffer::BufferUsage usage, 
             const GPUResource::ResourceOptions options, 
             std::uint32_t length, const void* pointer = nullptr) override;
+        [[nodiscard]] virtual RenderPipeline* CreateRenderPipeline(
+            const RenderPipelineDescripor desc) override;
     protected:
         PainterMetal(bool bEnableDebugLayer) 
             :Painter(bEnableDebugLayer)

@@ -22,12 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:35:56
- * @LastEditTime: 2020-05-29 19:20:32
+ * @LastEditTime: 2020-06-01 01:03:04
  */ 
 #pragma once
 #include "Extension.h"
 #include "Shader.h"
 #include "GPUResource.h"
+#include "RenderPipeline.h"
 
 namespace Sakura::Graphics
 {
@@ -92,6 +93,14 @@ namespace Sakura::Graphics
          * @author: SaeruHikari
          */
         [[nodiscard]] virtual RenderCommandBuffer* CreateRenderCommandBuffer() = 0;
+
+
+        /**
+         * @description: Create a render pipeline state.
+         * @return: PSO Object Pointer.
+         * @author: SaeruHikari
+         */
+        [[nodiscard]] virtual RenderPipeline* CreateRenderPipeline(const RenderPipelineDescripor desc) = 0;
 
         /**
          * @description: Returns the backend name of this painter.

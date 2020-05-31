@@ -21,30 +21,16 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-05-28 02:32:38
- * @LastEditTime: 2020-06-01 01:09:31
+ * @Date: 2020-06-01 01:04:33
+ * @LastEditTime: 2020-06-01 01:05:26
  */ 
 #pragma once
-#include "../../Include/CommandBuffer.h"
-#include "mtlpp/command_buffer.hpp"
+#include "../../Include/RenderPipeline.h"
 
 namespace Sakura::Graphics::Metal
 {
-    struct CommandQueueMetal;
-}
-
-namespace Sakura::Graphics::Metal
-{
-    struct RenderCommandBufferMetal final : public RenderCommandBuffer
+    struct RenderPipelineMetal : public RenderPipeline
     {
-        friend class PainterMetal;
-        virtual ~RenderCommandBufferMetal() = default;
-        virtual void Signal(Fence& fence) override;
-        virtual void Wait(Fence& fence) override;
-        virtual void Commit() override;
-        virtual void Present(const Drawable& drawable) override;
-        mtlpp::CommandBuffer buffer;
-    protected:
-        RenderCommandBufferMetal(mtlpp::CommandQueue& MetalQueue);
+        
     };
 }

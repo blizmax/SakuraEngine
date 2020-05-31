@@ -68,7 +68,7 @@ namespace Sakura
     /*
     using sstring = std::string;
     using swstring = std::wstring;*/
-    using sstring_view = std::string_view;
+    using sstring_view = eastl::string_view;
     
     namespace String
     {

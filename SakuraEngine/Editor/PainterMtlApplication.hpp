@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-05-29 20:57:25
+ * @LastEditTime: 2020-05-30 19:40:10
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -124,7 +124,7 @@ public:
                     break;
                 }
             }
-            std::cout << "WTF" << std::endl;
+            PainterMetal::info("Tick");
         }
         //SDL_Metal_CreateView
         return;

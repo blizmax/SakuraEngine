@@ -129,3 +129,11 @@ const Drawable& SwapChainMetal::GetDrawable() const
     }
     return currentDrawable;
 }
+
+
+//---------------RenderPipeline Creation---------------
+RenderPipeline* PainterMetal::CreateRenderPipeline(
+    const RenderPipelineDescripor desc)
+{
+    return nullptr;
+}
