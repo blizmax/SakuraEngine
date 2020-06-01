@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 01:19:36
- * @LastEditTime: 2020-05-28 01:51:36
+ * @LastEditTime: 2020-06-01 16:15:22
  */ 
 #pragma once
 
@@ -71,6 +71,7 @@ namespace Sakura::Graphics
 
     struct ShaderFunction
     {
+        friend struct PainterMetal;
         ShaderFunction(ShaderStageFlags _stage,
             Shader* _shader, const eastl::string& _entry)
             : stage(_stage), shader(_shader), entry(_entry)

@@ -22,15 +22,18 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-01 01:04:33
- * @LastEditTime: 2020-06-01 01:05:26
+ * @LastEditTime: 2020-06-01 16:04:08
  */ 
 #pragma once
 #include "../../Include/RenderPipeline.h"
+#include "mtlpp/render_pipeline.hpp"
 
 namespace Sakura::Graphics::Metal
 {
     struct RenderPipelineMetal : public RenderPipeline
     {
-        
+        RenderPipelineMetal(mtlpp::RenderPipelineState state)
+            :rpState(state){}
+        mtlpp::RenderPipelineState rpState;
     };
 }

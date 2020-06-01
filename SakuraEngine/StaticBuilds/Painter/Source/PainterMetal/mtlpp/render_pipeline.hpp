@@ -51,7 +51,7 @@ namespace mtlpp
     }
     MTLPP_AVAILABLE(10_11, 8_0);
 
-    enum class ColorWriteMask
+    enum ColorWriteMasks
     {
         None  = 0,
         Red   = 0x1 << 3,
@@ -61,6 +61,7 @@ namespace mtlpp
         All   = 0xf
     }
     MTLPP_AVAILABLE(10_11, 8_0);
+    using ColorWriteMask = uint32_t;
 
     enum class PrimitiveTopologyClass
     {

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-05-30 19:40:10
+ * @LastEditTime: 2020-06-02 01:28:47
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -94,16 +94,19 @@ public:
             = (SwapChainMetal*)Metal::SwapChainMetal::Create(*painter, 3, win);
         // Create Shader
         auto shader = Shader::Create(*painter, shadersSrc, strlen(shadersSrc));
-        auto vertFunction 
-            = ShaderFunction(ShaderStageFlags::VertexStage, shader, "vertFunc");
-        auto pixelFunction 
-            = ShaderFunction(ShaderStageFlags::PixelStage, shader, "fragFunc");
         auto renderCmdBuffer = RenderCommandBuffer::Create(*painter);
         auto vertexBuffer = GPUBuffer::Create(*painter,
             GPUBuffer::BufferUsage::VertexBuffer,
             GPUResource::ResourceOptions::Upload,
             sizeof(vertexData), vertexData);
 
+        RenderPipelineDescripor desc;
+        desc.shaderFunctions = {
+            ShaderFunction(VertexStage, shader, "vertFunc"), 
+            ShaderFunction(PixelStage, shader, "fragFunc")
+        };
+        auto renderPipeline = RenderPipeline::Create(*painter, desc);
+        
         // Step into main loop
         int run = 1;
         while (run)

@@ -22,14 +22,21 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-01 01:02:05
- * @LastEditTime: 2020-06-01 01:04:05
+ * @LastEditTime: 2020-06-01 15:40:02
  */ 
 #pragma once
 
 namespace Sakura::Graphics
 {
+    struct Painter;
+    struct RenderPipelineDescripor;
+}
+
+namespace Sakura::Graphics
+{
     struct RenderPipeline
     {
-
+        [[nodiscard]] static RenderPipeline* Create(
+            Painter& painter, const RenderPipelineDescripor& desc);
     };
 }

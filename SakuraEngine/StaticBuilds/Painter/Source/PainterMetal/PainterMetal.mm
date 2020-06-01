@@ -6,6 +6,8 @@
 #import "BufferMetal.h"
 #import "SwapChainMetal.hpp"
 #import <MetalKit/MetalKit.h>
+#import "MTLTransfer.hpp"
+#import "RenderPipelineMetal.h"
 
 using namespace Sakura::Graphics;
 using namespace Sakura::Graphics::Metal;
@@ -130,10 +132,50 @@ const Drawable& SwapChainMetal::GetDrawable() const
     return currentDrawable;
 }
 
-
 //---------------RenderPipeline Creation---------------
 RenderPipeline* PainterMetal::CreateRenderPipeline(
-    const RenderPipelineDescripor desc)
+    const RenderPipelineDescripor& desc)
 {
-    return nullptr;
+    mtlpp::RenderPipelineDescriptor rpDesc;
+    for(auto& function : desc.shaderFunctions)
+    {
+        ShaderMetal* shaderMtl 
+            = (ShaderMetal*)function.GetShader();
+        mtlpp::Function func 
+            = shaderMtl->shaderFunctions[function.GetEntry()];
+        switch(function.GetStage())
+        {
+        case ShaderStageFlags::VertexStage:
+            rpDesc.SetVertexFunction(func);
+            continue;
+        case ShaderStageFlags::PixelStage:
+            rpDesc.SetFragmentFunction(func);
+            continue;
+        default:
+            PainterMetal::warn("PainterMetal: Shader of this stage not supported!");
+        }
+        for(std::size_t i = 0u; i < desc.colorAttachments.size(); i++)
+        {
+            auto&& attachment = desc.colorAttachments[i];
+            rpDesc.GetColorAttachments()[i].SetBlendingEnabled(attachment.blendingEnabled);
+            rpDesc.GetColorAttachments()[i].SetPixelFormat(Transfer(attachment.format));
+            rpDesc.GetColorAttachments()[i].SetRgbBlendOperation(
+                Transfer(attachment.rgbBlendOp));
+            rpDesc.GetColorAttachments()[i].SetSourceRgbBlendFactor(
+                Transfer(attachment.srcRGBBlendFactor));
+            rpDesc.GetColorAttachments()[i].SetDestinationRgbBlendFactor(
+                Transfer(attachment.dstRGBBlendFactor));
+            rpDesc.GetColorAttachments()[i].SetAlphaBlendOperation(
+                Transfer(attachment.alphaBlendOp));
+            rpDesc.GetColorAttachments()[i].SetSourceAlphaBlendFactor(
+                Transfer(attachment.srcAlphaBlendFactor));
+            rpDesc.GetColorAttachments()[i].SetDestinationAlphaBlendFactor(
+                Transfer(attachment.dstAlphaBlendFactor));
+            rpDesc.GetColorAttachments()[i].SetWriteMask(attachment.colorWriteMask);
+        }
+    }
+    auto rpState 
+        = device.NewRenderPipelineState(rpDesc, nullptr);
+    auto result = new RenderPipelineMetal(rpState);
+    return result;
 }

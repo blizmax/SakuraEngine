@@ -58,7 +58,7 @@ namespace Sakura::Graphics::Metal
             const GPUResource::ResourceOptions options, 
             std::uint32_t length, const void* pointer = nullptr) override;
         [[nodiscard]] virtual RenderPipeline* CreateRenderPipeline(
-            const RenderPipelineDescripor desc) override;
+            const RenderPipelineDescripor& desc) override;
     protected:
         PainterMetal(bool bEnableDebugLayer) 
             :Painter(bEnableDebugLayer)

@@ -22,13 +22,14 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:36:03
- * @LastEditTime: 2020-05-28 18:36:55
+ * @LastEditTime: 2020-06-01 15:39:44
  */ 
 #include "Fence.h"
 #include "Painter.h"
 #include "Shader.h"
 #include "GPUResource.h"
 #include "CommandBuffer.h"
+#include "PainterStructures.h"
 
 using namespace Sakura::Graphics;
 
@@ -48,6 +49,12 @@ GPUBuffer* GPUBuffer::Create(Painter& painter,
     std::uint32_t length, const void* pointer)
 {
     return painter.CreateBuffer(usage, options, length, pointer);
+}
+
+RenderPipeline* RenderPipeline::Create(
+    Painter& painter, const RenderPipelineDescripor& desc)
+{
+    return painter.CreateRenderPipeline(desc);
 }
 
 RenderCommandBuffer* RenderCommandBuffer::Create(Painter& painter)

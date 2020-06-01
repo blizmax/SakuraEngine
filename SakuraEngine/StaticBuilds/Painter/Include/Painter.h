@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:35:56
- * @LastEditTime: 2020-06-01 01:03:04
+ * @LastEditTime: 2020-06-01 15:38:53
  */ 
 #pragma once
 #include "Extension.h"
@@ -100,7 +100,8 @@ namespace Sakura::Graphics
          * @return: PSO Object Pointer.
          * @author: SaeruHikari
          */
-        [[nodiscard]] virtual RenderPipeline* CreateRenderPipeline(const RenderPipelineDescripor desc) = 0;
+        [[nodiscard]] virtual RenderPipeline* CreateRenderPipeline(
+            const RenderPipelineDescripor& desc) = 0;
 
         /**
          * @description: Returns the backend name of this painter.
