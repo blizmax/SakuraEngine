@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 02:32:38
- * @LastEditTime: 2020-06-04 02:38:12
+ * @LastEditTime: 2020-06-05 01:43:07
  */ 
 #pragma once
 #include "../../Include/CommandBuffer.h"
@@ -51,6 +51,9 @@ namespace Sakura::Graphics::Metal
         virtual void EndRenderPass() override;
         virtual void SetRenderPipeline(const RenderPipeline& pipeline) override;
         virtual void SetVertexBuffer(const GPUBuffer& vertexBuffer) override;
+        virtual void DrawIndexed(
+            uint32_t indexCount, IndexType indexType,
+            const GPUBuffer& indexBuffer, uint32_t indexBufferOffset) override;
         virtual void Draw(uint32_t vertexStart, uint32_t vertexCount) override;
 
         mtlpp::CommandBuffer commandBuffer;

@@ -67,6 +67,7 @@ void RenderCommandBufferMetal::SetRenderPipeline(const RenderPipeline& pipeline)
 
 void RenderCommandBufferMetal::SetVertexBuffer(const GPUBuffer& vertexBuffer)
 {
+
     encoder.SetVertexBuffer(
         ((BufferMetal&)vertexBuffer).buffer,
         0, 0);
@@ -75,6 +76,18 @@ void RenderCommandBufferMetal::SetVertexBuffer(const GPUBuffer& vertexBuffer)
 void RenderCommandBufferMetal::Draw(uint32_t vertexStart, uint32_t vertexCount)
 {
     encoder.Draw(next_draw_prim, vertexStart, vertexCount);
+}
+
+void RenderCommandBufferMetal::DrawIndexed(
+    uint32_t indexCount, Sakura::Graphics::IndexType indexType,
+    const GPUBuffer& indexBuffer, uint32_t indexBufferOffset)
+{
+    mtlpp::IndexType type = 
+        (indexType == Sakura::Graphics::IndexType::UINT16 ? 
+            mtlpp::IndexType::UInt16 : mtlpp::IndexType::UInt32);
+    encoder.DrawIndexed(next_draw_prim, indexCount, type, 
+        ((BufferMetal&)indexBuffer).buffer,
+        indexBufferOffset);
 }
 
 void RenderCommandBufferMetal::EndRenderPass()

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-05 00:55:55
+ * @LastEditTime: 2020-06-05 02:08:33
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -56,6 +56,10 @@ const char shadersSrc[] = R"""(
     }
 )""";
 
+const uint32_t indexData[] =
+{
+    0, 1, 2
+};
 const float vertexData[] =
 {
     0.0f,  1.f, 0.0f,
@@ -84,34 +88,41 @@ public:
         }
         // Create Painter Objects
         Painter* painter = Painter::Create<Metal::PainterMetal>(true);
+        // Enable extensions like this:
         auto asyncExt = painter->EnableExtension<AsyncComputeExtension>();
         if(!asyncExt)
         {
-            Sakura::log::debug_error<Sakura::flags::DEBUG_GAME_AND_EDITOR>
+            Sakura::log::debug_warn<Sakura::flags::DEBUG_GAME_AND_EDITOR>
                 ("Failed to enable Async Compute Extension.");
         }
         // Create SwapChain
-        SwapChainMetal* chain 
-            = (SwapChainMetal*)Metal::SwapChainMetal::Create(*painter, 3, win);
+        SwapChainMetal* chain = 
+            (SwapChainMetal*)Metal::SwapChainMetal::Create(*painter, 3, win);
         // Create Shader
-        auto shader = Shader::Create(*painter, shadersSrc, strlen(shadersSrc));
+        auto shader =
+            Shader::Create(*painter, shadersSrc, strlen(shadersSrc));
         // Create RenderPipeline
-        RenderPipelineDescripor desc;
-        desc.shaderFunctions = {
-            ShaderFunction(VertexStage, shader, "vertFunc"), 
-            ShaderFunction(PixelStage, shader, "fragFunc")
-        };
-        RenderPipelineColorAttachmentDescriptor colorAttachment;
-        colorAttachment.format = PixelFormat::B8G8R8A8_UNORM;
-        desc.colorAttachments = {
-            colorAttachment
+        RenderPipelineDescripor desc
+        {
+            .shaderFunctions = {
+                ShaderFunction(VertexStage, shader, "vertFunc"), 
+                ShaderFunction(PixelStage, shader, "fragFunc")
+            },
+            .colorAttachments = {
+                RenderPipelineColorAttachmentDescriptor(PixelFormat::B8G8R8A8_UNORM)
+            }
         };
         auto renderPipeline = RenderPipeline::Create(*painter, desc);
-        // Create Vertex Buffer
+
+        // Create Vertex & Index Buffers
         auto vertexBuffer = GPUBuffer::Create(*painter,
             GPUBuffer::BufferUsage::VertexBuffer,
             GPUResource::ResourceOptions::Upload,
             sizeof(vertexData), vertexData);
+        auto indexBuffer = GPUBuffer::Create(*painter,
+            GPUBuffer::BufferUsage::IndexBuffer,
+            GPUResource::ResourceOptions::Upload,
+            sizeof(indexData), indexData);
 
         auto startTime = eastl::chrono::high_resolution_clock::now();
         eastl::unique_ptr<RenderCommandBuffer> commandBuffer;
@@ -142,13 +153,19 @@ public:
             {
                 startTime = currentTime;
                 run = (run % 600) + 1;
-                RenderPassColorAttachmentDescriptor cAttachment;
-                cAttachment.clearColor = {0.00167f * run, .6, 1, 1};
-                cAttachment.texture = &chain->GetDrawableTexture();
-                cAttachment.loadAction = LoadAction::Clear;
-                cAttachment.storeAction = StoreAction::Store;
-                RenderPassDescriptor pdesc;
-                pdesc.colorAttachments.push_back(cAttachment);
+                RenderPassDescriptor pdesc
+                {
+                    .colorAttachments = 
+                    {
+                        RenderPassColorAttachmentDescriptor 
+                        {
+                            .clearColor = {0.00167f * run, .6, 1, 1},
+                            .texture = &chain->GetDrawableTexture(),
+                            .loadAction = LoadAction::Clear,
+                            .storeAction = StoreAction::Store
+                        }
+                    }
+                };
                 renderPass.reset(RenderPass::Create(*painter, pdesc));
                 commandBuffer.reset(
                     RenderCommandBuffer::Create(*painter));
@@ -157,7 +174,8 @@ public:
                     commandBuffer->BeginRenderPass(*renderPass.get());
                     commandBuffer->SetRenderPipeline(*renderPipeline);
                     commandBuffer->SetVertexBuffer(*vertexBuffer);
-                    commandBuffer->Draw(0, 3);
+                    commandBuffer->DrawIndexed(
+                        3, IndexType::UINT32, *indexBuffer, 0);
                     commandBuffer->EndRenderPass();
                     commandBuffer->Present(chain->GetDrawable());
                 }

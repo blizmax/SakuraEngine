@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 17:32:48
- * @LastEditTime: 2020-06-05 01:04:10
+ * @LastEditTime: 2020-06-05 02:06:28
  */ 
 #pragma once
 #include "SakuraEngine/Core/Containers/Containers.h"
@@ -522,8 +522,17 @@ namespace Sakura::Graphics
         //Unknown = 4, ??
     };
 
-    struct RenderPassAttachmentDescriptor
+    struct Color
     {
+        double Red;
+        double Green;
+        double Blue;
+        double Alpha;
+    };
+
+    struct RenderPassColorAttachmentDescriptor 
+    {
+        Color clearColor;
         LoadAction loadAction = LoadAction::Clear;
         StoreAction storeAction = StoreAction::Store;
         GPUTexture* texture = nullptr;
@@ -533,27 +542,28 @@ namespace Sakura::Graphics
         }
     };
 
-    struct Color
-    {
-        double Red;
-        double Green;
-        double Blue;
-        double Alpha;
-    };
-
-    struct RenderPassColorAttachmentDescriptor : public RenderPassAttachmentDescriptor
-    {
-        Color clearColor;
-    };
-
-    struct RenderPassDepthAttachmentDescriptor : public RenderPassAttachmentDescriptor
+    struct RenderPassDepthAttachmentDescriptor 
     {
         double clearDepth = 0.f;
+        LoadAction loadAction = LoadAction::Clear;
+        StoreAction storeAction = StoreAction::Store;
+        GPUTexture* texture = nullptr;
+        bool isValid() const
+        {
+            return texture != nullptr;
+        }
     };
 
-    struct RenderPassStencilAttachmentDescriptor : public RenderPassAttachmentDescriptor
+    struct RenderPassStencilAttachmentDescriptor 
     {
         uint32_t clearStencil = 0;
+        LoadAction loadAction = LoadAction::Clear;
+        StoreAction storeAction = StoreAction::Store;
+        GPUTexture* texture = nullptr;
+        bool isValid() const
+        {
+            return texture != nullptr;
+        }
     };
 
     struct RenderPassDescriptor
@@ -574,6 +584,8 @@ namespace Sakura::Graphics
 
     struct RenderPipelineColorAttachmentDescriptor 
     {
+        RenderPipelineColorAttachmentDescriptor(PixelFormat fmt)
+            :format(fmt), blendingEnabled(false) {}
         bool blendingEnabled = false;
         PixelFormat format;
         BlendFactor srcRGBBlendFactor;

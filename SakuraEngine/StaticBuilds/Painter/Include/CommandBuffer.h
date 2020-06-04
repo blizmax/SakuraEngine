@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 00:38:26
- * @LastEditTime: 2020-06-05 00:57:03
+ * @LastEditTime: 2020-06-05 01:42:31
  */ 
 #pragma once
 #include <stdint.h>
@@ -39,6 +39,12 @@ namespace Sakura::Graphics
 
 namespace Sakura::Graphics
 {
+    enum class IndexType
+    {
+        UINT16 = 0,
+        UINT32 = 1,
+    };
+    
     struct CommandBuffer
     {
         CommandBuffer() = default;
@@ -78,11 +84,68 @@ namespace Sakura::Graphics
     struct RenderCommandBuffer : public CommandBuffer
     {
         virtual ~RenderCommandBuffer() = default;
-        static RenderCommandBuffer* Create(Painter&);
+        /**
+         * @description: Create a render command buffer.
+         * @param {Painter&} painter reference. 
+         * @return: RenderCommandBuffer allocated
+         * @author: SaeruHikari
+         */
+        [[nodiscard]] static RenderCommandBuffer* Create(Painter&);
+
+        /**
+         * @description: Begins a render pass.
+         * You must BeginRenderPass before any valid command encoding,
+         * Use RenderPass::Create() or painter->CreateRenderPass() to create one.
+         * @param {const RenderPass&} render pass to begin.
+         * @author: SaeruHikari
+         */
         virtual void BeginRenderPass(const RenderPass& pass) = 0;
+
+        /**
+         * @description: Ends encoding of a render pass.
+         * A valid encoded render command buffer should starts with BeginRenderPass
+         * and ends with EndRenderPass.
+         * @author: SaeruHikari
+         */
         virtual void EndRenderPass() = 0;
+        
+        /**
+         * @description: Set render pipeline (state) for next draws.
+         * Mensions that render pipeline contains descriptions and resources needed
+         * to start a GPU Drawing Pipeline Cycle.
+         * Descriptions: color/depth/stencil attachment format, etc.
+         * Resources: shaders and shader entries, etc.
+         * @param {const RenderPipeline&} render pipeline to set.
+         * @author: SaeruHikari
+         */
         virtual void SetRenderPipeline(const RenderPipeline&) = 0;
+
+        /**
+         * @description: Sets the vertex buffer for next draw(s).
+         * Buffer setted need to be marked with bitflag Usage::VertexBuffer.
+         * OtherWise the backends may throw incorrect-buffer-usage errors.
+         * @param {const Buffer&} vertexBuffer to set. 
+         * @author: SaeruHikari
+         */
         virtual void SetVertexBuffer(const GPUBuffer&) = 0;
+
+        /**
+         * @description: Draw indexed.
+         * Index Buffer setted need to be marked with bitflag Usage::IndexBuffer.
+         * OtherWise the backends may throw incorrect-buffer-usage errors.
+         * @param {const Buffer&} indexBuffer to set.
+         * @author: SaeruHikari
+         */
+        virtual void DrawIndexed(
+            uint32_t indexCount, IndexType indexType,
+            const GPUBuffer& indexBuffer, uint32_t indexBufferOffset) = 0;
+
+        /**
+         * @description: simply draws vertices provided with last setted vertex buffer.
+         * @param {uint32_t vertexStart} Start index of vertices to draw.
+         * @param {uint32_t vertexCount} Count of vertices to draw 
+         * @author: SaeruHikari
+         */
         virtual void Draw(uint32_t vertexStart, uint32_t vertexCount) = 0;
     protected:
         RenderCommandBuffer() = default;
