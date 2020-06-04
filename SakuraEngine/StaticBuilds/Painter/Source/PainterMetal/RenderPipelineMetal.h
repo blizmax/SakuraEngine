@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-01 01:04:33
- * @LastEditTime: 2020-06-04 14:18:06
+ * @LastEditTime: 2020-06-05 01:09:18
  */ 
 #pragma once
 #include "../../Include/RenderPipeline.h"
@@ -38,9 +38,10 @@ namespace Sakura::Graphics::Metal
 {
     struct RenderPipelineMetal : public RenderPipeline
     {
-        RenderPipelineMetal(mtlpp::RenderPipelineState state)
-            :rpState(state){}
+        RenderPipelineMetal(mtlpp::RenderPipelineState state, mtlpp::PrimitiveType primitive)
+            :rpState(state), primitiveType(primitive){}
         mtlpp::RenderPipelineState rpState;
+        mtlpp::PrimitiveType primitiveType;
     };
 
     struct RenderPassMetal : public RenderPass 

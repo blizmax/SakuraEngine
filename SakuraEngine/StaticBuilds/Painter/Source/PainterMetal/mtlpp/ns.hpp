@@ -23,7 +23,7 @@ namespace ns
         
     protected:
         Object();
-        Object(const Handle& handle);
+        Object(const Handle& handle, bool retain = true);
         Object(const Object& rhs);
 #if MTLPP_CONFIG_RVALUE_REFERENCES
         Object(Object&& rhs);

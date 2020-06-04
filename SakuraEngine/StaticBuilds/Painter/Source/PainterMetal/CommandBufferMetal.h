@@ -45,16 +45,18 @@ namespace Sakura::Graphics::Metal
         virtual void Commit() override;
         virtual void Present(const Drawable& drawable) override;
         virtual void WaitUntilCompleted() override;
-
+    
         // Render CommandBuffer interfaces
         virtual void BeginRenderPass(const RenderPass& pass) override;
         virtual void EndRenderPass() override;
         virtual void SetRenderPipeline(const RenderPipeline& pipeline) override;
         virtual void SetVertexBuffer(const GPUBuffer& vertexBuffer) override;
+        virtual void Draw(uint32_t vertexStart, uint32_t vertexCount) override;
 
         mtlpp::CommandBuffer commandBuffer;
         mtlpp::RenderCommandEncoder encoder;
     protected:
         RenderCommandBufferMetal(mtlpp::CommandQueue& MetalQueue);
+        mtlpp::PrimitiveType next_draw_prim;
     };
 }

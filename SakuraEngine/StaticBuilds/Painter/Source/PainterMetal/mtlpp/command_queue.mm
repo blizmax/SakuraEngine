@@ -37,7 +37,9 @@ namespace mtlpp
     CommandBuffer CommandQueue::CommandBuffer()
     {
         Validate();
-        return ns::Handle { (__bridge void*)[(__bridge id<MTLCommandQueue>)m_ptr commandBuffer] };
+        return {
+            ns::Handle { (__bridge void*)[(__bridge id<MTLCommandQueue>)m_ptr commandBuffer] },
+            false};
     }
 
     void CommandQueue::InsertDebugCaptureBoundary()

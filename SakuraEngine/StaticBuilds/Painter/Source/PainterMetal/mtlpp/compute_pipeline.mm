@@ -9,12 +9,12 @@
 namespace mtlpp
 {
     ComputePipelineReflection::ComputePipelineReflection() :
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLComputePipelineReflection alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLComputePipelineReflection alloc] init] }, false)
     {
     }
 
     ComputePipelineDescriptor::ComputePipelineDescriptor() :
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLComputePipelineDescriptor alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLComputePipelineDescriptor alloc] init] }, false)
     {
     }
 

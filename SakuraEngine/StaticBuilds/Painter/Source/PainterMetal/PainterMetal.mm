@@ -86,7 +86,7 @@ SwapChainMetal::SwapChainMetal(
     }
     NSWindow* window = (__bridge NSWindow*)_window.GetPtr();
     NSRect frame = NSMakeRect(0, 0,
-        window.frame.size.width, window.frame.size.height);
+        window.frame.size.width, window.frame.size.height - 10);
 
     MTKView* view = [[MTKView alloc] initWithFrame:frame];
     view.device = (__bridge id<MTLDevice>)device.GetPtr();
@@ -94,7 +94,7 @@ SwapChainMetal::SwapChainMetal(
 
     [window.contentView addSubview:view];
     [window orderFrontRegardless];
-    m_view = ns::Handle{ (__bridge void*)view };
+    m_view = { ns::Handle{ (__bridge void*)view }, false};
     if(m_view.GetPtr() == nullptr)
     {
         PainterMetal::error("SwapChainMetal: MTLView Create Failed!");
@@ -120,7 +120,7 @@ const Drawable& SwapChainMetal::GetDrawable() const
     //id<CAMetalDrawable> drawable = [metalLayer nextDrawable];
     currentDrawable.drawable = 
         //ns::Handle{ (__bridge void*)drawable };
-        ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentDrawable };
+        { ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentDrawable }, false};
     return currentDrawable;
 }
 
@@ -132,9 +132,9 @@ RenderPass& SwapChainMetal::GetDefaultRenderPass() const
 
 mtlpp::RenderPassDescriptor SwapChainMetal::GetRenderPassDescriptor() const
 {
-    return ns::Handle{
-        (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentRenderPassDescriptor 
-        };
+    return { ns::Handle{
+        (__bridge MTLRenderPassDescriptor*)((__bridge MTKView*)m_view.GetPtr()).currentRenderPassDescriptor
+        }, false};
 }
 
 GPUTexture& SwapChainMetal::GetDrawableTexture() 
@@ -170,6 +170,11 @@ RenderPipeline* PainterMetal::CreateRenderPipeline(
             PainterMetal::warn("PainterMetal: Shader of this stage not supported!");
         }
     }
+    mtlpp::PrimitiveTopologyClass topo = 
+        (desc.topology == 0 ? mtlpp::PrimitiveTopologyClass::Point : 
+         desc.topology < 3 ? mtlpp::PrimitiveTopologyClass::Line :
+         mtlpp::PrimitiveTopologyClass::Triangle);
+    rpDesc.SetInputPrimitiveTopology(topo);
     for(std::size_t i = 0u; i < desc.colorAttachments.size(); i++)
     {
         auto&& attachment = desc.colorAttachments[i];
@@ -194,7 +199,8 @@ RenderPipeline* PainterMetal::CreateRenderPipeline(
     }
     auto rpState 
         = device.NewRenderPipelineState(rpDesc, nullptr);
-    auto result = new RenderPipelineMetal(rpState);
+    mtlpp::PrimitiveType primitiveType = Transfer(desc.topology);
+    auto result = new RenderPipelineMetal(rpState, primitiveType);
     return result;
 }
 

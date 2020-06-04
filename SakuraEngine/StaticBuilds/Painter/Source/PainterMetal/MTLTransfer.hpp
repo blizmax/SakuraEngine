@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-01 15:50:00
- * @LastEditTime: 2020-06-03 14:19:18
+ * @LastEditTime: 2020-06-05 01:12:08
  */ 
 #pragma once
 #include "mtlpp/pixel_format.hpp"
@@ -271,6 +271,26 @@ namespace Sakura::Graphics::Metal
             return mtlpp::StoreAction::Store;
         default:
             PainterMetal::error("Metal do not support the load operation!");
+            break;
+        }
+    }
+
+    inline mtlpp::PrimitiveType Transfer(Sakura::Graphics::PrimitiveTopology pri)
+    {
+        switch (pri)
+        {
+        case Sakura::Graphics::PrimitiveTopology::Point:
+            return mtlpp::PrimitiveType::Point;
+        case Sakura::Graphics::PrimitiveTopology::Line:
+            return mtlpp::PrimitiveType::Line;
+        case Sakura::Graphics::PrimitiveTopology::LineStrip:
+            return mtlpp::PrimitiveType::LineStrip;
+        case Sakura::Graphics::PrimitiveTopology::Triangle:
+            return mtlpp::PrimitiveType::Triangle;
+        case Sakura::Graphics::PrimitiveTopology::TriangleStrip:
+            return mtlpp::PrimitiveType::TriangleStrip;
+        default:
+            PainterMetal::error("Metal do not support the primitive type!");
             break;
         }
     }

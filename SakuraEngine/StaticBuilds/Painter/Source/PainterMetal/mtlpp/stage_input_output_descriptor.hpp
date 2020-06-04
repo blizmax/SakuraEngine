@@ -98,7 +98,8 @@ namespace mtlpp
     {
     public:
         BufferLayoutDescriptor();
-        BufferLayoutDescriptor(const ns::Handle& handle) : ns::Object(handle) { }
+        BufferLayoutDescriptor(const ns::Handle& handle, bool retain = true)
+             : ns::Object(handle, retain) { }
 
         uint32_t     GetStride() const;
         StepFunction GetStepFunction() const;
@@ -114,7 +115,8 @@ namespace mtlpp
     {
     public:
         AttributeDescriptor();
-        AttributeDescriptor(const ns::Handle& handle) : ns::Object(handle) { }
+        AttributeDescriptor(const ns::Handle& handle, bool retain = true) 
+            : ns::Object(handle, retain) { }
 
         AttributeFormat GetFormat() const;
         uint32_t        GetOffset() const;
@@ -130,7 +132,8 @@ namespace mtlpp
     {
     public:
         StageInputOutputDescriptor();
-        StageInputOutputDescriptor(const ns::Handle& handle) : ns::Object(handle) { }
+        StageInputOutputDescriptor(const ns::Handle& handle, bool retain = true)
+             : ns::Object(handle, retain) { }
 
 
         ns::Array<BufferLayoutDescriptor> GetLayouts() const;

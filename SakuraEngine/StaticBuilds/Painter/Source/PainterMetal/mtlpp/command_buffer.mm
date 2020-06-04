@@ -170,19 +170,25 @@ namespace mtlpp
     {
         Validate();
         MTLRenderPassDescriptor* mtlRenderPassDescriptor = (__bridge MTLRenderPassDescriptor*)renderPassDescriptor.GetPtr();
-        return ns::Handle{ (__bridge void*)[(__bridge id<MTLCommandBuffer>)m_ptr renderCommandEncoderWithDescriptor:mtlRenderPassDescriptor] };
+        return {
+            ns::Handle{ (__bridge void*)[(__bridge id<MTLCommandBuffer>)m_ptr renderCommandEncoderWithDescriptor:mtlRenderPassDescriptor] },
+            false};
     }
 
     ComputeCommandEncoder CommandBuffer::ComputeCommandEncoder()
     {
         Validate();
-        return ns::Handle{ (__bridge void*)[(__bridge id<MTLCommandBuffer>)m_ptr computeCommandEncoder] };
+        return {
+            ns::Handle{ (__bridge void*)[(__bridge id<MTLCommandBuffer>)m_ptr computeCommandEncoder] },
+            false};
     }
 
     ParallelRenderCommandEncoder CommandBuffer::ParallelRenderCommandEncoder(const RenderPassDescriptor& renderPassDescriptor)
     {
         Validate();
         MTLRenderPassDescriptor* mtlRenderPassDescriptor = (__bridge MTLRenderPassDescriptor*)renderPassDescriptor.GetPtr();
-        return ns::Handle{ (__bridge void*)[(__bridge id<MTLCommandBuffer>)m_ptr parallelRenderCommandEncoderWithDescriptor:mtlRenderPassDescriptor] };
+        return {
+            ns::Handle{ (__bridge void*)[(__bridge id<MTLCommandBuffer>)m_ptr parallelRenderCommandEncoderWithDescriptor:mtlRenderPassDescriptor] },
+            false};
     }
 }

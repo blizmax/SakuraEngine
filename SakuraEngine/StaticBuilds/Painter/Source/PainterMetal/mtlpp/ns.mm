@@ -17,10 +17,10 @@ namespace ns
     {
     }
 
-    Object::Object(const Handle& handle) :
+    Object::Object(const Handle& handle, bool retain/* =true */) :
         m_ptr(handle.ptr)
     {
-        if (m_ptr)
+        if (m_ptr && retain)
             CFRetain(m_ptr);
     }
 
@@ -100,7 +100,7 @@ namespace ns
     }
 
     Error::Error() :
-        Object(Handle{ (__bridge void*)[[NSError alloc] init] })
+        Object(Handle{ (__bridge void*)[[NSError alloc] init] }, false)
     {
 
     }

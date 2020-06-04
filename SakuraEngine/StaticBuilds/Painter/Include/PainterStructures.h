@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 17:32:48
- * @LastEditTime: 2020-06-04 03:21:46
+ * @LastEditTime: 2020-06-05 01:04:10
  */ 
 #pragma once
 #include "SakuraEngine/Core/Containers/Containers.h"
@@ -563,12 +563,13 @@ namespace Sakura::Graphics
         RenderPassStencilAttachmentDescriptor stencilAttachment;
     };
 
-    enum class PrimitiveTopology
+    enum PrimitiveTopology
     {
-        Unspecified = 0,
-        Point       = 1,
-        Line        = 2,
-        Triangle    = 3,
+        Point         = 0,
+        Line          = 1,
+        LineStrip     = 2,
+        Triangle      = 3,
+        TriangleStrip = 4,
     };
 
     struct RenderPipelineColorAttachmentDescriptor 

@@ -17,7 +17,7 @@
 namespace mtlpp
 {
     CompileOptions::CompileOptions() :
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLCompileOptions alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLCompileOptions alloc] init] }, false)
     {
     }
 
@@ -94,13 +94,17 @@ namespace mtlpp
     CommandQueue Device::NewCommandQueue()
     {
         Validate();
-        return ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newCommandQueue] };
+        return {
+            ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newCommandQueue] },
+            false};
     }
 
     CommandQueue Device::NewCommandQueue(uint32_t maxCommandBufferCount)
     {
         Validate();
-        return ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newCommandQueueWithMaxCommandBufferCount:maxCommandBufferCount] };
+        return {
+            ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newCommandQueueWithMaxCommandBufferCount:maxCommandBufferCount] },
+            false};
     }
 
     SizeAndAlign Device::HeapTextureSizeAndAlign(const TextureDescriptor& desc)
@@ -135,37 +139,43 @@ namespace mtlpp
     Buffer Device::NewBuffer(uint32_t length, ResourceOptionsVal options)
     {
         Validate();
-        return ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newBufferWithLength:length options:MTLResourceOptions(options)] };
+        return { ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newBufferWithLength:length options:MTLResourceOptions(options)] },
+        false};
     }
 
     Buffer Device::NewBuffer(const void* pointer, uint32_t length, ResourceOptionsVal options)
     {
         Validate();
-        return ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newBufferWithBytes:pointer length:length options:MTLResourceOptions(options)] };
+        return {ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newBufferWithBytes:pointer length:length options:MTLResourceOptions(options)] },
+        false};
     }
 
 
     Buffer Device::NewBuffer(void* pointer, uint32_t length, ResourceOptionsVal options, std::function<void (void* pointer, uint32_t length)> deallocator)
     {
         Validate();
-        return ns::Handle{
+        return {ns::Handle{
             (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newBufferWithBytesNoCopy:pointer
-                                                                             length:length
-                                                                            options:MTLResourceOptions(options)
-                                                                        deallocator:^(void* pointer, NSUInteger length) { deallocator(pointer, uint32_t(length)); }]
-        };
+                length:length
+                options:MTLResourceOptions(options)
+                deallocator:^(void* pointer, NSUInteger length) { deallocator(pointer, uint32_t(length)); }]
+        }, false};
     }
 
     DepthStencilState Device::NewDepthStencilState(const DepthStencilDescriptor& descriptor)
     {
         Validate();
-        return ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newDepthStencilStateWithDescriptor:(__bridge MTLDepthStencilDescriptor*)descriptor.GetPtr()] };
+        return {
+            ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newDepthStencilStateWithDescriptor:(__bridge MTLDepthStencilDescriptor*)descriptor.GetPtr()] },
+            false};
     }
 
     Texture Device::NewTexture(const TextureDescriptor& descriptor)
     {
         Validate();
-        return ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newTextureWithDescriptor:(__bridge MTLTextureDescriptor*)descriptor.GetPtr()] };
+        return {
+            ns::Handle{ (__bridge void*)[(__bridge id<MTLDevice>)m_ptr newTextureWithDescriptor:(__bridge MTLTextureDescriptor*)descriptor.GetPtr()] },
+            false};
     }
 
     //- (id <MTLTexture>)newTextureWithDescriptor:(MTLTextureDescriptor *)descriptor iosurface:(IOSurfaceRef)iosurface plane:(NSUInteger)plane NS_AVAILABLE_MAC(10_11);

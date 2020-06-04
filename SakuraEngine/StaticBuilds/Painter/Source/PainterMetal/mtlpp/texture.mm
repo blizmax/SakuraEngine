@@ -9,7 +9,7 @@
 namespace mtlpp
 {
     TextureDescriptor::TextureDescriptor() :
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLTextureDescriptor alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLTextureDescriptor alloc] init] }, false)
     {
     }
 

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-04 15:12:46
+ * @LastEditTime: 2020-06-05 00:55:55
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -138,33 +138,31 @@ public:
             }
             auto currentTime = eastl::chrono::high_resolution_clock::now();
             float time = eastl::chrono::duration<float, eastl::chrono::seconds::period>(currentTime - startTime).count();
-            if(time > 0.016)
+            if(time > 0.0016)
             {
                 startTime = currentTime;
-                run = (run % 300) + 1;
-                /*RenderPassColorAttachmentDescriptor cAttachment;
-                cAttachment.clearColor = {.2 + 0.0033334f * run, .6, 1, 1};
+                run = (run % 600) + 1;
+                RenderPassColorAttachmentDescriptor cAttachment;
+                cAttachment.clearColor = {0.00167f * run, .6, 1, 1};
                 cAttachment.texture = &chain->GetDrawableTexture();
                 cAttachment.loadAction = LoadAction::Clear;
                 cAttachment.storeAction = StoreAction::Store;
                 RenderPassDescriptor pdesc;
                 pdesc.colorAttachments.push_back(cAttachment);
                 renderPass.reset(RenderPass::Create(*painter, pdesc));
-                renderPass.reset(&chain->GetDefaultRenderPass());*/
-                mtlpp::RenderPassDescriptor ps = 
-                    ((Metal::SwapChainMetal*)chain)->GetRenderPassDescriptor();
-                /*commandBuffer.reset(
-                        RenderCommandBuffer::Create(*painter));
+                commandBuffer.reset(
+                    RenderCommandBuffer::Create(*painter));
                 if(renderPass != nullptr)
                 {
                     commandBuffer->BeginRenderPass(*renderPass.get());
                     commandBuffer->SetRenderPipeline(*renderPipeline);
                     commandBuffer->SetVertexBuffer(*vertexBuffer);
+                    commandBuffer->Draw(0, 3);
                     commandBuffer->EndRenderPass();
                     commandBuffer->Present(chain->GetDrawable());
                 }
                 commandBuffer->Commit();
-                commandBuffer->WaitUntilCompleted();*/
+                commandBuffer->WaitUntilCompleted();
                 run++;
             }
         }

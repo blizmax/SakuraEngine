@@ -81,7 +81,8 @@ namespace mtlpp
     {
     public:
         Device() { }
-        Device(const ns::Handle& handle) : ns::Object(handle) { }
+        Device(const ns::Handle& handle, bool retain = true)
+            : ns::Object(handle, retain) { }
 
         static Device CreateSystemDefaultDevice() MTLPP_AVAILABLE(10_11, 8_0);
         static ns::Array<Device> CopyAllDevices() MTLPP_AVAILABLE(10_11, NA);

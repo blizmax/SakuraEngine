@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 01:40:41
- * @LastEditTime: 2020-05-28 19:07:47
+ * @LastEditTime: 2020-06-04 18:51:20
  */ 
 /*
  * Copyright 2016-2017 Nikolay Aleksiev. All rights reserved.
@@ -89,7 +89,8 @@ namespace mtlpp
     {
     public:
         Resource() { }
-        Resource(const ns::Handle& handle) : ns::Object(handle) { }
+        Resource(const ns::Handle& handle, bool retain = true) 
+            : ns::Object(handle, retain) { }
 
         ns::String   GetLabel() const;
         CpuCacheMode GetCpuCacheMode() const;

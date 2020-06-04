@@ -22,9 +22,10 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 00:38:26
- * @LastEditTime: 2020-06-04 02:36:59
+ * @LastEditTime: 2020-06-05 00:57:03
  */ 
 #pragma once
+#include <stdint.h>
 
 namespace Sakura::Graphics
 {
@@ -82,6 +83,7 @@ namespace Sakura::Graphics
         virtual void EndRenderPass() = 0;
         virtual void SetRenderPipeline(const RenderPipeline&) = 0;
         virtual void SetVertexBuffer(const GPUBuffer&) = 0;
+        virtual void Draw(uint32_t vertexStart, uint32_t vertexCount) = 0;
     protected:
         RenderCommandBuffer() = default;
     };

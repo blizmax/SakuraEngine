@@ -62,6 +62,7 @@ void RenderCommandBufferMetal::SetRenderPipeline(const RenderPipeline& pipeline)
 {
     encoder.SetRenderPipelineState(
         ((RenderPipelineMetal&)pipeline).rpState);
+    next_draw_prim = ((RenderPipelineMetal&)pipeline).primitiveType;
 }
 
 void RenderCommandBufferMetal::SetVertexBuffer(const GPUBuffer& vertexBuffer)
@@ -69,7 +70,11 @@ void RenderCommandBufferMetal::SetVertexBuffer(const GPUBuffer& vertexBuffer)
     encoder.SetVertexBuffer(
         ((BufferMetal&)vertexBuffer).buffer,
         0, 0);
-    encoder.Draw(mtlpp::PrimitiveType::Triangle, 0, 3);
+}
+
+void RenderCommandBufferMetal::Draw(uint32_t vertexStart, uint32_t vertexCount)
+{
+    encoder.Draw(next_draw_prim, vertexStart, vertexCount);
 }
 
 void RenderCommandBufferMetal::EndRenderPass()

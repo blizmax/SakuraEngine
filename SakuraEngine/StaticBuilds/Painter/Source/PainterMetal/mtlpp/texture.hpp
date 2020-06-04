@@ -40,7 +40,8 @@ namespace mtlpp
     {
     public:
         TextureDescriptor();
-        TextureDescriptor(const ns::Handle& handle) : ns::Object(handle) { }
+        TextureDescriptor(const ns::Handle& handle, bool retain = true) 
+            : ns::Object(handle, retain) { }
 
         static TextureDescriptor Texture2DDescriptor(PixelFormat pixelFormat, uint32_t width, uint32_t height, bool mipmapped);
         static TextureDescriptor TextureCubeDescriptor(PixelFormat pixelFormat, uint32_t size, bool mipmapped);
@@ -77,7 +78,8 @@ namespace mtlpp
     {
     public:
         Texture() { }
-        Texture(const ns::Handle& handle) : Resource(handle) { }
+        Texture(const ns::Handle& handle, bool retain = true)
+            : Resource(handle, retain) { }
 
         Resource     GetRootResource() const MTLPP_DEPRECATED(10_11, 10_12, 8_0, 10_0);
         Texture      GetParentTexture() const MTLPP_AVAILABLE(10_11, 9_0);

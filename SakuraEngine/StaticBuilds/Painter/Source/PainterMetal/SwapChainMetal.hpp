@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 23:07:52
- * @LastEditTime: 2020-06-04 14:22:29
+ * @LastEditTime: 2020-06-04 19:13:10
  */ 
 #pragma once
 #include "../../Include/SwapChain.h"
@@ -62,13 +62,15 @@ namespace Sakura::Graphics::Metal
         {
         public:
             NSWindowH() { }
-            NSWindowH(const ns::Handle& handle) : ns::Object(handle) { }
+            NSWindowH(const ns::Handle& handle, bool retain = true) 
+                : ns::Object(handle, retain) { }
         };
         class MtlView : public ns::Object
         {
         public:
             MtlView() { }
-            MtlView(const ns::Handle& handle) : ns::Object(handle) { }
+            MtlView(const ns::Handle& handle, bool retain = true) 
+                : ns::Object(handle, retain) { }
         };
         mtlpp::RenderPassDescriptor GetRenderPassDescriptor() const;
     protected:

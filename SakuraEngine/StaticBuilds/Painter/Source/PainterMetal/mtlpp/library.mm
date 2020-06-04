@@ -11,7 +11,7 @@
 namespace mtlpp
 {
     VertexAttribute::VertexAttribute() :
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLVertexAttribute alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLVertexAttribute alloc] init] }, false)
     {
     }
 
@@ -61,7 +61,7 @@ namespace mtlpp
 
     Attribute::Attribute() :
 #if MTLPP_IS_AVAILABLE(10_12, 10_0)
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLAttribute alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLAttribute alloc] init] }, false)
 #else
         ns::Object(ns::Handle{ nullptr })
 #endif
@@ -130,7 +130,7 @@ namespace mtlpp
 
     FunctionConstant::FunctionConstant() :
 #if MTLPP_IS_AVAILABLE(10_12, 10_0)
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLFunctionConstant alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLFunctionConstant alloc] init] }, false)
 #else
         ns::Object(ns::Handle{ nullptr })
 #endif

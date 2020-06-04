@@ -17,7 +17,7 @@ namespace Sakura::Graphics::Metal
             PainterMetal::error("SDL2 Tkit: Failed to get NSWindow handle from SDL Window!");
         }
         SwapChainMetal::NSWindowH result
-            = ns::Handle{ (__bridge void*)nswindow };
+            = { ns::Handle{ (__bridge void*)nswindow }, false};
         return result;
     }
 }

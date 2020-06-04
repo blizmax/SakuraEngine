@@ -84,7 +84,8 @@ namespace mtlpp
     {
     public:
         VertexBufferLayoutDescriptor();
-        VertexBufferLayoutDescriptor(const ns::Handle& handle) : ns::Object(handle) { }
+        VertexBufferLayoutDescriptor(const ns::Handle& handle, bool retain = true)
+             : ns::Object(handle, retain) { }
 
         uint32_t           GetStride() const;
         VertexStepFunction GetStepFunction() const;
@@ -100,7 +101,8 @@ namespace mtlpp
     {
     public:
         VertexAttributeDescriptor();
-        VertexAttributeDescriptor(const ns::Handle& handle) : ns::Object(handle) { }
+        VertexAttributeDescriptor(const ns::Handle& handle, bool retain = true) 
+            : ns::Object(handle, retain) { }
 
         VertexFormat GetFormat() const;
         uint32_t     GetOffset() const;
@@ -116,7 +118,8 @@ namespace mtlpp
     {
     public:
         VertexDescriptor();
-        VertexDescriptor(const ns::Handle& handle) : ns::Object(handle) { }
+        VertexDescriptor(const ns::Handle& handle, bool retain = true) 
+            : ns::Object(handle, retain) { }
 
         ns::Array<VertexBufferLayoutDescriptor> GetLayouts() const;
         ns::Array<VertexAttributeDescriptor>    GetAttributes() const;

@@ -9,7 +9,7 @@
 namespace mtlpp
 {
     StructMember::StructMember() :
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLStructMember alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLStructMember alloc] init] }, false)
     {
     }
 
@@ -44,7 +44,7 @@ namespace mtlpp
     }
 
     StructType::StructType() :
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLStructType alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLStructType alloc] init] }, false)
     {
     }
 
@@ -61,7 +61,7 @@ namespace mtlpp
     }
 
     ArrayType::ArrayType() :
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLArrayType alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLArrayType alloc] init] }, false)
     {
     }
 
@@ -96,7 +96,7 @@ namespace mtlpp
     }
 
     Argument::Argument() :
-        ns::Object(ns::Handle{ (__bridge void*)[[MTLArgument alloc] init] })
+        ns::Object(ns::Handle{ (__bridge void*)[[MTLArgument alloc] init] }, false)
     {
     }
 
