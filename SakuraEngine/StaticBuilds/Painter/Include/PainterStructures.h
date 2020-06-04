@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 17:32:48
- * @LastEditTime: 2020-06-02 01:25:10
+ * @LastEditTime: 2020-06-04 03:21:46
  */ 
 #pragma once
 #include "SakuraEngine/Core/Containers/Containers.h"
@@ -548,12 +548,12 @@ namespace Sakura::Graphics
 
     struct RenderPassDepthAttachmentDescriptor : public RenderPassAttachmentDescriptor
     {
-        double clearDepth;
+        double clearDepth = 0.f;
     };
 
     struct RenderPassStencilAttachmentDescriptor : public RenderPassAttachmentDescriptor
     {
-        uint32_t clearStencil;
+        uint32_t clearStencil = 0;
     };
 
     struct RenderPassDescriptor
@@ -581,7 +581,7 @@ namespace Sakura::Graphics
         BlendFactor srcAlphaBlendFactor;
         BlendFactor dstAlphaBlendFactor;
         BlendOperation alphaBlendOp;
-        ColorWriteMask colorWriteMask;
+        ColorWriteMask colorWriteMask = All;
     };
 
     struct VertexLayout

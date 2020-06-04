@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 17:46:20
- * @LastEditTime: 2020-05-28 18:52:10
+ * @LastEditTime: 2020-06-04 02:33:20
  */ 
 #pragma once
 #include "../../Include/GPUResource.h"
@@ -40,8 +40,8 @@ namespace Sakura::Graphics::Metal
         friend class PainterMetal;
         virtual ~BufferMetal() = default;
         virtual std::uint32_t GetSize() const override;
+        mtlpp::Buffer buffer;
     protected:
         BufferMetal(mtlpp::Buffer, const BufferUsage);
-        mtlpp::Buffer buffer;
     };
 }

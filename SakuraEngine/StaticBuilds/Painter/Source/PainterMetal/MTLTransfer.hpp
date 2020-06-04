@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-01 15:50:00
- * @LastEditTime: 2020-06-02 00:39:21
+ * @LastEditTime: 2020-06-03 14:19:18
  */ 
 #pragma once
 #include "mtlpp/pixel_format.hpp"
@@ -274,4 +274,11 @@ namespace Sakura::Graphics::Metal
             break;
         }
     }
+}
+
+
+
+namespace Sakura::Graphics::Metal
+{
+    
 }

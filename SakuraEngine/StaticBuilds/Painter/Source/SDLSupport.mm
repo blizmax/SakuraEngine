@@ -8,10 +8,6 @@ namespace Sakura::Graphics::Metal
     SwapChainMetal::NSWindowH GetNSWindow(SDL_Window* window)
     {
         PainterMetal::debug_info("Created a swap chain from SDL_Window!");
-        if(window == nullptr)
-        {
-            PainterMetal::error("SwapChainMetal: null SDL_Window received!");
-        }
         SDL_SysWMinfo info;
         if(!SDL_GetWindowWMInfo(window, &info))
             PainterMetal::error("SDL2 ToolKit: Failed to Get SDL WindowWMInfo!");

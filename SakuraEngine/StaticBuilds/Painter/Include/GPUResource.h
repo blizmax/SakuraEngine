@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 17:26:41
- * @LastEditTime: 2020-05-28 18:52:36
+ * @LastEditTime: 2020-06-02 02:02:52
  */ 
 #pragma once
 #include "PainterStructures.h"

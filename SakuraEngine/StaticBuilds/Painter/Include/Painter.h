@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:35:56
- * @LastEditTime: 2020-06-01 15:38:53
+ * @LastEditTime: 2020-06-02 01:57:48
  */ 
 #pragma once
 #include "Extension.h"
@@ -34,7 +34,7 @@ namespace Sakura::Graphics
 {
     struct Fence;
     struct RenderPass;
-    struct RenderPassDesc;
+    struct RenderPassDescriptor;
     struct RenderCommandBuffer;
     struct SwapChain;
 }
@@ -56,12 +56,12 @@ namespace Sakura::Graphics
         /**
          * @description: To Begin a RenderTask, Render Pass is necessary.
          * Returns a pointer of created renderpass, which needs to be managed by users.
-         * @param {const RenderPassDesc&} Description of a render pass.
+         * @param {const RenderPassDescriptor&} Description of a render pass.
          * @return: Render Pass pointer
          * @author: SaeruHikari
          */    
         [[nodiscard]] virtual RenderPass* CreateRenderPass(
-            const RenderPassDesc& desc) = 0;
+            const RenderPassDescriptor& desc) = 0;
 
         /**
          * @description: Create a shader with source code.

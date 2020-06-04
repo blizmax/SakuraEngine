@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 22:43:31
- * @LastEditTime: 2020-05-29 20:13:11
+ * @LastEditTime: 2020-06-04 00:43:24
  */ 
 #pragma once
 #include <iostream>
@@ -30,6 +30,8 @@
 namespace Sakura::Graphics
 {
     struct Painter;
+    struct GPUTexture;
+    struct RenderPass;
 }
 struct SDL_Window;
 
@@ -50,6 +52,16 @@ namespace Sakura::Graphics
          * @author: SaeruHikari
          */
         virtual const Drawable& GetDrawable() const = 0;
+
+
+        virtual RenderPass& GetDefaultRenderPass() const = 0;
+
+        /**
+         * @description: Get Texture of the back-buffer.
+         * @return: Drawable Texture Reference.
+         * @author: SaeruHikari
+         */
+        virtual GPUTexture& GetDrawableTexture() = 0;
 
         /**
          * @description: Get Frame Count of the SwapChain.

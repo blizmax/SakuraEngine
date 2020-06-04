@@ -22,12 +22,19 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 23:07:52
- * @LastEditTime: 2020-05-29 21:06:13
+ * @LastEditTime: 2020-06-04 14:22:29
  */ 
 #pragma once
 #include "../../Include/SwapChain.h"
 #include "mtlpp/drawable.hpp"
+#include "mtlpp/render_pass.hpp"
 #include "PainterMetal.h"
+#include "TextureMetal.h"
+
+namespace Sakura::Graphics::Metal
+{
+    struct SwapChainMetal;
+}
 
 namespace Sakura::Graphics::Metal
 {
@@ -42,6 +49,8 @@ namespace Sakura::Graphics::Metal
     public:
         virtual std::uint32_t GetFrameCount() const override;
         virtual const Drawable& GetDrawable() const override;
+        virtual GPUTexture& GetDrawableTexture() override;
+        virtual RenderPass& GetDefaultRenderPass() const override;
     public:
         template<typename... Args>
         static SwapChain* Create(Painter& painter,
@@ -61,12 +70,16 @@ namespace Sakura::Graphics::Metal
             MtlView() { }
             MtlView(const ns::Handle& handle) : ns::Object(handle) { }
         };
+        mtlpp::RenderPassDescriptor GetRenderPassDescriptor() const;
     protected:
         SwapChainMetal(
             Painter& painter, const std::uint32_t frameCount, 
             SwapChainMetal::NSWindowH val);
 
+
         MtlView m_view;
         mutable DrawableMetal currentDrawable;
+        TextureMetal currentDrawableTexture 
+            = TextureMetal(GPUTexture::TextureType::Texture2D);
     };
 }

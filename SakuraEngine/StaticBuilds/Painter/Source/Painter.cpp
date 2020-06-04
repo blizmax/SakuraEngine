@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:36:03
- * @LastEditTime: 2020-06-01 15:39:44
+ * @LastEditTime: 2020-06-03 14:32:51
  */ 
 #include "Fence.h"
 #include "Painter.h"
@@ -30,6 +30,7 @@
 #include "GPUResource.h"
 #include "CommandBuffer.h"
 #include "PainterStructures.h"
+#include "RenderPass.h"
 
 using namespace Sakura::Graphics;
 
@@ -55,6 +56,12 @@ RenderPipeline* RenderPipeline::Create(
     Painter& painter, const RenderPipelineDescripor& desc)
 {
     return painter.CreateRenderPipeline(desc);
+}
+
+RenderPass* RenderPass::Create(
+    Painter& painter, const RenderPassDescriptor& desc)
+{
+    return painter.CreateRenderPass(desc);
 }
 
 RenderCommandBuffer* RenderCommandBuffer::Create(Painter& painter)

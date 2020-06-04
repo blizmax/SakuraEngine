@@ -22,16 +22,22 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 17:38:50
- * @LastEditTime: 2020-05-28 18:46:29
+ * @LastEditTime: 2020-06-03 22:18:30
  */ 
 #pragma once
 #include "../../Include/GPUResource.h"
+#include "mtlpp/texture.hpp"
 
 namespace Sakura::Graphics::Metal
 {
     struct TextureMetal : public GPUTexture
     {
+        TextureMetal(TextureType type)
+            :GPUTexture(type){}
+        TextureMetal(TextureType type, mtlpp::Texture texMetal)
+            :texture(texMetal), GPUTexture(type){}
         virtual ~TextureMetal() = default;
-
+        virtual Extent2D GetExtent() const override;
+        mtlpp::Texture texture;
     };
 }

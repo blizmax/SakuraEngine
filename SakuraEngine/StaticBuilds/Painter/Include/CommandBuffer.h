@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 00:38:26
- * @LastEditTime: 2020-05-29 20:08:24
+ * @LastEditTime: 2020-06-04 02:36:59
  */ 
 #pragma once
 
@@ -31,6 +31,9 @@ namespace Sakura::Graphics
     struct Fence;
     struct Painter;
     struct Drawable;
+    struct RenderPass;
+    struct RenderPipeline;
+    struct GPUBuffer;
 }
 
 namespace Sakura::Graphics
@@ -39,8 +42,6 @@ namespace Sakura::Graphics
     {
         CommandBuffer() = default;
         virtual ~CommandBuffer() = default;
-
-
 
     public:
         /**
@@ -56,6 +57,8 @@ namespace Sakura::Graphics
          * @author: SaeruHikari
          */
         virtual void Wait(Fence& fence) = 0;
+
+        virtual void WaitUntilCompleted() = 0;
 
         /**
          * @description: Commit command buffer to the queue.
@@ -75,6 +78,10 @@ namespace Sakura::Graphics
     {
         virtual ~RenderCommandBuffer() = default;
         static RenderCommandBuffer* Create(Painter&);
+        virtual void BeginRenderPass(const RenderPass& pass) = 0;
+        virtual void EndRenderPass() = 0;
+        virtual void SetRenderPipeline(const RenderPipeline&) = 0;
+        virtual void SetVertexBuffer(const GPUBuffer&) = 0;
     protected:
         RenderCommandBuffer() = default;
     };

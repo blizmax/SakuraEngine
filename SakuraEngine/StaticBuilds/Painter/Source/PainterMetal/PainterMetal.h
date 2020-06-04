@@ -22,11 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:31:41
- * @LastEditTime: 2020-06-01 01:06:11
+ * @LastEditTime: 2020-06-04 00:18:48
  */ 
 #pragma once
 #include "../../Include/Painter.h"
+#include "../../Include/CommandQueue.h"
 #include "mtlpp/device.hpp"
+#include "mtlpp/command_queue.hpp"
 
 namespace Sakura::Graphics
 {
@@ -35,6 +37,11 @@ namespace Sakura::Graphics
 
 namespace Sakura::Graphics::Metal
 {
+    struct CommandQueueMetal final : public CommandQueue
+    {
+        mtlpp::CommandQueue queue;
+    };
+
     struct PainterMetal final : public Painter
     {
         friend class Painter;
@@ -48,7 +55,7 @@ namespace Sakura::Graphics::Metal
         // Implementations
         [[nodiscard]] virtual Fence* CreateFence() override;
         [[nodiscard]] virtual RenderPass* CreateRenderPass(
-            const RenderPassDesc& desc) override;
+            const RenderPassDescriptor& desc) override;
         [[nodiscard]] virtual Shader* CreateShader(
             const char* data, const std::size_t dataSize,
             const Shader::MacroTable& macroTable = _Shader::nullTable) override;
@@ -59,16 +66,23 @@ namespace Sakura::Graphics::Metal
             std::uint32_t length, const void* pointer = nullptr) override;
         [[nodiscard]] virtual RenderPipeline* CreateRenderPipeline(
             const RenderPipelineDescripor& desc) override;
+        
     protected:
         PainterMetal(bool bEnableDebugLayer) 
             :Painter(bEnableDebugLayer)
         {
             device = mtlpp::Device::CreateSystemDefaultDevice();
+            queue.queue = device.NewCommandQueue();
             if(device.GetPtr() == nullptr)
                 PainterMetal::error("Failed to create Metal Device!");
         }
     public:
         mtlpp::Device device;
+        /**
+         * @description: Graphics Queue.
+         * @author: SaeruHikari
+         */
+        CommandQueueMetal queue;
     };
 
 }

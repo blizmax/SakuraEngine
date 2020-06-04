@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-02 01:28:47
+ * @LastEditTime: 2020-06-04 15:12:46
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -52,16 +52,18 @@ const char shadersSrc[] = R"""(
 
     fragment half4 fragFunc()
     {
-        return half4(1.0, 0.0, 0.0, 1.0);
+        return half4(0.0, 1.0, 1.0, 1.0);
     }
 )""";
 
 const float vertexData[] =
 {
-    0.0f,  1.0f, 0.0f,
+    0.0f,  1.f, 0.0f,
     -1.0f, -1.0f, 0.0f,
     1.0f, -1.0f, 0.0f,
 };
+
+#include <EASTL/chrono.h>
 
 class PainterMetalApp
 {
@@ -72,15 +74,14 @@ public:
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         auto win = SDL_CreateWindow(
             "Metal",
-            200, 200,
-            1280, 720, 
-            SDL_WINDOW_RESIZABLE);
+            0, 0,
+            1920, 1080, 
+            SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_SHOWN);
         if(!win)
         {
             Sakura::log::debug_error<Sakura::flags::DEBUG_GAME_AND_EDITOR>
                 ("Failed to create SDL window!");
         }
-
         // Create Painter Objects
         Painter* painter = Painter::Create<Metal::PainterMetal>(true);
         auto asyncExt = painter->EnableExtension<AsyncComputeExtension>();
@@ -94,19 +95,27 @@ public:
             = (SwapChainMetal*)Metal::SwapChainMetal::Create(*painter, 3, win);
         // Create Shader
         auto shader = Shader::Create(*painter, shadersSrc, strlen(shadersSrc));
-        auto renderCmdBuffer = RenderCommandBuffer::Create(*painter);
-        auto vertexBuffer = GPUBuffer::Create(*painter,
-            GPUBuffer::BufferUsage::VertexBuffer,
-            GPUResource::ResourceOptions::Upload,
-            sizeof(vertexData), vertexData);
-
+        // Create RenderPipeline
         RenderPipelineDescripor desc;
         desc.shaderFunctions = {
             ShaderFunction(VertexStage, shader, "vertFunc"), 
             ShaderFunction(PixelStage, shader, "fragFunc")
         };
+        RenderPipelineColorAttachmentDescriptor colorAttachment;
+        colorAttachment.format = PixelFormat::B8G8R8A8_UNORM;
+        desc.colorAttachments = {
+            colorAttachment
+        };
         auto renderPipeline = RenderPipeline::Create(*painter, desc);
-        
+        // Create Vertex Buffer
+        auto vertexBuffer = GPUBuffer::Create(*painter,
+            GPUBuffer::BufferUsage::VertexBuffer,
+            GPUResource::ResourceOptions::Upload,
+            sizeof(vertexData), vertexData);
+
+        auto startTime = eastl::chrono::high_resolution_clock::now();
+        eastl::unique_ptr<RenderCommandBuffer> commandBuffer;
+        eastl::unique_ptr<RenderPass> renderPass;
         // Step into main loop
         int run = 1;
         while (run)
@@ -117,7 +126,7 @@ public:
                 switch (evt.type)
                 {
                 case SDL_QUIT:
-                    run = 0; break;
+                    run = 0; return;
                 case SDL_WINDOWEVENT:
 					if (evt.window.event == SDL_WINDOWEVENT_RESIZED)
                     {
@@ -127,9 +136,38 @@ public:
                     break;
                 }
             }
-            PainterMetal::info("Tick");
+            auto currentTime = eastl::chrono::high_resolution_clock::now();
+            float time = eastl::chrono::duration<float, eastl::chrono::seconds::period>(currentTime - startTime).count();
+            if(time > 0.016)
+            {
+                startTime = currentTime;
+                run = (run % 300) + 1;
+                /*RenderPassColorAttachmentDescriptor cAttachment;
+                cAttachment.clearColor = {.2 + 0.0033334f * run, .6, 1, 1};
+                cAttachment.texture = &chain->GetDrawableTexture();
+                cAttachment.loadAction = LoadAction::Clear;
+                cAttachment.storeAction = StoreAction::Store;
+                RenderPassDescriptor pdesc;
+                pdesc.colorAttachments.push_back(cAttachment);
+                renderPass.reset(RenderPass::Create(*painter, pdesc));
+                renderPass.reset(&chain->GetDefaultRenderPass());*/
+                mtlpp::RenderPassDescriptor ps = 
+                    ((Metal::SwapChainMetal*)chain)->GetRenderPassDescriptor();
+                /*commandBuffer.reset(
+                        RenderCommandBuffer::Create(*painter));
+                if(renderPass != nullptr)
+                {
+                    commandBuffer->BeginRenderPass(*renderPass.get());
+                    commandBuffer->SetRenderPipeline(*renderPipeline);
+                    commandBuffer->SetVertexBuffer(*vertexBuffer);
+                    commandBuffer->EndRenderPass();
+                    commandBuffer->Present(chain->GetDrawable());
+                }
+                commandBuffer->Commit();
+                commandBuffer->WaitUntilCompleted();*/
+                run++;
+            }
         }
-        //SDL_Metal_CreateView
         return;
     }
 };

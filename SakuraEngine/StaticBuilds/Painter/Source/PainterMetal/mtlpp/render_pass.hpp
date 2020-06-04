@@ -7,7 +7,7 @@
 
 #include "defines.hpp"
 #include "ns.hpp"
-
+#include <iostream>
 namespace mtlpp
 {
     class Texture;
@@ -126,7 +126,6 @@ namespace mtlpp
     public:
         RenderPassDescriptor();
         RenderPassDescriptor(const ns::Handle& handle) : ns::Object(handle) { }
-
         ns::Array<RenderPassColorAttachmentDescriptor> GetColorAttachments() const;
         RenderPassDepthAttachmentDescriptor   GetDepthAttachment() const;
         RenderPassStencilAttachmentDescriptor GetStencilAttachment() const;

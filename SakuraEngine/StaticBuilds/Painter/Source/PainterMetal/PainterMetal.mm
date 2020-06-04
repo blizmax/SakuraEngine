@@ -8,16 +8,12 @@
 #import <MetalKit/MetalKit.h>
 #import "MTLTransfer.hpp"
 #import "RenderPipelineMetal.h"
+#import "TextureMetal.h"
 
 using namespace Sakura::Graphics;
 using namespace Sakura::Graphics::Metal;
 
 Fence* PainterMetal::CreateFence()
-{
-    return nullptr;
-}
-
-RenderPass* PainterMetal::CreateRenderPass(const RenderPassDesc& desc)
 {
     return nullptr;
 }
@@ -89,7 +85,6 @@ SwapChainMetal::SwapChainMetal(
         return;
     }
     NSWindow* window = (__bridge NSWindow*)_window.GetPtr();
-
     NSRect frame = NSMakeRect(0, 0,
         window.frame.size.width, window.frame.size.height);
 
@@ -116,20 +111,40 @@ std::uint32_t SwapChainMetal::GetFrameCount() const
     }
     return ((CAMetalLayer*)((__bridge MTKView*)m_view.GetPtr()).layer).maximumDrawableCount;
 }
-
+//CAMetalLayer *metalLayer = (CAMetalLayer*)((__bridge MTKView*)m_view.GetPtr()).layer
+//id<CAMetalDrawable> *drawable = [metalLayer nextDrawable];
 const Drawable& SwapChainMetal::GetDrawable() const
 {
-    //mtlpp::Drawable db = ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentDrawable };
-    id<MTLDrawable> drawable = ((__bridge MTKView*)m_view.GetPtr()).currentDrawable;
-    uint64_t _id = drawable.drawableID;
-    //uint64_t _id = db.GetDrawableID();
-    if(currentDrawable.drawable.GetPtr() == nullptr ||
-       _id != currentDrawable.drawable.GetDrawableID() )
-    {
-        currentDrawable.drawable = 
-            ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentDrawable };
-    }
+    CAMetalLayer *metalLayer = 
+        (CAMetalLayer*)((__bridge MTKView*)m_view.GetPtr()).layer;
+    //id<CAMetalDrawable> drawable = [metalLayer nextDrawable];
+    currentDrawable.drawable = 
+        //ns::Handle{ (__bridge void*)drawable };
+        ns::Handle{ (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentDrawable };
     return currentDrawable;
+}
+
+RenderPass& SwapChainMetal::GetDefaultRenderPass() const
+{
+    auto result = new RenderPassMetal(GetRenderPassDescriptor());
+    return *result;
+}
+
+mtlpp::RenderPassDescriptor SwapChainMetal::GetRenderPassDescriptor() const
+{
+    return ns::Handle{
+        (__bridge void*)((__bridge MTKView*)m_view.GetPtr()).currentRenderPassDescriptor 
+        };
+}
+
+GPUTexture& SwapChainMetal::GetDrawableTexture() 
+{
+    if(GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture().GetPtr() != nullptr)
+    {
+        currentDrawableTexture.texture =
+            GetRenderPassDescriptor().GetColorAttachments()[0].GetTexture();
+    }
+    return currentDrawableTexture;
 }
 
 //---------------RenderPipeline Creation---------------
@@ -154,11 +169,14 @@ RenderPipeline* PainterMetal::CreateRenderPipeline(
         default:
             PainterMetal::warn("PainterMetal: Shader of this stage not supported!");
         }
-        for(std::size_t i = 0u; i < desc.colorAttachments.size(); i++)
+    }
+    for(std::size_t i = 0u; i < desc.colorAttachments.size(); i++)
+    {
+        auto&& attachment = desc.colorAttachments[i];
+        rpDesc.GetColorAttachments()[i].SetBlendingEnabled(attachment.blendingEnabled);
+        rpDesc.GetColorAttachments()[i].SetPixelFormat(Transfer(attachment.format));
+        if(attachment.blendingEnabled)
         {
-            auto&& attachment = desc.colorAttachments[i];
-            rpDesc.GetColorAttachments()[i].SetBlendingEnabled(attachment.blendingEnabled);
-            rpDesc.GetColorAttachments()[i].SetPixelFormat(Transfer(attachment.format));
             rpDesc.GetColorAttachments()[i].SetRgbBlendOperation(
                 Transfer(attachment.rgbBlendOp));
             rpDesc.GetColorAttachments()[i].SetSourceRgbBlendFactor(
@@ -171,11 +189,56 @@ RenderPipeline* PainterMetal::CreateRenderPipeline(
                 Transfer(attachment.srcAlphaBlendFactor));
             rpDesc.GetColorAttachments()[i].SetDestinationAlphaBlendFactor(
                 Transfer(attachment.dstAlphaBlendFactor));
-            rpDesc.GetColorAttachments()[i].SetWriteMask(attachment.colorWriteMask);
         }
+        rpDesc.GetColorAttachments()[i].SetWriteMask(attachment.colorWriteMask);
     }
     auto rpState 
         = device.NewRenderPipelineState(rpDesc, nullptr);
     auto result = new RenderPipelineMetal(rpState);
     return result;
+}
+
+
+//---------------RenderPass Creation---------------
+RenderPassMetal::RenderPassMetal(
+    const Sakura::Graphics::RenderPassDescriptor& desc)
+{
+    passDesc.SetRenderTargetArrayLength(desc.colorAttachments.size());
+    if(desc.depthAttachment.texture != nullptr)
+    {
+        mtlpp::RenderPassDepthAttachmentDescriptor depthAttachment;
+        depthAttachment.SetClearDepth(desc.depthAttachment.clearDepth);
+        depthAttachment.SetTexture(((TextureMetal*)desc.depthAttachment.texture)->texture);
+        depthAttachment.SetLoadAction(Transfer(desc.depthAttachment.loadAction));
+        depthAttachment.SetStoreAction(Transfer(desc.depthAttachment.storeAction));
+        passDesc.SetDepthAttachment(depthAttachment);
+    }
+    if(desc.stencilAttachment.texture != nullptr)
+    {
+        mtlpp::RenderPassStencilAttachmentDescriptor stencilAttachment;
+        stencilAttachment.SetClearStencil(desc.stencilAttachment.clearStencil);
+        stencilAttachment.SetTexture(((TextureMetal*)desc.stencilAttachment.texture)->texture);
+        stencilAttachment.SetLoadAction(Transfer(desc.stencilAttachment.loadAction));
+        stencilAttachment.SetStoreAction(Transfer(desc.stencilAttachment.storeAction));
+        passDesc.SetStencilAttachment(stencilAttachment);
+    }
+    for(uint32_t i = 0; i < desc.colorAttachments.size(); i++)
+    {
+        auto&& cAttachment = desc.colorAttachments[i];
+        if(cAttachment.texture == nullptr)
+            continue;
+        passDesc.GetColorAttachments()[i].SetClearColor(
+            *(mtlpp::ClearColor*)&cAttachment.clearColor);
+        passDesc.GetColorAttachments()[i].SetTexture(
+            ((TextureMetal*)cAttachment.texture)->texture);
+        passDesc.GetColorAttachments()[i].SetLoadAction(
+            Transfer(cAttachment.loadAction));
+        passDesc.GetColorAttachments()[i].SetStoreAction(
+            Transfer(cAttachment.storeAction));
+    }
+}
+RenderPass* PainterMetal::CreateRenderPass(
+    const Sakura::Graphics::RenderPassDescriptor& desc)
+{
+    return new RenderPassMetal(desc);
 }

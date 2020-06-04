@@ -22,11 +22,17 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-01 01:04:33
- * @LastEditTime: 2020-06-01 16:04:08
+ * @LastEditTime: 2020-06-04 14:18:06
  */ 
 #pragma once
 #include "../../Include/RenderPipeline.h"
+#include "../../Include/RenderPass.h"
 #include "mtlpp/render_pipeline.hpp"
+
+namespace Sakura::Graphics
+{
+    struct RenderPassDescriptor;
+}
 
 namespace Sakura::Graphics::Metal
 {
@@ -35,5 +41,14 @@ namespace Sakura::Graphics::Metal
         RenderPipelineMetal(mtlpp::RenderPipelineState state)
             :rpState(state){}
         mtlpp::RenderPipelineState rpState;
+    };
+
+    struct RenderPassMetal : public RenderPass 
+    {
+        RenderPassMetal(const Sakura::Graphics::RenderPassDescriptor& desc);
+        RenderPassMetal(mtlpp::RenderPassDescriptor descMetal)
+            :passDesc(descMetal){}
+        ~RenderPassMetal() = default;
+        mtlpp::RenderPassDescriptor passDesc;
     };
 }

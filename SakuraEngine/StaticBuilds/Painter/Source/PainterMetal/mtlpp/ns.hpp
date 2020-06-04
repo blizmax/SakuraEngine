@@ -20,7 +20,7 @@ namespace ns
         inline const void* GetPtr() const { return m_ptr; }
 
         inline operator bool() const { return m_ptr != nullptr; }
-
+        
     protected:
         Object();
         Object(const Handle& handle);

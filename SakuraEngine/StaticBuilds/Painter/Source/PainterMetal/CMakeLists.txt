@@ -17,14 +17,10 @@ set(PLATFORM_LIBRARIES
     "-framework MetalKit"
     "-framework CoreFoundation"
     "-fobjc-link-runtime"
+    "-fno-objc-arc"
 )
 set(CMAKE_C_FLAGS "-x objective-c")
 set(CMAKE_CXX_FLAGS "-x objective-c++")
-set_source_files_properties(
-    ${PLATFORM_SOURCES}
-    PROPERTIES
-    COMPILE_FLAGS -fobjc-weak
-)
 
 include_directories(../../Include/)
 

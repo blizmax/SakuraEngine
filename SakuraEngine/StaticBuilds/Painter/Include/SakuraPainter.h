@@ -22,13 +22,15 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:33:10
- * @LastEditTime: 2020-05-29 19:15:14
+ * @LastEditTime: 2020-06-03 14:41:24
  */ 
 #pragma once
 #include "../Source/PainterMetal/PainterMetal.h"
 #include "../Source/PainterMetal/SwapChainMetal.hpp"
 #include "CommandBuffer.h"
 #include "CommandQueue.h"
+#include "RenderPass.h"
+#include "RenderPipeline.h"
 
 namespace Sakura::Graphics
 {

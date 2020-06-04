@@ -22,19 +22,21 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 01:11:45
- * @LastEditTime: 2020-05-28 01:12:40
+ * @LastEditTime: 2020-06-03 14:31:42
  */ 
 #pragma once
 
 namespace Sakura::Graphics
 {
-    struct RenderPassDesc
-    {
+    struct Painter;
+    struct RenderPassDescriptor;
+}
 
-    };
-
+namespace Sakura::Graphics
+{
     struct RenderPass
     {
-        virtual ~RenderPass() = 0;
+        [[nodiscard]] static RenderPass* Create(Painter&, const RenderPassDescriptor&);
+        virtual ~RenderPass() = default;
     };
 }

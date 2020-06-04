@@ -22,11 +22,12 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 02:32:38
- * @LastEditTime: 2020-06-01 01:09:31
+ * @LastEditTime: 2020-06-04 02:38:12
  */ 
 #pragma once
 #include "../../Include/CommandBuffer.h"
 #include "mtlpp/command_buffer.hpp"
+#include "mtlpp/render_command_encoder.hpp"
 
 namespace Sakura::Graphics::Metal
 {
@@ -38,12 +39,21 @@ namespace Sakura::Graphics::Metal
     struct RenderCommandBufferMetal final : public RenderCommandBuffer
     {
         friend class PainterMetal;
-        virtual ~RenderCommandBufferMetal() = default;
+        ~RenderCommandBufferMetal() = default;
         virtual void Signal(Fence& fence) override;
         virtual void Wait(Fence& fence) override;
         virtual void Commit() override;
         virtual void Present(const Drawable& drawable) override;
-        mtlpp::CommandBuffer buffer;
+        virtual void WaitUntilCompleted() override;
+
+        // Render CommandBuffer interfaces
+        virtual void BeginRenderPass(const RenderPass& pass) override;
+        virtual void EndRenderPass() override;
+        virtual void SetRenderPipeline(const RenderPipeline& pipeline) override;
+        virtual void SetVertexBuffer(const GPUBuffer& vertexBuffer) override;
+
+        mtlpp::CommandBuffer commandBuffer;
+        mtlpp::RenderCommandEncoder encoder;
     protected:
         RenderCommandBufferMetal(mtlpp::CommandQueue& MetalQueue);
     };
