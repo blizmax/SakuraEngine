@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-05 02:08:33
+ * @LastEditTime: 2020-06-05 02:17:14
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -79,7 +79,7 @@ public:
         auto win = SDL_CreateWindow(
             "Metal",
             0, 0,
-            1920, 1080, 
+            1280, 720, 
             SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_SHOWN);
         if(!win)
         {
@@ -140,26 +140,24 @@ public:
                     run = 0; return;
                 case SDL_WINDOWEVENT:
 					if (evt.window.event == SDL_WINDOWEVENT_RESIZED)
-                    {
 						std::cout << "MESSAGE:Resizing window...\n";
-					}
                 default:
                     break;
                 }
             }
             auto currentTime = eastl::chrono::high_resolution_clock::now();
             float time = eastl::chrono::duration<float, eastl::chrono::seconds::period>(currentTime - startTime).count();
-            if(time > 0.0016)
+            if(time > 0.016)
             {
                 startTime = currentTime;
-                run = (run % 600) + 1;
+                run = (run % 60) + 1;
                 RenderPassDescriptor pdesc
                 {
                     .colorAttachments = 
                     {
                         RenderPassColorAttachmentDescriptor 
                         {
-                            .clearColor = {0.00167f * run, .6, 1, 1},
+                            .clearColor = {0.0167f * run, .6, 1, 1},
                             .texture = &chain->GetDrawableTexture(),
                             .loadAction = LoadAction::Clear,
                             .storeAction = StoreAction::Store
@@ -167,8 +165,7 @@ public:
                     }
                 };
                 renderPass.reset(RenderPass::Create(*painter, pdesc));
-                commandBuffer.reset(
-                    RenderCommandBuffer::Create(*painter));
+                commandBuffer.reset(RenderCommandBuffer::Create(*painter));
                 if(renderPass != nullptr)
                 {
                     commandBuffer->BeginRenderPass(*renderPass.get());

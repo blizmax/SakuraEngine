@@ -33,6 +33,7 @@ add_subdirectory(Core)
 add_subdirectory(StaticBuilds)
 add_subdirectory(Modules)
 add_subdirectory(Editor)
+add_subdirectory(Tools)
 #add_subdirectory(Framework)
 
 include(CPack)
