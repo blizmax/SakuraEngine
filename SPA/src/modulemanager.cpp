@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-13 23:23:02
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-30 17:24:29
+ * @LastEditTime: 2020-06-05 19:51:38
  */
 #define API_EXPORTS
 #include "../include/modulemanager.h"
@@ -77,33 +77,18 @@ namespace Sakura::SPA
         initName.append(mName);
         eastl::string prefix = moduleDir;
 #if defined(CONFINFO_PLATFORM_LINUX) 
-    #if defined(DEBUG) || defined(_DEBUG)
-        prefix.append("/Debug");
-    #else
-        prefix.append("/Release");
-    #endif
         prefix.append("/lib/lib").append(name);
     #if defined(DEBUG) || defined(_DEBUG)
         prefix.append("d");
     #endif
         prefix.append(".so");
 #elif defined(CONFINFO_PLATFORM_MACOS)
-    #if defined(DEBUG) || defined(_DEBUG)
-        prefix.append("/Debug");
-    #else
-        prefix.append("/release"); 
-    #endif
         prefix.append("/lib/lib").append(name);
     #if defined(DEBUG) || defined(_DEBUG)
         prefix.append("d");
     #endif
         prefix.append(".dylib");
 #elif defined(CONFINFO_PLATFORM_WIN32)
-    #if defined(DEBUG) || defined(_DEBUG)
-        prefix.append("\\Debug");
-    #else
-        prefix.append("\\Release");
-    #endif
         prefix.append("\\bin\\").append(name);
     #if defined(DEBUG) || defined(_DEBUG)
         prefix.append("d");

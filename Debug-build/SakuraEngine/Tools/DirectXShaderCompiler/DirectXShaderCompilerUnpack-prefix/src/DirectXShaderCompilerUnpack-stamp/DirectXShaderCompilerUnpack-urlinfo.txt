@@ -1,0 +1,3 @@
+repository='external project URL'
+module='/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/Tools/DirectXShaderCompiler/binaries/MacOS.zip'
+tag=''

@@ -1,6 +1,6 @@
 set(TARGET DirectXShaderCompiler)
 
-include(../../../cmake/SakuraModules.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/SakuraModules.cmake)
 include(ExternalProject)
 
 get_platform_dir()
@@ -64,3 +64,5 @@ set_target_properties(${TARGET}
     PROPERTIES
     FOLDER Externals
 )
+
+file(COPY ${BINARIES_DIR}/dxc DESTINATION ${CMAKE_BINARY_DIR}/Engine/bin FOLLOW_SYMLINK_CHAIN)

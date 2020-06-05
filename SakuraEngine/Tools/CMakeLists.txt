@@ -1,1 +1,2 @@
 add_subdirectory(DirectXShaderCompiler)
+add_subdirectory(SPIRV-Cross)

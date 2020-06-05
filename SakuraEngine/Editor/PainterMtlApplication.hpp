@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-05 02:17:14
+ * @LastEditTime: 2020-06-05 19:37:48
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -145,6 +145,7 @@ public:
                     break;
                 }
             }
+
             auto currentTime = eastl::chrono::high_resolution_clock::now();
             float time = eastl::chrono::duration<float, eastl::chrono::seconds::period>(currentTime - startTime).count();
             if(time > 0.016)
@@ -168,13 +169,13 @@ public:
                 commandBuffer.reset(RenderCommandBuffer::Create(*painter));
                 if(renderPass != nullptr)
                 {
+                    commandBuffer->Present(chain->GetDrawable());
                     commandBuffer->BeginRenderPass(*renderPass.get());
                     commandBuffer->SetRenderPipeline(*renderPipeline);
                     commandBuffer->SetVertexBuffer(*vertexBuffer);
                     commandBuffer->DrawIndexed(
                         3, IndexType::UINT32, *indexBuffer, 0);
                     commandBuffer->EndRenderPass();
-                    commandBuffer->Present(chain->GetDrawable());
                 }
                 commandBuffer->Commit();
                 commandBuffer->WaitUntilCompleted();

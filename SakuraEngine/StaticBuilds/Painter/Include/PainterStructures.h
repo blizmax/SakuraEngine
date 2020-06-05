@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 17:32:48
- * @LastEditTime: 2020-06-05 02:06:28
+ * @LastEditTime: 2020-06-05 18:28:12
  */ 
 #pragma once
 #include "SakuraEngine/Core/Containers/Containers.h"
@@ -614,7 +614,7 @@ namespace Sakura::Graphics
         };
         uint32_t stride;
         VertexStepFunction stepFunction;
-        eastl::vector<VertexAttribute> attributes;
+        Sakura::SVector<VertexAttribute> attributes;
     };
 
     struct RenderPipelineDescripor

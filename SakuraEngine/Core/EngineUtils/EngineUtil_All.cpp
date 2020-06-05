@@ -22,11 +22,8 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-11 08:39:32
- * @LastEditTime: 2020-03-16 15:02:22
+ * @LastEditTime: 2020-06-05 19:43:05
  */
-#include "Common/T2String.cc"
-#include "xxHash/xxhash.c"
-#include "xxHash/xxhsum.c"
 #ifdef _WIN32
 #include "Win32/fs.cpp"
 #include "Win32/os.cpp"
@@ -36,3 +33,4 @@
 #include "Unix/os.cc"
 #include "Unix/time.cc"
 #endif
+#include "Common/T2String.cc"
