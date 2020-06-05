@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 17:32:48
- * @LastEditTime: 2020-06-05 18:28:12
+ * @LastEditTime: 2020-06-06 03:18:53
  */ 
 #pragma once
 #include "SakuraEngine/Core/Containers/Containers.h"
@@ -37,7 +37,66 @@ namespace Sakura::Graphics
 
 namespace Sakura::Graphics
 {
-    enum class Format
+    enum class VertexFormat
+    {
+        Invalid               = 0,
+
+        UChar2                = 1,
+        UChar3                = 2,
+        UChar4                = 3,
+
+        Char2                 = 4,
+        Char3                 = 5,
+        Char4                 = 6,
+
+        UChar2Normalized      = 7,
+        UChar3Normalized      = 8,
+        UChar4Normalized      = 9,
+
+        Char2Normalized       = 10,
+        Char3Normalized       = 11,
+        Char4Normalized       = 12,
+
+        UShort2               = 13,
+        UShort3               = 14,
+        UShort4               = 15,
+
+        Short2                = 16,
+        Short3                = 17,
+        Short4                = 18,
+
+        UShort2Normalized     = 19,
+        UShort3Normalized     = 20,
+        UShort4Normalized     = 21,
+
+        Short2Normalized      = 22,
+        Short3Normalized      = 23,
+        Short4Normalized      = 24,
+
+        Half2                 = 25,
+        Half3                 = 26,
+        Half4                 = 27,
+
+        Float                 = 28,
+        Float2                = 29,
+        Float3                = 30,
+        Float4                = 31,
+
+        Int                   = 32,
+        Int2                  = 33,
+        Int3                  = 34,
+        Int4                  = 35,
+
+        UInt                  = 36,
+        UInt2                 = 37,
+        UInt3                 = 38,
+        UInt4                 = 39,
+
+        Int1010102Normalized  = 40,
+        UInt1010102Normalized = 41,
+    };
+
+    enum class PixelFormat
     {
         UNKNOWN,
         R64G64B64A64_UINT,
@@ -447,8 +506,6 @@ namespace Sakura::Graphics
         S_BC7_UNORM_BLOCK = BC7_UNORM_BLOCK,
         S_BC7_SRGB_BLOCK = BC7_SRGB_BLOCK,
     };
-    using VertexFormat = Format;
-    using PixelFormat = Format;
     
     enum class BlendFactor
     {
@@ -597,7 +654,7 @@ namespace Sakura::Graphics
         ColorWriteMask colorWriteMask = All;
     };
 
-    struct VertexLayout
+    struct VertexAttribute
     {
         enum class VertexStepFunction
         {
@@ -607,14 +664,17 @@ namespace Sakura::Graphics
             //PerPatch                                          = 3, ?
             //PerPatchControlPoint                              = 4, ?
         };
-        struct VertexAttribute
-        {
-            VertexFormat format;
-            uint32_t offset;
-        };
+        VertexAttribute(const Sakura::sstring& _semantic_name, uint32_t _stride, uint32_t _offset, 
+            VertexFormat _format, uint32_t _stepRate = 1, VertexStepFunction _stepFunction = VertexStepFunction::PerVertex)
+            :semantic_name(_semantic_name), stride(_stride), offset(_offset), format(_format),
+            stepRate(_stepRate), stepFunction(_stepFunction)
+        {}
+        Sakura::sstring semantic_name;
         uint32_t stride;
-        VertexStepFunction stepFunction;
-        Sakura::SVector<VertexAttribute> attributes;
+        uint32_t offset;
+        VertexFormat format;
+        uint32_t stepRate = 1;
+        VertexStepFunction stepFunction = VertexStepFunction::PerVertex;
     };
 
     struct RenderPipelineDescripor
@@ -624,6 +684,6 @@ namespace Sakura::Graphics
         PixelFormat stencilFormat;
         Sakura::SVector<ShaderFunction> shaderFunctions;
         PrimitiveTopology topology = PrimitiveTopology::Triangle;
-        VertexLayout vertexLayout;
+        Sakura::SVector<VertexAttribute> vertexAttributes;
     };
 }

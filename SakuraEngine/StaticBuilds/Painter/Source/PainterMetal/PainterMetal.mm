@@ -175,6 +175,18 @@ RenderPipeline* PainterMetal::CreateRenderPipeline(
          desc.topology < 3 ? mtlpp::PrimitiveTopologyClass::Line :
          mtlpp::PrimitiveTopologyClass::Triangle);
     rpDesc.SetInputPrimitiveTopology(topo);
+    mtlpp::VertexDescriptor vdesc;
+    for(std::size_t i = 0; i < desc.vertexAttributes.size(); i++)
+    {
+        auto&& attrib = desc.vertexAttributes[i];
+        vdesc.GetLayouts()[i].SetStride(attrib.stride);
+        vdesc.GetLayouts()[i].SetStepFunction(Transfer(attrib.stepFunction));
+        vdesc.GetLayouts()[i].SetStepRate(attrib.stepRate);
+        vdesc.GetAttributes()[i].SetFormat(Transfer(attrib.format));
+        vdesc.GetAttributes()[i].SetOffset(attrib.offset);
+        vdesc.GetAttributes()[i].SetBufferIndex(0);
+    }
+    rpDesc.SetVertexDescriptor(vdesc);
     for(std::size_t i = 0u; i < desc.colorAttachments.size(); i++)
     {
         auto&& attachment = desc.colorAttachments[i];

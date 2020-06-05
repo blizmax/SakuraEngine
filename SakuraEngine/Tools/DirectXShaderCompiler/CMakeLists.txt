@@ -19,6 +19,7 @@ endif()
 set(LIB_DIR ${BINARIES_DIR}/lib)
 set(BIN_DIR ${BINARIES_DIR}/bin)
 
+
 if(WIN32)
     if(${WIN_ARCH} STREQUAL "x64")
        #set(BINARIES_MD5 cb428de9a084987323376dee63611a56)
@@ -35,17 +36,19 @@ elseif(APPLE)
 endif()
 
 if(WIN32 OR APPLE)
-    ExternalProject_Add(${TARGET}Unpack
-        URL ${BINARIES_DIR}.zip
-        SOURCE_DIR ${BINARIES_DIR}
-        BUILD_BYPRODUCTS ${LIBRARIES}
-        BUILD_IN_SOURCE TRUE
-        EXCLUDE_FROM_ALL TRUE
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND ""
-        STEP_TARGETS build
-    )
-    add_dependencies(${TARGET} ${TARGET}Unpack-build)
+    execute_process(COMMAND ${CMAKE_COMMAND} -E tar -xf ${BINARIES_DIR}.zip
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/dxc 
+              ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/clang-tblgen 
+              ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/llvm-tblgen 
+              ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/opt
+         DESTINATION ${ENGINE_TOOLS_DIR}/DirectXShaderCompiler/
+         FOLLOW_SYMLINK_CHAIN)
+    file(GLOB_RECURSE DXCLibs
+        ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/*dxcompiler.*)
+    file(COPY ${DXCLibs}
+         DESTINATION ${ENGINE_TOOLS_DIR}/DirectXShaderCompiler/
+         FOLLOW_SYMLINK_CHAIN)
 endif()
 
 set_target_properties(${TARGET} PROPERTIES PREREQUISITE_BINARIES "${PREREQUISITE_BINARIES_LIST}")
@@ -64,5 +67,3 @@ set_target_properties(${TARGET}
     PROPERTIES
     FOLDER Externals
 )
-
-file(COPY ${BINARIES_DIR}/dxc DESTINATION ${CMAKE_BINARY_DIR}/Engine/bin FOLLOW_SYMLINK_CHAIN)

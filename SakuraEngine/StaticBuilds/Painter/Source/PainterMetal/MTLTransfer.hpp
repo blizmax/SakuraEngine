@@ -22,12 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-01 15:50:00
- * @LastEditTime: 2020-06-05 01:12:08
+ * @LastEditTime: 2020-06-06 03:37:36
  */ 
 #pragma once
 #include "mtlpp/pixel_format.hpp"
 #include "../../Include/PainterStructures.h"
 #include "mtlpp/render_pipeline.hpp"
+#include "mtlpp/vertex_descriptor.hpp"
 
 #define FORMAT_MAPPER_MTL() \
     MTL_FORMAT_MAPPING(UNKNOWN, Invalid);\
@@ -144,11 +145,11 @@
 //VK_NON_DEF
 
 #define MTL_FORMAT_MAPPING(format, mtlformat) \
-{case Format::format: \
+{case PixelFormat::format: \
 return mtlpp::PixelFormat::mtlformat;}
 
 #define MTL_NON_DEF(format)\
-{case Format::format: \
+{case PixelFormat::format: \
 std::string val##format = "Vulkan Format not supported: "; \
 std::string fmt##format = #format; \
 Sakura::log::warn(val##format + fmt##format); \
@@ -158,7 +159,7 @@ using namespace Sakura::Graphics;
 
 namespace Sakura::Graphics::Metal
 {
-    static mtlpp::PixelFormat Transfer(const Sakura::Graphics::Format format)
+    static mtlpp::PixelFormat Transfer(const Sakura::Graphics::PixelFormat format)
     {
         switch (format)
         {
@@ -173,18 +174,18 @@ namespace Sakura::Graphics::Metal
 #undef MTL_NON_DEF
 #define MTL_FORMAT_MAPPING(format, mtlformat) \
 case mtlpp::PixelFormat::mtlformat:\
-return Format::format; 
+return PixelFormat::format; 
 #define MTL_NON_DEF(format) 
 
 namespace Sakura::Graphics::Metal
 {
-    static Sakura::Graphics::Format Transfer(const mtlpp::PixelFormat format)
+    static Sakura::Graphics::PixelFormat Transfer(const mtlpp::PixelFormat format)
     {
         switch (format)
         {
             FORMAT_MAPPER_MTL()
         default:
-            return Sakura::Graphics::Format::UNKNOWN;
+            return Sakura::Graphics::PixelFormat::UNKNOWN;
         }
     }
 }
@@ -293,6 +294,27 @@ namespace Sakura::Graphics::Metal
             PainterMetal::error("Metal do not support the primitive type!");
             break;
         }
+    }
+
+    inline mtlpp::VertexStepFunction Transfer(Sakura::Graphics::VertexAttribute::VertexStepFunction f)
+    {
+        switch (f)
+        {
+        case Sakura::Graphics::VertexAttribute::VertexStepFunction::PerVertex:
+            return mtlpp::VertexStepFunction::PerVertex;
+        case Sakura::Graphics::VertexAttribute::VertexStepFunction::Constant:
+            return mtlpp::VertexStepFunction::Constant;
+        case Sakura::Graphics::VertexAttribute::VertexStepFunction::PerInstance:
+            return mtlpp::VertexStepFunction::PerInstance;
+        default:
+            PainterMetal::error("Metal do not support the VertexStepFunction!");
+            break;
+        }
+    }
+
+    inline mtlpp::VertexFormat Transfer(Sakura::Graphics::VertexFormat vf)
+    {
+        return *((mtlpp::VertexFormat*)&vf);
     }
 }
 

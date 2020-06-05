@@ -1,0 +1,239 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "Engine/lib/libCoreModuled.dylib"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"_add_library",
+			"add_library",
+			"target_link_libraries",
+			"ADD_DEFINITIONS",
+			"add_definitions",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"/Users/huangzheng/vcpkg/scripts/buildsystems/vcpkg.cmake",
+			"SakuraEngine/Core/CMakeLists.txt",
+			"CMakeLists.txt",
+			"SakuraEngine/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 2,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 250,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 4,
+				"parent" : 0
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 91,
+				"parent" : 4
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 71,
+				"parent" : 4
+			},
+			{
+				"command" : 5,
+				"file" : 2,
+				"line" : 52,
+				"parent" : 4
+			},
+			{
+				"command" : 5,
+				"file" : 2,
+				"line" : 116,
+				"parent" : 4
+			},
+			{
+				"command" : 5,
+				"file" : 2,
+				"line" : 117,
+				"parent" : 4
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 19,
+				"parent" : 10
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 22,
+				"parent" : 10
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 25,
+				"parent" : 10
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -Wno-unused-parameter -std=c++20 -stdlib=libc++ -m64 -fPIC -march=native -O3 -pthread  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -fPIC   -msse4.2 -D SAKURA_TARGET_PLATFORM_UNIX -D SAKURA_TARGET_PLATFORM_OSX -D SAKURA_CONSOLE_INOUT -D SAKURA_DEBUG_EDITOR -D SAKURA_DEBUG_GAME"
+				},
+				{
+					"fragment" : "-std=gnu++2a"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"define" : "CoreModule_EXPORTS"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "FMT_LOCALE"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "MACRO"
+				},
+				{
+					"backtrace" : 6,
+					"define" : "_DEBUG"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 7,
+					"path" : "/usr/local/include"
+				},
+				{
+					"backtrace" : 8,
+					"path" : "/Users/huangzheng/Coding/SakuraEngine/Extern/include"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "/Users/huangzheng/Coding/SakuraEngine/Extern/include/DirectXMath/Inc"
+				},
+				{
+					"backtrace" : 11,
+					"path" : "/Users/huangzheng/Coding/SakuraEngine/SakuraEngine"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/../Extern/include"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/.."
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "/Users/huangzheng/vcpkg/installed/x64-osx/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "/Users/huangzheng/vcpkg/installed/x64-osx/include/Common"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "Core::@dc8fc5ddcfb2baa2e43e"
+		}
+	],
+	"id" : "CoreModule::@dc8fc5ddcfb2baa2e43e",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "../../Engine/lib/libCored.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/Users/huangzheng/vcpkg/installed/x64-osx/debug/lib/libfmtd.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/Users/huangzheng/vcpkg/installed/x64-osx/debug/lib/libEASTL.a",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "CoreModule",
+	"nameOnDisk" : "libCoreModuled.dylib",
+	"paths" : 
+	{
+		"build" : "SakuraEngine/Core",
+		"source" : "SakuraEngine/Core"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "SakuraEngine/Core/CoreModule.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}
