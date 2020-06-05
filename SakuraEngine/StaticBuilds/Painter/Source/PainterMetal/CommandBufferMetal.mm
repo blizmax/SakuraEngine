@@ -67,7 +67,8 @@ void RenderCommandBufferMetal::SetRenderPipeline(const RenderPipeline& pipeline)
 
 void RenderCommandBufferMetal::SetVertexBuffer(const GPUBuffer& vertexBuffer)
 {
-
+    if(vertexBuffer.usage != GPUBuffer::BufferUsage::VertexBuffer)
+        PainterMetal::error("Buffer setted as vertex buffer must has the usage of VertexBuffer!");
     encoder.SetVertexBuffer(
         ((BufferMetal&)vertexBuffer).buffer,
         0, 0);
@@ -82,6 +83,8 @@ void RenderCommandBufferMetal::DrawIndexed(
     uint32_t indexCount, Sakura::Graphics::IndexType indexType,
     const GPUBuffer& indexBuffer, uint32_t indexBufferOffset)
 {
+    if(indexBuffer.usage != GPUBuffer::BufferUsage::IndexBuffer)
+        PainterMetal::error("Buffer used as index buffer must has the usage of IndexBuffer!");
     mtlpp::IndexType type = 
         (indexType == Sakura::Graphics::IndexType::UINT16 ? 
             mtlpp::IndexType::UInt16 : mtlpp::IndexType::UInt32);
