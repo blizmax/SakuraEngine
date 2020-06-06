@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-13 23:23:02
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-05 19:51:38
+ * @LastEditTime: 2020-06-07 01:25:24
  */
 #define API_EXPORTS
 #include "../include/modulemanager.h"
@@ -77,19 +77,19 @@ namespace Sakura::SPA
         initName.append(mName);
         eastl::string prefix = moduleDir;
 #if defined(CONFINFO_PLATFORM_LINUX) 
-        prefix.append("/lib/lib").append(name);
+        prefix.append(name);
     #if defined(DEBUG) || defined(_DEBUG)
         prefix.append("d");
     #endif
         prefix.append(".so");
 #elif defined(CONFINFO_PLATFORM_MACOS)
-        prefix.append("/lib/lib").append(name);
+        prefix.append(name);
     #if defined(DEBUG) || defined(_DEBUG)
         prefix.append("d");
     #endif
         prefix.append(".dylib");
 #elif defined(CONFINFO_PLATFORM_WIN32)
-        prefix.append("\\bin\\").append(name);
+        prefix.append(name);
     #if defined(DEBUG) || defined(_DEBUG)
         prefix.append("d");
     #endif
@@ -287,8 +287,8 @@ namespace Sakura::SPA
     }
 }
 
-SPA_API Sakura::SPA::ModuleManager* __stdcall GetModuleManager()
+extern "C" SPA_API Sakura::SPA::ModuleManager* __stdcall GetModuleManager()
 {
-    static Sakura::SPA::ModuleManager mModuleManager;
-    return &mModuleManager;
+    static Sakura::SPA::ModuleManager* mModuleManager = new Sakura::SPA::ModuleManager();
+    return mModuleManager;
 }

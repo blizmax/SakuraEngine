@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-06 16:39:18
+ * @LastEditTime: 2020-06-07 00:20:15
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -184,7 +184,6 @@ public:
                             .loadAction = LoadAction::Clear,
                             .storeAction = StoreAction::Store,
                             .texture = &chain->GetDrawableTexture(),
-
                         }
                     }
                 };
