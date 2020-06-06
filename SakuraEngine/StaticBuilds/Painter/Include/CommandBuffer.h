@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 00:38:26
- * @LastEditTime: 2020-06-05 01:42:31
+ * @LastEditTime: 2020-06-06 12:20:47
  */ 
 #pragma once
 #include <stdint.h>
@@ -122,7 +122,7 @@ namespace Sakura::Graphics
 
         /**
          * @description: Sets the vertex buffer for next draw(s).
-         * Buffer setted need to be marked with bitflag Usage::VertexBuffer.
+         * Buffer setted needs to be marked with bitflag Usage::VertexBuffer.
          * OtherWise the backends may throw incorrect-buffer-usage errors.
          * @param {const Buffer&} vertexBuffer to set. 
          * @author: SaeruHikari

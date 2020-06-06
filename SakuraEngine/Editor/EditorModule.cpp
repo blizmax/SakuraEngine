@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-24 13:05:07
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-05-28 01:55:40
+ * @LastEditTime: 2020-06-06 15:57:28
  */
 #include "EditorModule.h"
 #include "SakuraEngine/Core/Core.h"
@@ -34,7 +34,9 @@ void EditorModule::MainPluginExec()
     //auto app = std::make_unique<VkTestApplication>();
     //auto app = std::make_unique<RenderGraphTestApplication>();
     //auto app = std::make_unique<MtlDevApp>();
+#ifdef SAKURA_TARGET_PLATFORM_OSX
     auto app = std::make_unique<PainterMetalApp>();
 	app->run();
+#endif
     return;
 }

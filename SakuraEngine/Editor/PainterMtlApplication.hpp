@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-06 03:26:34
+ * @LastEditTime: 2020-06-06 13:20:57
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -195,9 +195,8 @@ public:
                     commandBuffer->BeginRenderPass(*renderPass.get());
                     commandBuffer->SetRenderPipeline(*renderPipeline);
                     commandBuffer->SetVertexBuffer(*vertexBuffer);
-                    commandBuffer->Draw(0, 3);
-                    //commandBuffer->DrawIndexed(
-                    //    3, IndexType::UINT32, *indexBuffer, 0);
+                    commandBuffer->DrawIndexed(
+                        3, IndexType::UINT32, *indexBuffer, 0);
                     commandBuffer->EndRenderPass();
                 }
                 commandBuffer->Commit();

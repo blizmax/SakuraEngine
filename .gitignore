@@ -27,3 +27,4 @@ GTAGS
 GRTAGS
 /xcode
 /.idea
+*-build/
