@@ -4,7 +4,7 @@
  * @Author: SaeruHikari
  * @Date: 2020-02-02 09:36:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-30 11:52:47
+ * @LastEditTime: 2020-06-07 00:14:30
  */
 #pragma once
 // Concepts
@@ -17,7 +17,7 @@
 #include "sinterface.h"
 // Assert
 #include "SAssert.h"
-#ifdef SAKURA_TARGET_PLATFORM_WIN32
+#ifdef SAKURA_TARGET_PLATFORM_WIN
 #include "SWinDefination.h"
 #elif defined(SAKURA_TARGET_PLATFFORM_OSX)
 #include "SMacDefination.h"

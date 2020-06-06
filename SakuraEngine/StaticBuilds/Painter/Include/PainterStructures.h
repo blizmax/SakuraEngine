@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 17:32:48
- * @LastEditTime: 2020-06-06 12:34:47
+ * @LastEditTime: 2020-06-06 16:38:38
  */ 
 #pragma once
 #include "SakuraEngine/Core/Containers/Containers.h"
@@ -682,8 +682,8 @@ namespace Sakura::Graphics
         PixelFormat depthFormat;
         PixelFormat stencilFormat;
         PrimitiveTopology topology = PrimitiveTopology::Triangle;
-        Sakura::SVector<VertexAttribute> vertexAttributes;
         Sakura::SVector<ShaderFunction> shaderFunctions;
         Sakura::SVector<RenderPipelineColorAttachmentDescriptor> colorAttachments;
+        Sakura::SVector<VertexAttribute> vertexAttributes;
     };
 }

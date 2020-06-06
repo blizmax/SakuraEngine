@@ -29,7 +29,7 @@ if is_plat("linux", "macosx") then
         add_defines("SAKURA_TARGET_PLATFORM_OSX") 
     end
 elseif is_plat("windows") then
-    add_defines("SAKURA_TARGET_PLATFORM_WIN32") 
+    add_defines("SAKURA_TARGET_PLATFORM_WIN") 
 end
 
 function static_lib(targetName, version, ...)

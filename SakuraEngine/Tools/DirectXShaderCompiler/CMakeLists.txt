@@ -38,14 +38,8 @@ endif()
 if(WIN32 OR APPLE)
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar -xf ${BINARIES_DIR}.zip
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
-    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/dxc 
-              ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/clang-tblgen 
-              ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/llvm-tblgen 
-              ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/opt
-         DESTINATION ${ENGINE_TOOLS_DIR}/DirectXShaderCompiler/
-         FOLLOW_SYMLINK_CHAIN)
     file(GLOB_RECURSE DXCLibs
-        ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/*dxcompiler.*)
+        ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/*)
     file(COPY ${DXCLibs}
          DESTINATION ${ENGINE_TOOLS_DIR}/DirectXShaderCompiler/
          FOLLOW_SYMLINK_CHAIN)

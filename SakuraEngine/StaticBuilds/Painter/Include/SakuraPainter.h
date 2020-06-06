@@ -22,14 +22,17 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:33:10
- * @LastEditTime: 2020-06-03 14:41:24
+ * @LastEditTime: 2020-06-06 16:37:21
  */ 
 #pragma once
+#ifdef SAKURA_TARGET_PLATFORM_OSX
 #include "../Source/PainterMetal/PainterMetal.h"
 #include "../Source/PainterMetal/SwapChainMetal.hpp"
+#endif
 #include "CommandBuffer.h"
 #include "CommandQueue.h"
 #include "RenderPass.h"
+#include "Painter.h"
 #include "RenderPipeline.h"
 
 namespace Sakura::Graphics

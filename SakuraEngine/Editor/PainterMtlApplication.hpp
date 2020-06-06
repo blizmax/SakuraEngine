@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-06 13:20:57
+ * @LastEditTime: 2020-06-06 16:39:18
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -181,9 +181,10 @@ public:
                         RenderPassColorAttachmentDescriptor 
                         {
                             .clearColor = {0.0167f * run, .6, 1, 1},
-                            .texture = &chain->GetDrawableTexture(),
                             .loadAction = LoadAction::Clear,
-                            .storeAction = StoreAction::Store
+                            .storeAction = StoreAction::Store,
+                            .texture = &chain->GetDrawableTexture(),
+
                         }
                     }
                 };
