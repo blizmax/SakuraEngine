@@ -5,13 +5,16 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-14 00:31:40
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-30 17:13:43
+ * @LastEditTime: 2020-06-08 00:43:57
  */
 #pragma once
-#include <string>
-#include <vector>
-#include <cstdlib>
 #include <EASTL/string.h>
+
+namespace Sakura
+{
+    using sstring = eastl::string;
+    using sstring_view = eastl::string_view;
+}
 
 namespace Sakura::SPA
 {
@@ -23,8 +26,8 @@ namespace Sakura::SPA
      */
     struct Dependency
     {
-        eastl::string name; //!< The name of the dependency
-        eastl::string version; //!< The version of the dependency
+        Sakura::sstring name; //!< The name of the dependency
+        Sakura::sstring version; //!< The version of the dependency
     };
 
     /**
@@ -33,15 +36,15 @@ namespace Sakura::SPA
      */
     struct ModuleInfo
     {
-        eastl::string name; //!< name of the plugin
-        eastl::string prettyname;//!< formatted name of the plugin
-        eastl::string engine_version;//!< version of the engine
-        eastl::string version;// !< version of the plugin
-        eastl::string linking;// !< linking of the plugin
-        eastl::string license;//!< license of the plugin
-        eastl::string url; //!< url of the plugin 
-        eastl::string copyright;//!< copyright of the plugin
-        eastl::string make;//!<making method
+        Sakura::sstring name; //!< name of the plugin
+        Sakura::sstring prettyname;//!< formatted name of the plugin
+        Sakura::sstring engine_version;//!< version of the engine
+        Sakura::sstring version;// !< version of the plugin
+        Sakura::sstring linking;// !< linking of the plugin
+        Sakura::sstring license;//!< license of the plugin
+        Sakura::sstring url; //!< url of the plugin 
+        Sakura::sstring copyright;//!< copyright of the plugin
+        Sakura::sstring make;//!<making method
 
         // Dependencies array
         eastl::vector<Dependency> dependencies;

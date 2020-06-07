@@ -23,9 +23,12 @@ elseif(UNIX)
     execute_process(COMMAND $ENV{VCPKG_ROOT}/vcpkg install --triplet x64-linux ${VCPKG_PKGS})
   endif(APPLE)
 endif(WIN32)
+
 message(STATUS $ENV{VCPKG_ROOT})
 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 message(STATUS "TOOL CHAIN: ${CMAKE_TOOLCHAIN_FILE}")
+
+project(Sakura)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/Engine/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/Engine/lib)
@@ -38,20 +41,21 @@ set(ENGINE_LIB_DIR ${CMAKE_BINARY_DIR}/Engine/lib)
 set(ENGINE_BINARY_DIR ${CMAKE_BINARY_DIR}/Engine/bin) 
 set(ENGINE_TOOLS_DIR ${CMAKE_BINARY_DIR}/Engine/tools) 
 
-enable_testing()
 find_package(freetype CONFIG REQUIRED)
-
 find_package(EnTT CONFIG REQUIRED)
 #find_package(glfw3 CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(EASTL CONFIG REQUIRED)
 find_package(EABase CONFIG REQUIRED)
-
+if(APPLE)
+# Do not find VK if APPLE
+else(APPLE)
 find_package(Vulkan REQUIRED VERSION 1.2.131.2) 
 if(Vulkan_FOUND)
 include_directories(${Vulkan_INCLUDE_DIRS})
 endif()
+endif(APPLE)
 
 set(CMAKE_DEBUG_POSTFIX d)
 

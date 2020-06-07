@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:33:10
- * @LastEditTime: 2020-06-06 16:37:21
+ * @LastEditTime: 2020-06-08 00:02:28
  */ 
 #pragma once
 #ifdef SAKURA_TARGET_PLATFORM_OSX
@@ -45,7 +45,7 @@ namespace Sakura::Graphics
             eastl::unique_ptr<CommandQueue> blitQueue;
         };
         AsyncComputeExtension() = default;
-        inline static const eastl::vector<eastl::string_view> supportedBackEnds = {
+        inline static const eastl::vector<Sakura::sstring_view> supportedBackEnds = {
             "Metal",
             "Direct3D12",
             "Vulkan",

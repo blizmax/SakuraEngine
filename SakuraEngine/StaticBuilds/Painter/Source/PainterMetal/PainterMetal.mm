@@ -27,7 +27,7 @@ ShaderMetal::ShaderMetal(mtlpp::Library lib)
 }
 
 const void* ShaderMetal::NewFunctionHandle(
-    const eastl::string& entryName)
+    const Sakura::sstring& entryName)
 {
     if(shaderFunctions.find(entryName) == shaderFunctions.end())
     {

@@ -46,8 +46,6 @@
 #include "../CoreMinimal/SKeyWords.h"
 #include "SVariant.h"
 #include <EASTL/string.h>
-#include <EASTL/vector.h>
-#include <EASTL/map.h>
 
 using namespace std; 
 

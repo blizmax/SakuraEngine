@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-13 23:23:02
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-07 01:25:24
+ * @LastEditTime: 2020-06-08 02:46:45
  */
 #define API_EXPORTS
 #include "../include/modulemanager.h"
@@ -51,7 +51,7 @@ namespace Sakura::SPA
         InitializeMap[moduleName] = _register;
     }
 
-    IModule* ModuleManager::SpawnStaticModule(const eastl::string& name)
+    IModule* ModuleManager::SpawnStaticModule(const Sakura::sstring& name)
     {
         if (ModulesMap.find(name) != ModulesMap.end())
             return ModulesMap[name].get();
@@ -66,16 +66,16 @@ namespace Sakura::SPA
         return ModulesMap[name].get();
     }
 
-    IModule* ModuleManager::SpawnDynamicModule(const eastl::string& name)
+    IModule* ModuleManager::SpawnDynamicModule(const Sakura::sstring& name)
     {
         if (ModulesMap.find(name) != ModulesMap.end())
             return ModulesMap[name].get();
         std::unique_ptr<SharedLibrary> sharedLib
             = std::make_unique<SharedLibrary>();
-        eastl::string initName("InitializeModule");
-        eastl::string mName(name);
+        Sakura::sstring initName("InitializeModule");
+        Sakura::sstring mName(name);
         initName.append(mName);
-        eastl::string prefix = moduleDir;
+        Sakura::sstring prefix = moduleDir;
 #if defined(CONFINFO_PLATFORM_LINUX) 
         prefix.append(name);
     #if defined(DEBUG) || defined(_DEBUG)
@@ -108,7 +108,7 @@ namespace Sakura::SPA
         if (sharedLib->hasSymbol(initName.c_str()))
         {
             auto func = sharedLib->get<IModule*()>(initName);
-            ModulesMap[name] = std::unique_ptr<IModule>(func());
+            ModulesMap[name] = eastl::unique_ptr<IModule>(func());
             IDynamicModule* module = (IDynamicModule*)ModulesMap[name].get();
             module->sharedLib = std::move(sharedLib);
             
@@ -155,14 +155,14 @@ namespace Sakura::SPA
         return info;
     }
 
-    IModule* ModuleManager::GetModule(const eastl::string& name)
+    IModule* ModuleManager::GetModule(const Sakura::sstring& name)
     {
         if (ModulesMap.find(name) == ModulesMap.end())
             return nullptr;
         return ModulesMap.find(name)->second.get();
     }
 
-    ModuleProperty ModuleManager::GetModuleProp(const eastl::string& entry)
+    ModuleProperty ModuleManager::GetModuleProp(const Sakura::sstring& entry)
     {
         if(NodeMap.find(entry) == NodeMap.end())
             assert(0 && "Module Node not found");
@@ -170,7 +170,7 @@ namespace Sakura::SPA
             (ModuleNode(NodeMap[entry]), moduleDependecyGraph);
     }
 
-    void ModuleManager::SetModuleProp(const eastl::string& entry, const ModuleProperty& prop)
+    void ModuleManager::SetModuleProp(const Sakura::sstring& entry, const ModuleProperty& prop)
     {
         DAG::set_vertex_property<ModuleProp_t>(
             DAG::vertex(NodeMap.find(entry)->second,
@@ -178,7 +178,7 @@ namespace Sakura::SPA
             moduleDependecyGraph, prop);
     }
 
-    bool ModuleManager::__internal_InitModuleGraph(const eastl::string& nodename)
+    bool ModuleManager::__internal_InitModuleGraph(const Sakura::sstring& nodename)
     {
         if(GetModuleProp(nodename).bActive) 
             return true;
@@ -197,7 +197,7 @@ namespace Sakura::SPA
         return true;
     }
 
-    void ModuleManager::__internal_MakeModuleGraph(const eastl::string& entry,
+    void ModuleManager::__internal_MakeModuleGraph(const Sakura::sstring& entry,
         bool shared)
     {
         if(NodeMap.find(entry) != NodeMap.end())
@@ -226,7 +226,7 @@ namespace Sakura::SPA
         }
     }
 
-    bool ModuleManager::__internal_DestroyModuleGraph(const eastl::string& nodename)
+    bool ModuleManager::__internal_DestroyModuleGraph(const Sakura::sstring& nodename)
     {
         if(!GetModuleProp(nodename).bActive) 
             return true;
@@ -269,21 +269,21 @@ namespace Sakura::SPA
     }
 
     const ModuleGraph& ModuleManager::MakeModuleGraph
-        (const eastl::string& entry, bool shared/*=false*/)
+        (const Sakura::sstring& entry, bool shared/*=false*/)
     {
         mainModuleName = entry;
         __internal_MakeModuleGraph(entry, shared);
         return moduleDependecyGraph;
     }
 
-    void ModuleManager::Mount(const eastl::string& rootdir)
+    void ModuleManager::Mount(const Sakura::sstring& rootdir)
     {
         moduleDir = rootdir;
     }
 
-    eastl::string_view ModuleManager::GetRoot(void)
+    Sakura::sstring_view ModuleManager::GetRoot(void)
     {
-        return eastl::string_view(moduleDir);
+        return Sakura::sstring_view(moduleDir);
     }
 }
 

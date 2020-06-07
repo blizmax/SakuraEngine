@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 01:19:36
- * @LastEditTime: 2020-06-01 16:15:22
+ * @LastEditTime: 2020-06-08 02:47:51
  */ 
 #pragma once
 
@@ -52,18 +52,18 @@ namespace Sakura::Graphics
         
     namespace _Shader
     {
-        inline const eastl::unordered_map<eastl::string, eastl::string> nullTable;
+        inline const Sakura::sunordered_map<Sakura::sstring, Sakura::sstring> nullTable;
     }
     struct Shader
     {
         friend class ShaderFunction;
-        using MacroTable = eastl::unordered_map<eastl::string, eastl::string>;
+        using MacroTable = Sakura::sunordered_map<Sakura::sstring, Sakura::sstring>;
         [[nodiscard]] static Shader* Create(
             Painter&, const char* data, std::size_t dataSize,
             const MacroTable& PreprocessorMacros = _Shader::nullTable);
     protected:
         [[nodiscard]] virtual const void* NewFunctionHandle(
-            const eastl::string& functionName)
+            const Sakura::sstring& functionName)
         {
             return nullptr;
         }
@@ -73,7 +73,7 @@ namespace Sakura::Graphics
     {
         friend struct PainterMetal;
         ShaderFunction(ShaderStageFlags _stage,
-            Shader* _shader, const eastl::string& _entry)
+            Shader* _shader, const Sakura::sstring& _entry)
             : stage(_stage), shader(_shader), entry(_entry)
         {
             funcHandle = shader->NewFunctionHandle(_entry);
@@ -86,7 +86,7 @@ namespace Sakura::Graphics
         {
             return shader;
         }
-        const eastl::string& GetEntry() const
+        const Sakura::sstring& GetEntry() const
         {
             return entry;
         }
@@ -97,7 +97,7 @@ namespace Sakura::Graphics
     protected:
         ShaderStageFlags stage;
         Shader* shader = nullptr;
-        eastl::string entry;
+        Sakura::sstring entry;
         // For metal, this is called MTLFunction in MTLLibrary
         // For vulkan, this handle keeps as nullptr
         // For Direct3D12, this handle keeps as nullptr

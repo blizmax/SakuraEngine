@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 01:39:22
- * @LastEditTime: 2020-05-28 02:09:01
+ * @LastEditTime: 2020-06-08 02:47:58
  */ 
 #pragma once
 #include "../../Include/Shader.h"
@@ -36,9 +36,9 @@ namespace Sakura::Graphics::Metal
         ShaderMetal(mtlpp::Library lib);
     public:
         virtual const void* NewFunctionHandle(
-            const eastl::string& functionName) override;
+            const Sakura::sstring& functionName) override;
 
         mtlpp::Library library;
-        eastl::unordered_map<eastl::string, mtlpp::Function> shaderFunctions;
+        Sakura::sunordered_map<Sakura::sstring, mtlpp::Function> shaderFunctions;
     };
 }

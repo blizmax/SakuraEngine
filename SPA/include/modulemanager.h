@@ -22,22 +22,17 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:45
- * @LastEditTime: 2020-04-30 17:24:08
+ * @LastEditTime: 2020-06-08 02:50:23
  */
 #pragma once
 #define EA_CPP14_CONSTEXPR constexpr
 #include "../../Extern/include/version/version.h"
 #include "../../DependencyGraph/Graph.h"
-#include <functional>
-#include <memory>
 #include <stdint.h>
-#include <iostream>
-#include <string>
-#include <string_view>
-#include "moduleininfo.h"
 #include "imodule.h"
-#include <unordered_map>
 #include <EASTL/map.h>
+#include <EASTL/functional.h>
+#include <EASTL/unique_ptr.h>
 #ifdef __EMSCRIPTEN__
 #include "emscripten.h"
 #define DLLEXPORT EMSCRIPTEN_KEEPALIVE
@@ -75,9 +70,9 @@ namespace Sakura::SPA
     struct ModuleProperty
     {
         bool bActive = false;
-        eastl::string name;
+        Sakura::sstring name;
     };
-    using registerer = std::function<std::unique_ptr<IModule>(void)>;
+    using registerer = eastl::function<eastl::unique_ptr<IModule>(void)>;
     using ModuleProp = property<ModuleProp_t, ModuleProperty>;
     using ModuleGraph = DAG::Graph<ModuleProp>;
     using ModuleNode = DAG::GraphVertex<ModuleProp>;
@@ -87,36 +82,36 @@ namespace Sakura::SPA
         friend struct IModule;
     public:
         ModuleManager() = default;
-        virtual IModule* GetModule(const eastl::string& name);
+        virtual IModule* GetModule(const Sakura::sstring& name);
     
-        virtual const ModuleGraph& MakeModuleGraph(const eastl::string& entry, 
+        virtual const ModuleGraph& MakeModuleGraph(const Sakura::sstring& entry, 
             bool shared = false);
         virtual bool InitModuleGraph(void);
         virtual bool DestroyModuleGraph(void);
     public:
-        virtual void Mount(const eastl::string& rootdir);
-        virtual eastl::string_view GetRoot(void);
+        virtual void Mount(const Sakura::sstring& rootdir);
+        virtual Sakura::sstring_view GetRoot(void);
         virtual void RegisterStaticallyLinkedModule(
             const char* moduleName, registerer _register);
-        virtual IModule* SpawnStaticModule(const eastl::string& moduleName);
-        virtual IModule* SpawnDynamicModule(const eastl::string& moduleName);
-        virtual ModuleProperty GetModuleProp(const eastl::string& name);
-        virtual void SetModuleProp(const eastl::string& name, const ModuleProperty& prop);
+        virtual IModule* SpawnStaticModule(const Sakura::sstring& moduleName);
+        virtual IModule* SpawnDynamicModule(const Sakura::sstring& moduleName);
+        virtual ModuleProperty GetModuleProp(const Sakura::sstring& name);
+        virtual void SetModuleProp(const Sakura::sstring& name, const ModuleProperty& prop);
     private:
-        bool __internal_DestroyModuleGraph(const eastl::string& nodename);
-        void __internal_MakeModuleGraph(const eastl::string& entry,
+        bool __internal_DestroyModuleGraph(const Sakura::sstring& nodename);
+        void __internal_MakeModuleGraph(const Sakura::sstring& entry,
             bool shared = false);
-        bool __internal_InitModuleGraph(const eastl::string& nodename);
+        bool __internal_InitModuleGraph(const Sakura::sstring& nodename);
         Version CoreVersion{"0.1.0"};
         ModuleInfo ParseMetaData(const char* metadata);
     private:
-        eastl::string moduleDir;
-        std::vector<eastl::string> roots;
-        eastl::string mainModuleName;
+        Sakura::sstring moduleDir;
+        eastl::vector<Sakura::sstring> roots;
+        Sakura::sstring mainModuleName;
         ModuleGraph moduleDependecyGraph;
-        eastl::map<eastl::string, int, std::less<>> NodeMap;
-        eastl::map<eastl::string, registerer, std::less<>> InitializeMap;
-        eastl::map<eastl::string, std::unique_ptr<IModule>, std::less<>>
+        eastl::map<Sakura::sstring, int, eastl::less<>> NodeMap;
+        eastl::map<Sakura::sstring, registerer, eastl::less<>> InitializeMap;
+        eastl::map<Sakura::sstring, eastl::unique_ptr<IModule>, eastl::less<>>
             ModulesMap;
     };
 
@@ -125,10 +120,10 @@ namespace Sakura::SPA
     {
         SStaticallyLinkedModuleRegistrant(const char* InModuleName)
         {
-            std::function<std::unique_ptr<IModule>(void)> func =
+            eastl::function<eastl::unique_ptr<IModule>(void)> func =
                 []()
                 {
-                    return std::make_unique<ModuleClass>();                     
+                    return eastl::make_unique<ModuleClass>();                     
                 };
             GetModuleManager()
                 ->RegisterStaticallyLinkedModule(InModuleName, func);

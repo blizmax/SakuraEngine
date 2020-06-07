@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-13 22:58:31
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-30 17:20:57
+ * @LastEditTime: 2020-06-08 02:46:16
  */
 #pragma once
 #include "confinfo.h" 
@@ -38,7 +38,7 @@ namespace Sakura::SPA
         {load(path);}
         SharedLibrary(const std::string& path)
         {load(path);}
-        SharedLibrary(const eastl::string& path)
+        SharedLibrary(const Sakura::sstring& path)
         {load(path);}
         SharedLibrary(std::string_view path)
         {load(path);}
@@ -70,7 +70,7 @@ namespace Sakura::SPA
         * @overload 
         * @see load(const char* path) 
         */
-        inline bool load(const eastl::string& path)
+        inline bool load(const Sakura::sstring& path)
         {return load(path.c_str());}
         /**
         * @overload 
@@ -136,7 +136,7 @@ namespace Sakura::SPA
         * @see get(const char* symbolName)
         */
         template<typename SymT>
-        SymT& get(const eastl::string& symbolName)
+        SymT& get(const Sakura::sstring& symbolName)
         {return get<SymT>(symbolName.c_str());}
         /**
         * @overload

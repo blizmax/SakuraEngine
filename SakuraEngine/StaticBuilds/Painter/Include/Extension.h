@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:53:14
- * @LastEditTime: 2020-05-29 18:50:39
+ * @LastEditTime: 2020-06-08 00:00:46
  */ 
 #pragma once
 #include "SakuraEngine/Core/Core.h"
@@ -36,9 +36,9 @@ namespace Sakura::Graphics
 {
     struct DefaultBackEndNames
     {
-        static constexpr const eastl::string_view Metal = "Metal";
-        static constexpr const eastl::string_view Direct3D12 = "Direct3D12";
-        static constexpr const eastl::string_view Vulkan = "Vulkan";
+        static constexpr const Sakura::sstring_view Metal = "Metal";
+        static constexpr const Sakura::sstring_view Direct3D12 = "Direct3D12";
+        static constexpr const Sakura::sstring_view Vulkan = "Vulkan";
     };
 
     struct Extension
