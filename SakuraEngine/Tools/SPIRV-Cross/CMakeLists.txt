@@ -20,13 +20,9 @@ endif()
 if(WIN32 OR APPLE)
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar -xf ${BINARIES_DIR}.zip
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
-    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/spirv-cross 
-         DESTINATION ${ENGINE_TOOLS_DIR}/SPIRV-Cross/
-         FOLLOW_SYMLINK_CHAIN)
-    file(GLOB_RECURSE DXCLibs
-        ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/*.dylib
-        ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/*.a)
-    file(COPY ${DXCLibs}
+    file(GLOB_RECURSE SPIRV_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/binaries/bin/*)
+    file(COPY ${SPIRV_FILES}
          DESTINATION ${ENGINE_TOOLS_DIR}/SPIRV-Cross/
          FOLLOW_SYMLINK_CHAIN)
 endif()
