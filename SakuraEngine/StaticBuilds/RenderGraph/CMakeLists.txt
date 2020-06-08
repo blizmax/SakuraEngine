@@ -17,4 +17,4 @@ GraphPassNode.cpp
 GraphResourceNode.cpp)
 endif()
 
-target_link_libraries(RenderGraph Core)
+target_link_libraries(RenderGraph CoreModule)

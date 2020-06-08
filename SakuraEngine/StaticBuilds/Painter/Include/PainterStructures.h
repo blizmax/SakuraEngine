@@ -625,7 +625,7 @@ namespace Sakura::Graphics
 
     struct RenderPassDescriptor
     {
-        Sakura::SVector<RenderPassColorAttachmentDescriptor> colorAttachments;
+        Sakura::svector<RenderPassColorAttachmentDescriptor> colorAttachments;
         RenderPassDepthAttachmentDescriptor depthAttachment;
         RenderPassStencilAttachmentDescriptor stencilAttachment;
     };
@@ -682,8 +682,8 @@ namespace Sakura::Graphics
         PixelFormat depthFormat;
         PixelFormat stencilFormat;
         PrimitiveTopology topology = PrimitiveTopology::Triangle;
-        Sakura::SVector<ShaderFunction> shaderFunctions;
-        Sakura::SVector<RenderPipelineColorAttachmentDescriptor> colorAttachments;
-        Sakura::SVector<VertexAttribute> vertexAttributes;
+        Sakura::svector<ShaderFunction> shaderFunctions;
+        Sakura::svector<RenderPipelineColorAttachmentDescriptor> colorAttachments;
+        Sakura::svector<VertexAttribute> vertexAttributes;
     };
 }

@@ -120,6 +120,8 @@ include(cmake/PluginBash.cmake)
 
 include_directories(Extern/include/)
 include_directories(Extern/include/DirectXMath/Inc/)
+include_directories(Extern/mimalloc/include/)
+
 
 add_subdirectory(Extern)
 add_subdirectory(SPA)

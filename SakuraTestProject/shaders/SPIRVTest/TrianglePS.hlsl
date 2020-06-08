@@ -9,7 +9,6 @@ float4 fragFunc(VertexOut pin) : SV_TARGET
 {
     return float4(1.f, 1.f, 1.f, 1.f);
 }
-
 /*
 struct fragFunc_out
 {

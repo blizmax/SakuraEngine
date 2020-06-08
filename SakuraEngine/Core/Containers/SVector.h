@@ -16,8 +16,8 @@
 namespace Sakura
 {
     template<class T, size_t N>
-    using SSmallVector = boost::container::small_vector<T, N>;
+    using ssmall_vector = boost::container::small_vector<T, N>;
 
     template<class T>
-    using SVector = eastl::vector<T>;
+    using svector = eastl::vector<T>;
 }

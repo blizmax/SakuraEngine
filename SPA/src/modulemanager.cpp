@@ -5,39 +5,15 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-13 23:23:02
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-08 02:46:45
+ * @LastEditTime: 2020-06-08 22:27:54
  */
 #define API_EXPORTS
 #include "../include/modulemanager.h"
 #include "../include/confinfo.h"
 #include "../../Extern/include/json/json.hpp"
 #include <EASTL/string_view.h>
+#include "../../Extern/include/DefaultAllocate.h"
 //#define SPA_OUTPUT_LOG
-
-inline void* operator new[](size_t size, const char* pName, int flags,
-        unsigned debugFlags, const char* file, int line)
-{
-    (void)file;
-    (void)line;
-    (void)pName;
-    (void)flags;
-    (void)debugFlags;
-    return malloc(size);
-}  
-
-inline void* operator new[](size_t size, size_t alignment,
-        size_t alignmentOffset, const char* pName, int flags,
-        unsigned debugFlags, const char* file, int line)
-{
-    (void)file;
-    (void)line;
-    (void)alignment;
-    (void)alignmentOffset;
-    (void)pName;
-    (void)flags;
-    (void)debugFlags;
-    return malloc(size);
-}
 
 namespace Sakura::SPA
 {
@@ -77,13 +53,13 @@ namespace Sakura::SPA
         initName.append(mName);
         Sakura::sstring prefix = moduleDir;
 #if defined(CONFINFO_PLATFORM_LINUX) 
-        prefix.append(name);
+        prefix.append("lib").append(name);
     #if defined(DEBUG) || defined(_DEBUG)
         prefix.append("d");
     #endif
         prefix.append(".so");
 #elif defined(CONFINFO_PLATFORM_MACOS)
-        prefix.append(name);
+        prefix.append("lib").append(name);
     #if defined(DEBUG) || defined(_DEBUG)
         prefix.append("d");
     #endif

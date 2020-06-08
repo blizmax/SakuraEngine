@@ -28,4 +28,4 @@ add_library(PainterMetal STATIC
 ${mtlppSrc}
 )
 
-target_link_libraries(PainterMetal Core ${PLATFORM_LIBRARIES})
+target_link_libraries(PainterMetal CoreModule ${PLATFORM_LIBRARIES})
