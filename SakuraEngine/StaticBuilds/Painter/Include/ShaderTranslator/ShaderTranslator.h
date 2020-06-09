@@ -22,13 +22,47 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-08 23:19:06
- * @LastEditTime: 2020-06-08 23:25:51
+ * @LastEditTime: 2020-06-09 13:34:12
  */ 
 #pragma once
 #include <Core/Containers/Containers.h>
+#include "../Shader.h"
+#include <dxc/dxcapi.h>         // Be sure to link with dxcompiler.lib.
 
 namespace Sakura::Graphics
 {
+    enum class ShaderILBC
+    {
+        SPIRV,
+        DXBC,
+        DXIL,
+        Count
+    };
+    enum class ShadingLanguage
+    {
+        HLSL,
+        MSL,
+        GLSL,
+        Count
+    };
+    struct ShaderCompileDesc 
+    {
+        Sakura::swstring shaderFileName;
+        Sakura::swstring entryPoint;
+        Sakura::swstring binaryPath;
+        Sakura::swstring pdbPath;
+        ShaderStageFlags shaderStage;
+        // Advanced Options
+        bool bEnableDebugInformation = false;
+        Sakura::smap<Sakura::swstring, Sakura::swstring> macroDefs;
+        Sakura::svector<Sakura::swstring> compilerArgs;
+    };
+    struct ShaderCompileQuery
+    {
+        CComPtr<IDxcBlob> compiledBlob;
+        CComPtr<IDxcBlobUtf16> shaderName;
+        CComPtr<IDxcBlob> shaderHash;
+    };
     /**
      * @description: Accepts HLSL shader file and translate to variant
      * shader backends like GLSL, MSL, etc.
@@ -36,15 +70,18 @@ namespace Sakura::Graphics
      * https://github.com/microsoft/DirectXShaderCompiler
      * @author: SaeruHikari
      */
-    namespace ShaderTranslator
+    struct HLSLShaderCompiler
     {
-        enum TargetSL
-        {
-            GLSL,
-            SPIRV,
-            MSL,
-            Count
-        };
-        static Sakura::svector<uint8_t> CompileToSPIRV(const Sakura::svector<uint8_t>& srcHLSL);
+        bool Compile(const ShaderCompileDesc& compileDesc,
+            const ShaderILBC target = ShaderILBC::SPIRV,
+            ShaderCompileQuery* query = nullptr);
+        CComPtr<IDxcUtils> pUtils;
+        CComPtr<IDxcCompiler3> pCompiler;
+        CComPtr<IDxcIncludeHandler> pIncludeHandler;
+    };
+
+    struct SPIRVShaderTranslator
+    {
+        //bool Compile()
     };
 }

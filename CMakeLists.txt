@@ -39,7 +39,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/Engine/bin)
 set(ENGINE_DIR ${CMAKE_BINARY_DIR}/Engine) 
 set(ENGINE_LIB_DIR ${CMAKE_BINARY_DIR}/Engine/lib) 
 set(ENGINE_BINARY_DIR ${CMAKE_BINARY_DIR}/Engine/bin) 
-set(ENGINE_TOOLS_DIR ${CMAKE_BINARY_DIR}/Engine/tools) 
+set(ENGINE_TOOLS_DIR ${CMAKE_BINARY_DIR}/Engine/Tools) 
+link_directories(${ENGINE_LIB_DIR})
+link_directories(${ENGINE_BINARY_DIR})
+link_directories(${ENGINE_TOOLS_DIR})
+
 
 find_package(freetype CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)

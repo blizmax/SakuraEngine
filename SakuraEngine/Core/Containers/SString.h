@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-07 13:19:34
- * @LastEditTime: 2020-06-08 22:50:16
+ * @LastEditTime: 2020-06-09 02:20:02
  */ 
 // Prototype from Star Engine :
 // https://github.com/star-e/StarEngine/blob/master/Star/SMap.h
@@ -80,10 +80,9 @@ namespace Sakura
 {
     // __c_plus_plus 17+
     using sstring = eastl::string;
-    /*
-    using sstring = std::string;
-    using swstring = std::wstring;*/
+    using swstring = eastl::wstring;
     using sstring_view = eastl::string_view;
+    using swstring_view = eastl::wstring_view;
     
     namespace String
     {

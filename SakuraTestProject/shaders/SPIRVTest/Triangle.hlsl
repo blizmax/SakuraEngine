@@ -14,6 +14,7 @@ VertexOut vertFunc(VertexIn vin)
     vout.position = float4(vin.inPos.xyz, 1.f);
     return vout;
 }
+// /Users/huangzheng/Coding/SakuraEngine/Debug-build/Engine/tools/DirectXShaderCompiler/dxc-3.7 -spirv -E vertFunc -T vs_6_6 /Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.hlsl
 // /Users/huangzheng/Coding/SakuraEngine/Debug-build/Engine/tools/DirectXShaderCompiler/dxc-3.7 -spirv -E vertFunc -T vs_6_6 -Fo /Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.spv /Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.hlsl
 /*
     #include <metal_stdlib>

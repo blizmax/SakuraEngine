@@ -1,7 +1,8 @@
 #Core Dispatcher of the Engine
 add_library(EditorModule SHARED EditorModule.cpp)
 
-target_link_libraries(EditorModule SPA Painter SDL2::SDL2 CoreModule)
+target_link_libraries(EditorModule 
+SPA Painter SDL2::SDL2 CoreModule ShaderTranslator)
 
 add_executable(Editor Execute/Execute.cpp)
 

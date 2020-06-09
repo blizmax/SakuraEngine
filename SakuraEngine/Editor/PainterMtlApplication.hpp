@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-07 00:20:15
+ * @LastEditTime: 2020-06-09 13:27:17
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
@@ -34,6 +34,7 @@ extern "C"
 	#include "SDL2/SDL_metal.h"
 	#undef main
 }
+#include "StaticBuilds/Painter/Include/ShaderTranslator/ShaderTranslator.h"
 #include <iostream>
 
 using namespace Sakura::Graphics;
@@ -118,6 +119,20 @@ public:
         SwapChainMetal* chain = 
             (SwapChainMetal*)Metal::SwapChainMetal::Create(*painter, 3, win);
         // Create Shader
+        HLSLShaderCompiler translator;
+        ShaderCompileDesc shaderCompileDesc;
+        shaderCompileDesc.shaderFileName 
+            = L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.hlsl";
+        shaderCompileDesc.binaryPath 
+            = L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.spv";
+        shaderCompileDesc.shaderStage = ShaderStageFlags::VertexStage;
+        shaderCompileDesc.entryPoint = L"vertFunc";
+        ShaderCompileQuery query;
+        if(!translator.Compile(shaderCompileDesc, ShaderILBC::SPIRV, &query))
+            Sakura::log::debug_warn<Sakura::flags::DEBUG_GAME_AND_EDITOR>
+                ("Failed to compile hlsl shader to spirv.");
+        
+        // MTL Shader
         auto shader =
             Shader::Create(*painter, shadersSrc, strlen(shadersSrc));
         // Create RenderPipeline

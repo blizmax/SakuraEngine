@@ -31,5 +31,19 @@ endif()
 add_library(Painter STATIC 
 ${PainterSouce}
 )
-
 target_link_libraries(Painter ${BackeEndAPIs})
+
+
+# add ShaderTranslator API
+add_library(ShaderTranslator SHARED 
+Source/ShaderTranslator.cpp
+Include/ShaderTranslator/ShaderTranslator.h
+)
+#find libdxcompiler
+find_library(libdxcompiler 
+dxcompiler 
+${ENGINE_TOOLS_DIR}/DirectXShaderCompiler/)
+#link dxcompiler
+target_link_libraries(ShaderTranslator PUBLIC
+CoreModule
+${libdxcompiler})

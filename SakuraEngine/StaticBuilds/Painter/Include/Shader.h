@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 01:19:36
- * @LastEditTime: 2020-06-08 02:47:51
+ * @LastEditTime: 2020-06-09 02:17:58
  */ 
 #pragma once
 
@@ -48,6 +48,7 @@ namespace Sakura::Graphics
         RayClosestHit       = 0x00000400,
         RayMiss             = 0x00000800,
         MeshStage           = 0x00000080,
+        AmplificationStage  = 0x00001000,
     };
         
     namespace _Shader
