@@ -47,3 +47,18 @@ ${ENGINE_TOOLS_DIR}/DirectXShaderCompiler/)
 target_link_libraries(ShaderTranslator PUBLIC
 CoreModule
 ${libdxcompiler})
+
+#spirv
+find_library(libspirv_cross 
+spirv-cross-c 
+spirv-cross-core
+spirv-cross-cpp
+spirv-cross-glsl
+spirv-cross-hlsl
+spirv-cross-msl
+spirv-cross-reflect
+spirv-cross-util
+${ENGINE_TOOLS_DIR}/SPIRV-Cross/)
+message(STATUS ${libspirv_cross})
+#link
+target_link_libraries(ShaderTranslator PUBLIC ${libspirv_cross})

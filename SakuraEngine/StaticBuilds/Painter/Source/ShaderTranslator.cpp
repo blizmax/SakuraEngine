@@ -22,13 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-08 23:26:09
- * @LastEditTime: 2020-06-09 13:38:17
+ * @LastEditTime: 2020-06-09 13:44:52
  */ 
 #include "../Include/ShaderTranslator/ShaderTranslator.h"
 using namespace Sakura::Graphics;
 #include <codecvt>
 #include <spirv_cross/spirv_glsl.hpp>
-
+#include <iostream>
 bool Sakura::Graphics::HLSLShaderCompiler::Compile(
     const ShaderCompileDesc& compileDesc,
     const Sakura::Graphics::ShaderILBC target,
@@ -222,5 +222,22 @@ bool Sakura::Graphics::HLSLShaderCompiler::Compile(
 
         // Use reflection interface here.
     }*/
+    return true;
+}
+
+bool Sakura::Graphics::SPIRVShaderTranslator::Compile(
+    const uint32_t *ir_, size_t word_count,
+    const ShadingLanguage sl)
+{
+    spirv_cross::CompilerGLSL glsl(ir_, word_count);
+    // Set some options.
+	spirv_cross::CompilerGLSL::Options options;
+	options.version = 450;
+	options.es = true;
+	glsl.set_common_options(options);
+
+	// Compile to GLSL, ready to give to GL driver.
+	std::string source = glsl.compile();
+    std::cout << source << std::endl;
     return true;
 }

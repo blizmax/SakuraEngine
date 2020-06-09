@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-08 23:19:06
- * @LastEditTime: 2020-06-09 13:34:12
+ * @LastEditTime: 2020-06-09 13:39:49
  */ 
 #pragma once
 #include <Core/Containers/Containers.h>
@@ -82,6 +82,8 @@ namespace Sakura::Graphics
 
     struct SPIRVShaderTranslator
     {
-        //bool Compile()
+        bool Compile(
+            const uint32_t *ir_, size_t word_count,
+            const ShadingLanguage sl = ShadingLanguage::MSL);
     };
 }
