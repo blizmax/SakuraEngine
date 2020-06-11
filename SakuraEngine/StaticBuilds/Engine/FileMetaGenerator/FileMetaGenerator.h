@@ -21,7 +21,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-11 23:32:58
- * @LastEditTime: 2020-06-12 00:41:06
+ * @LastEditTime: 2020-06-12 00:57:03
  */ 
 #pragma once
 #include "SakuraEngine/Core/Containers/Containers.h"
@@ -34,11 +34,11 @@ namespace Sakura::Engine
     struct FileMetaGenerator
     {
         static void AddInformation(
-            const Sakura::sstring& path,
+            const Sakura::swstring& path,
             const Sakura::sstring& title, const Sakura::sstring& data);
 
         static Sakura::sstring GetInformation(
-            const Sakura::sstring& path, const Sakura::sstring& title,
-            int* line = nullptr);
+            const Sakura::swstring& path,
+            const Sakura::sstring& title, int* line = nullptr);
     };
 }

@@ -3,4 +3,4 @@ src/FileMetaGenerator.cpp
 
 )
 
-target_link_libraries(FileMetaGenerator Core)
+target_link_libraries(FileMetaGenerator CoreModule)

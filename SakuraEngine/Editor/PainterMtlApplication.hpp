@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-12 00:54:06
+ * @LastEditTime: 2020-06-12 00:58:33
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Runtime/Painter/Include/SakuraPainter.h"
@@ -36,6 +36,7 @@ extern "C"
 }
 #include "StaticBuilds/Runtime/Painter/Include/ShaderTranslator/ShaderTranslator.h"
 #include <iostream>
+#include "StaticBuilds/Engine/FileMetaGenerator/FileMetaGenerator.h"
 
 using namespace Sakura::Graphics;
 using namespace Sakura::Graphics::Metal;
@@ -154,7 +155,10 @@ public:
             ShadingLanguage::MSL,
             L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/TrianglePS.mtl"
         );
-        
+        Sakura::Engine::FileMetaGenerator::AddInformation(
+            L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/TrianglePS.meta",
+            "timestamp", "000000");
+
         // MTL Shader
         auto vertShader = 
             Shader::Create(*painter, vsrc.c_str(), vsrc.size());

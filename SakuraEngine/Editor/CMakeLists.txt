@@ -2,7 +2,7 @@
 add_library(EditorModule SHARED EditorModule.cpp)
 
 target_link_libraries(EditorModule 
-SPA Painter SDL2::SDL2 CoreModule ShaderTranslator)
+SPA Painter SDL2::SDL2 CoreModule ShaderTranslator FileMetaGenerator)
 
 add_executable(Editor Execute/Execute.cpp)
 

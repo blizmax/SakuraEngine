@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-11 23:39:56
- * @LastEditTime: 2020-06-12 00:48:54
+ * @LastEditTime: 2020-06-12 01:49:32
  */ 
 #include "../FileMetaGenerator.h"
 #include <codecvt>
@@ -32,44 +32,77 @@ using namespace Sakura::Engine;
 //namespace fs = std::filesystem;
 //auto ftime = fs::last_write_time(src);
 //std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime);
-
+#include <iostream>
 void FileMetaGenerator::AddInformation(
-    const Sakura::sstring& path,
+    const Sakura::swstring& path,
     const Sakura::sstring& title, const Sakura::sstring& data)
 {
     int l = -1;
-    GetInformation(path, title, &l);
-    std::fstream outf(path.c_str(), std::ios::binary);
+    auto _d = GetInformation(path, title, &l);
+    if(_d == data)
+        return;
     if(l == -1) // Add new line
     {
-        outf << title.c_str() << " : " << data.c_str() << std::endl;
+        std::ofstream outf(path.c_str(), ios::app);
+        outf << title.c_str() << ":" << data.c_str() << "\n";
+        outf.close();
     }
     else // edit old line
     {
-        
+        std::ifstream inf(path.c_str());
+        std::string line;
+        std::string strFileData;
+        int i = 0;
+        while(std::getline(inf, line))
+        {
+            if (i == l)
+            {
+                strFileData.append(title.c_str()).append(":").append(data.c_str());
+                strFileData += "\n";
+            }
+            else
+            {
+                strFileData += line;
+                strFileData += "\n";
+            }
+            i++;
+        }
+        inf.close();
+        ofstream out(path.c_str());
+        out.flush();
+        out << strFileData;
+        out.close();
     }
 }
 
 Sakura::sstring FileMetaGenerator::GetInformation(
-    const Sakura::sstring& path, const Sakura::sstring& title,
+    const Sakura::swstring& path, const Sakura::sstring& title,
     int* _line)
 {
     Sakura::sstring res;
     if(_line != nullptr)
         *_line = -1;
-    std::fstream outf(path.c_str(), std::ios::binary);
+    std::fstream outf(path.c_str(), fstream::in);
     std::string line;
     int l = 0;
     while(std::getline(outf, line))
     {
-        auto cut = line.find(":");
-        if(cut > 0 && line.substr(1, cut - 1) == title.c_str())
+        if(!line.empty())
         {
-            res = line.substr(cut + 1, line.size()).c_str();
-            if(_line != nullptr)
-                *_line = l;
+            auto cut = line.find(":");
+            if(cut > 0)
+            {
+                std::cout << line.substr(0, cut) << std::endl;
+                if(line.substr(0, cut) == title.c_str())
+                {
+                    res = line.substr(cut + 1, line.size()).c_str();
+                    if(_line != nullptr)
+                        *_line = l;
+                }
+            }
         }
         l++;
     }
+    outf.close();
     return res;
 }
