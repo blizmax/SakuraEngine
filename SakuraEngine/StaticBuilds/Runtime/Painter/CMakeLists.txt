@@ -49,7 +49,7 @@ CoreModule
 ${libdxcompiler})
 
 #spirv
-find_library(libspirv_cross 
+set(libspirv_cross 
 spirv-cross-c 
 spirv-cross-core
 spirv-cross-cpp
@@ -57,8 +57,7 @@ spirv-cross-glsl
 spirv-cross-hlsl
 spirv-cross-msl
 spirv-cross-reflect
-spirv-cross-util
-${ENGINE_TOOLS_DIR}/SPIRV-Cross/)
+spirv-cross-util)
 message(STATUS ${libspirv_cross})
 #link
 target_link_libraries(ShaderTranslator PUBLIC ${libspirv_cross})

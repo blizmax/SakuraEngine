@@ -1,3 +1,6 @@
 [submodule "Extern/mimalloc"]
 	path = Extern/mimalloc
 	url = https://github.com/microsoft/mimalloc.git
+[submodule "SakuraEngine/Tools/SPIRV-Cross"]
+	path = SakuraEngine/Tools/SPIRV-Cross
+	url = https://github.com/KhronosGroup/SPIRV-Cross.git

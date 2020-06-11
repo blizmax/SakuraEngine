@@ -22,30 +22,36 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-08 23:26:09
- * @LastEditTime: 2020-06-09 13:44:52
+ * @LastEditTime: 2020-06-11 23:26:46
  */ 
 #include "../Include/ShaderTranslator/ShaderTranslator.h"
 using namespace Sakura::Graphics;
 #include <codecvt>
 #include <spirv_cross/spirv_glsl.hpp>
-#include <iostream>
+#include <spirv_cross/spirv_msl.hpp>
+#include <spirv_cross/spirv_hlsl.hpp>
+
+
 bool Sakura::Graphics::HLSLShaderCompiler::Compile(
     const ShaderCompileDesc& compileDesc,
     const Sakura::Graphics::ShaderILBC target,
     ShaderCompileQuery* query)
 {
     if(query == nullptr)
+    {
         if(compileDesc.shaderFileName.empty() || compileDesc.binaryPath.empty())
             return false;
-    // 
+    }
+    else 
+        query->Reset();
     // Create compiler and utils.
-    //
-    DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&pUtils));
-    DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&pCompiler));
-    //
+    if(pUtils == nullptr)
+        DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&pUtils));
+    if(pCompiler == nullptr)
+        DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&pCompiler));
     // Create default include handler. (You can create your own...)
-    //
-    pUtils->CreateDefaultIncludeHandler(&pIncludeHandler);
+    if(pIncludeHandler == nullptr)
+        pUtils->CreateDefaultIncludeHandler(&pIncludeHandler);
     Sakura::swstring stage;
     switch(compileDesc.shaderStage)
     {
@@ -148,26 +154,26 @@ bool Sakura::Graphics::HLSLShaderCompiler::Compile(
     CComPtr<IDxcBlobUtf16> pShaderName = nullptr;
     pResults->GetOutput(
         DXC_OUT_OBJECT, IID_PPV_ARGS(&pShader), &pShaderName);
-    if (!compileDesc.binaryPath.empty() && pShader != nullptr)
+    if (pShader != nullptr)
     {
-        if(query)
+        if(query != nullptr)
         {
             query->compiledBlob = pShader;
             query->shaderName = pShaderName;
         }
-        FILE* fp = NULL;
-        std::wstring name = pShaderName->GetStringPointer();
-        std::string utf8N;
-        std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
-        utf8N = conv.to_bytes(name);
-        fp = fopen(utf8N.c_str(), "wb");
-        fwrite(pShader->GetBufferPointer(), pShader->GetBufferSize(), 1, fp);
-        fclose(fp);
+        if(!compileDesc.binaryPath.empty())
+        {
+            FILE* fp = NULL;
+            std::wstring name = pShaderName->GetStringPointer();
+            std::string utf8N;
+            std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+            utf8N = conv.to_bytes(name);
+            fp = fopen(utf8N.c_str(), "wb");
+            fwrite(pShader->GetBufferPointer(), pShader->GetBufferSize(), 1, fp);
+            fclose(fp);
+        }
     }
-
-    //
     // Save pdb.
-    //
     CComPtr<IDxcBlob> pPDB = nullptr;
     CComPtr<IDxcBlobUtf16> pPDBName = nullptr;
     pResults->GetOutput(DXC_OUT_PDB, IID_PPV_ARGS(&pPDB), &pPDBName);
@@ -182,15 +188,12 @@ bool Sakura::Graphics::HLSLShaderCompiler::Compile(
         fwrite(pPDB->GetBufferPointer(), pPDB->GetBufferSize(), 1, fp);
         fclose(fp);
     }
-
-    //
     // Print hash.
-    //
     CComPtr<IDxcBlob> pHash = nullptr;
     pResults->GetOutput(DXC_OUT_SHADER_HASH, IID_PPV_ARGS(&pHash), nullptr);
     if (pHash != nullptr)
     {
-        if(query)
+        if(query != nullptr)
         {
             query->shaderHash = pHash;
         }
@@ -200,44 +203,59 @@ bool Sakura::Graphics::HLSLShaderCompiler::Compile(
             wprintf(L"%x", pHashBuf->HashDigest[i]);
         wprintf(L"\n");
     }
-
-
-    //
-    // Get separate reflection.
-    //
-    //CComPtr<IDxcBlob> pReflectionData;
-    //pResults->GetOutput(DXC_OUT_REFLECTION, IID_PPV_ARGS(&pReflectionData), nullptr);
-    /*if (pReflectionData != nullptr)
-    {
-        // Optionally, save reflection blob for later here.
-
-        // Create reflection interface.
-        DxcBuffer ReflectionData;
-        ReflectionData.Encoding = DXC_CP_ACP;
-        ReflectionData.Ptr = pReflectionData->GetBufferPointer();
-        ReflectionData.Size = pReflectionData->GetBufferSize();
-
-        CComPtr<ID3D12ShaderReflection> pReflection;
-        pUtils->CreateReflection(&ReflectionData, IID_PPV_ARGS(&pReflection));
-
-        // Use reflection interface here.
-    }*/
     return true;
 }
 
-bool Sakura::Graphics::SPIRVShaderTranslator::Compile(
+Sakura::sstring Sakura::Graphics::SPIRVShaderTranslator::Translate(
     const uint32_t *ir_, size_t word_count,
-    const ShadingLanguage sl)
+    const ShadingLanguage sl,
+    const Sakura::swstring& outputPath)
 {
-    spirv_cross::CompilerGLSL glsl(ir_, word_count);
+    spirv_cross::Compiler* compiler = nullptr;
+    Sakura::sstring result;
     // Set some options.
-	spirv_cross::CompilerGLSL::Options options;
-	options.version = 450;
-	options.es = true;
-	glsl.set_common_options(options);
-
+    spirv_cross::CompilerGLSL::Options options;
+    options.version = 450;
+    options.es = true;
+    switch (sl)
+    {
+    case ShadingLanguage::GLSL:
+        {
+            spirv_cross::CompilerGLSL gl_compiler(ir_, word_count);
+            gl_compiler.set_common_options(options);
+            result = gl_compiler.compile().c_str();
+            break;
+        }
+    case ShadingLanguage::MSL:
+        {
+            spirv_cross::CompilerMSL msl_compiler(ir_, word_count);
+            msl_compiler.set_common_options(options);
+            result = msl_compiler.compile().c_str();
+            break;
+        }
+    case ShadingLanguage::HLSL:
+        {
+            spirv_cross::CompilerHLSL hlsl_compiler(ir_, word_count);
+            hlsl_compiler.set_common_options(options);
+            spirv_cross::CompilerHLSL::Options hlsl_options;
+            hlsl_compiler.set_hlsl_options(hlsl_options);
+            result = hlsl_compiler.compile().c_str();
+            break;
+        }
+    default:
+        return result;
+    }
+    if(!outputPath.empty())
+    {
+        FILE* fp = NULL;
+        std::wstring name = outputPath.c_str();
+        std::string utf8N;
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+        utf8N = conv.to_bytes(name);
+        fp = fopen(utf8N.c_str(), "wb");
+        fwrite(result.c_str(), result.size() * sizeof(char), 1, fp);
+        fclose(fp);
+    }
 	// Compile to GLSL, ready to give to GL driver.
-	std::string source = glsl.compile();
-    std::cout << source << std::endl;
-    return true;
+    return result;
 }

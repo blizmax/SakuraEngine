@@ -1,0 +1,22 @@
+#include <metal_stdlib>
+#include <simd/simd.h>
+
+using namespace metal;
+
+struct vertFunc_out
+{
+    float4 gl_Position [[position]];
+};
+
+struct vertFunc_in
+{
+    float3 in_var_SV_Position [[attribute(0)]];
+};
+
+vertex vertFunc_out vertFunc(vertFunc_in in [[stage_in]])
+{
+    vertFunc_out out = {};
+    out.gl_Position = float4(in.in_var_SV_Position, 1.0);
+    return out;
+}
+

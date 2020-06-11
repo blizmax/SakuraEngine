@@ -22,11 +22,11 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-09 13:27:17
+ * @LastEditTime: 2020-06-12 00:54:06
  */ 
 #pragma once
-#include "SakuraEngine/StaticBuilds/Painter/Include/SakuraPainter.h"
-#include "SakuraEngine/StaticBuilds/Painter/Include/SDLSupport.h"
+#include "SakuraEngine/StaticBuilds/Runtime/Painter/Include/SakuraPainter.h"
+#include "SakuraEngine/StaticBuilds/Runtime/Painter/Include/SDLSupport.h"
 extern "C"
 {
 	#include "SDL2/SDL.h"
@@ -34,7 +34,7 @@ extern "C"
 	#include "SDL2/SDL_metal.h"
 	#undef main
 }
-#include "StaticBuilds/Painter/Include/ShaderTranslator/ShaderTranslator.h"
+#include "StaticBuilds/Runtime/Painter/Include/ShaderTranslator/ShaderTranslator.h"
 #include <iostream>
 
 using namespace Sakura::Graphics;
@@ -119,28 +119,55 @@ public:
         SwapChainMetal* chain = 
             (SwapChainMetal*)Metal::SwapChainMetal::Create(*painter, 3, win);
         // Create Shader
-        HLSLShaderCompiler translator;
+        HLSLShaderCompiler compiler;
+        SPIRVShaderTranslator translator;
         ShaderCompileDesc shaderCompileDesc;
+        ShaderCompileQuery query;
         shaderCompileDesc.shaderFileName 
             = L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.hlsl";
         shaderCompileDesc.binaryPath 
             = L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.spv";
         shaderCompileDesc.shaderStage = ShaderStageFlags::VertexStage;
         shaderCompileDesc.entryPoint = L"vertFunc";
-        ShaderCompileQuery query;
-        if(!translator.Compile(shaderCompileDesc, ShaderILBC::SPIRV, &query))
+        if(!compiler.Compile(shaderCompileDesc, ShaderILBC::SPIRV, &query))
             Sakura::log::debug_warn<Sakura::flags::DEBUG_GAME_AND_EDITOR>
                 ("Failed to compile hlsl shader to spirv.");
+        auto vsrc = translator.Translate(
+            (const uint32_t*)query.GetCompiledShaderBlob(), 
+            query.GetCompiledShaderSize() / sizeof(uint32_t),
+            ShadingLanguage::MSL,
+            L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.mtl"
+        );
+        //
+        shaderCompileDesc.shaderFileName 
+            = L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/TrianglePS.hlsl";
+        shaderCompileDesc.binaryPath 
+            = L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/TrianglePS.spv";
+        shaderCompileDesc.shaderStage = ShaderStageFlags::PixelStage;
+        shaderCompileDesc.entryPoint = L"fragFunc";
+        if(!compiler.Compile(shaderCompileDesc, ShaderILBC::SPIRV, &query))
+            Sakura::log::debug_warn<Sakura::flags::DEBUG_GAME_AND_EDITOR>
+                ("Failed to compile hlsl shader to spirv.");
+        auto psrc = translator.Translate(
+            (const uint32_t*)query.GetCompiledShaderBlob(), 
+            query.GetCompiledShaderSize() / sizeof(uint32_t),
+            ShadingLanguage::MSL,
+            L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/TrianglePS.mtl"
+        );
         
         // MTL Shader
+        auto vertShader = 
+            Shader::Create(*painter, vsrc.c_str(), vsrc.size());
+        auto fragShader = 
+            Shader::Create(*painter, psrc.c_str(), psrc.size());
         auto shader =
             Shader::Create(*painter, shadersSrc, strlen(shadersSrc));
         // Create RenderPipeline
         RenderPipelineDescripor desc
         {
             .shaderFunctions = {
-                ShaderFunction(VertexStage, shader, "vertFunc"), 
-                ShaderFunction(PixelStage, shader, "fragFunc")
+                ShaderFunction(VertexStage, vertShader, "vertFunc"), 
+                ShaderFunction(PixelStage, fragShader, "fragFunc")
             },
             .colorAttachments = {
                 RenderPipelineColorAttachmentDescriptor(PixelFormat::B8G8R8A8_UNORM)

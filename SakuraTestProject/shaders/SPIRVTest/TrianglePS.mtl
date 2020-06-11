@@ -1,0 +1,17 @@
+#include <metal_stdlib>
+#include <simd/simd.h>
+
+using namespace metal;
+
+struct fragFunc_out
+{
+    float4 out_var_SV_TARGET [[color(0)]];
+};
+
+fragment fragFunc_out fragFunc()
+{
+    fragFunc_out out = {};
+    out.out_var_SV_TARGET = float4(1.0);
+    return out;
+}
+

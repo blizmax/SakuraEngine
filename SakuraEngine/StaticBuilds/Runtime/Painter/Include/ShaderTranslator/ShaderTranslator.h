@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-08 23:19:06
- * @LastEditTime: 2020-06-09 13:39:49
+ * @LastEditTime: 2020-06-11 23:26:02
  */ 
 #pragma once
 #include <Core/Containers/Containers.h>
@@ -57,12 +57,31 @@ namespace Sakura::Graphics
         Sakura::smap<Sakura::swstring, Sakura::swstring> macroDefs;
         Sakura::svector<Sakura::swstring> compilerArgs;
     };
+    
     struct ShaderCompileQuery
     {
+        friend class HLSLShaderCompiler;
+        const void* GetCompiledShaderBlob() const 
+        {
+            return compiledBlob->GetBufferPointer();
+        }
+        const auto GetCompiledShaderSize() const 
+        {
+            return compiledBlob->GetBufferSize();
+        }
+        void Reset()
+        {
+            compiledBlob.Release();
+            shaderName.Release();
+            shaderHash.Release();
+        }
+    protected:
         CComPtr<IDxcBlob> compiledBlob;
         CComPtr<IDxcBlobUtf16> shaderName;
         CComPtr<IDxcBlob> shaderHash;
     };
+
+
     /**
      * @description: Accepts HLSL shader file and translate to variant
      * shader backends like GLSL, MSL, etc.
@@ -70,11 +89,13 @@ namespace Sakura::Graphics
      * https://github.com/microsoft/DirectXShaderCompiler
      * @author: SaeruHikari
      */
-    struct HLSLShaderCompiler
+    class HLSLShaderCompiler
     {
+    public:
         bool Compile(const ShaderCompileDesc& compileDesc,
             const ShaderILBC target = ShaderILBC::SPIRV,
             ShaderCompileQuery* query = nullptr);
+    protected:
         CComPtr<IDxcUtils> pUtils;
         CComPtr<IDxcCompiler3> pCompiler;
         CComPtr<IDxcIncludeHandler> pIncludeHandler;
@@ -82,8 +103,9 @@ namespace Sakura::Graphics
 
     struct SPIRVShaderTranslator
     {
-        bool Compile(
+        Sakura::sstring Translate(
             const uint32_t *ir_, size_t word_count,
-            const ShadingLanguage sl = ShadingLanguage::MSL);
+            const ShadingLanguage sl = ShadingLanguage::MSL,
+            const Sakura::swstring& outputPath = Sakura::swstring());
     };
 }

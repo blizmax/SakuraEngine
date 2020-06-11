@@ -34,6 +34,7 @@ const void* ShaderMetal::NewFunctionHandle(
         mtlpp::Function func = library.NewFunction(entryName.c_str());
         if(func.GetPtr() == nullptr)
         {
+            PainterMetal::error(entryName.c_str());
             PainterMetal::error("Create Metal Shader Function Failed!");
         }
         shaderFunctions[entryName] = func;

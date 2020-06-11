@@ -14,24 +14,6 @@ VertexOut vertFunc(VertexIn vin)
     vout.position = float4(vin.inPos.xyz, 1.f);
     return vout;
 }
-// /Users/huangzheng/Coding/SakuraEngine/Debug-build/Engine/tools/DirectXShaderCompiler/dxc-3.7 -spirv -E vertFunc -T vs_6_6 /Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.hlsl
-// /Users/huangzheng/Coding/SakuraEngine/Debug-build/Engine/tools/DirectXShaderCompiler/dxc-3.7 -spirv -E vertFunc -T vs_6_6 -Fo /Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.spv /Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.hlsl
-/*
-    #include <metal_stdlib>
-    using namespace metal;
-
-    vertex float4 vertFunc(
-        const device packed_float3* vertexArray [[buffer(0)]],
-        unsigned int vID[[vertex_id]])
-    {
-        return float4(vertexArray[vID], 1.0);
-    }
-
-    fragment half4 fragFunc()
-    {
-        return half4(0.0, 1.0, 1.0, 1.0);
-    }
-*/
 
 /* MSL Generated
     #include <metal_stdlib>
@@ -56,3 +38,6 @@ VertexOut vertFunc(VertexIn vin)
         return out;
     }
 */
+
+// /Users/huangzheng/Coding/SakuraEngine/Debug-build/Engine/tools/DirectXShaderCompiler/dxc-3.7 -spirv -E vertFunc -T vs_6_6 /Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.hlsl
+// /Users/huangzheng/Coding/SakuraEngine/Debug-build/Engine/tools/DirectXShaderCompiler/dxc-3.7 -spirv -E vertFunc -T vs_6_6 -Fo /Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.spv /Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/Triangle.hlsl
