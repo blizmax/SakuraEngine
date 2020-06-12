@@ -21,10 +21,11 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-11 23:32:58
- * @LastEditTime: 2020-06-12 14:30:45
+ * @LastEditTime: 2020-06-12 17:58:56
  */ 
 #pragma once
 #include "SakuraEngine/Core/Containers/Containers.h"
+#include "yaml.hpp"
 #include <fstream>
 
 namespace Sakura::Engine
@@ -35,7 +36,7 @@ namespace Sakura::Engine
     {
         using MetaPair = eastl::pair<Sakura::sstring, Sakura::sstring>;
         using MetaMap = Sakura::smap<Sakura::sstring, Sakura::sstring>;
-        using Functor = eastl::function<MetaPair(const Sakura::swstring&)>;
+        using Functor = eastl::function<MetaPair(FileMetaGenerator&, const Sakura::swstring&)>;
         void AddMeta(Functor functor)
         {
             functors.push_back(functor);
@@ -50,13 +51,21 @@ namespace Sakura::Engine
         {
             for(auto& functor : functors)
             {
-                AddInformation(path, functor(path).first, functor(path).second);
+                AddInformation(path,
+                    functor(*this, path).first, functor(*this, path).second);
             }
         }
         Sakura::sstring GetMeta(
             const Sakura::swstring& path, const Sakura::sstring& title)
         {
             return GetInformation(path, title);
+        }
+        bool HasMeta(
+            const Sakura::swstring& path, const Sakura::sstring& title)
+        {
+            int line = -1;
+            GetInformation(path, title, &line);
+            return line != -1;
         }
         MetaMap GetAllMeta(const Sakura::swstring& path);
     protected:

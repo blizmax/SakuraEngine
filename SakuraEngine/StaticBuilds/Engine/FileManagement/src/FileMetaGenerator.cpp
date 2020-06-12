@@ -22,12 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-11 23:39:56
- * @LastEditTime: 2020-06-12 14:31:42
+ * @LastEditTime: 2020-06-12 17:42:52
  */ 
 #include "../FileMetaGenerator.h"
 #include <codecvt>
 #include <filesystem>
 #include <sstream>
+#include "SakuraEngine/Core/CoreMinimal/SGUID.h"
 
 using namespace Sakura::Engine;
 //namespace fs = std::filesystem;
@@ -38,6 +39,8 @@ void FileMetaGenerator::AddInformation(
     const Sakura::swstring& path,
     const Sakura::sstring& title, const Sakura::sstring& data)
 {
+    if(title.empty())
+        return;
     int l = -1;
     auto _d = GetInformation(path, title, &l);
     if(_d == data)
@@ -133,12 +136,22 @@ FileMetaGenerator::FileMetaGenerator()
 {
     namespace fs = std::filesystem;
     functors.push_back(
-        [](const Sakura::swstring& path) -> Sakura::Engine::FileMetaGenerator::MetaPair
+        [](FileMetaGenerator& generator, const Sakura::swstring& path) -> Sakura::Engine::FileMetaGenerator::MetaPair
     {
         std::time_t t = 
             std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         std::stringstream ss;
         ss << t;
         return {"timestamp", ss.str().c_str()};
+    });
+    functors.push_back(
+        [](FileMetaGenerator& generator, const Sakura::swstring& path) -> Sakura::Engine::FileMetaGenerator::MetaPair
+    {
+        if(generator.HasMeta(path, "GUID"))
+            return {Sakura::sstring(), Sakura::sstring()};
+        Sakura::Guid guid = Sakura::newGuid();
+        std::stringstream ss;
+        ss << guid;
+        return {"GUID", ss.str().c_str()};
     });
 }

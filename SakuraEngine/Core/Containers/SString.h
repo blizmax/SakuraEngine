@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-07 13:19:34
- * @LastEditTime: 2020-06-09 02:20:02
+ * @LastEditTime: 2020-06-12 18:28:49
  */ 
 // Prototype from Star Engine :
 // https://github.com/star-e/StarEngine/blob/master/Star/SMap.h
@@ -86,38 +86,6 @@ namespace Sakura
     
     namespace String
     {
-        /**
-         * @description: Discard old ref and transfer. 
-         * @param {type} 
-         * @return: 
-         * @author: SaeruHikari
-         */
-        template<typename To, typename From,
-            typename std::enable_if<
-                std::is_constructible<std::string_view, To>::value &&
-                std::is_constructible<std::string_view, From>::value
-            >::type * = nullptr>
-        To DiscardCastStringTo(From& from)
-        {
-            std::variant<From, To> var = std::move(from);
-            return std::move(Sakura::convert<To>(var));
-        }
 
-        /**
-         * @description: Copy and transfer.  
-         * @param {type} 
-         * @return: 
-         * @author: SaeruHikari
-         */
-        template<typename To, typename From,
-            typename std::enable_if<
-                std::is_constructible<std::string_view, To>::value &&
-                std::is_constructible<std::string_view, From>::value
-            >::type * = nullptr>
-        To CastStringTo(From& from)
-        {
-            std::variant<From, To> var = from;
-            return std::move(Sakura::convert<To>(var));
-        }
     }
 }

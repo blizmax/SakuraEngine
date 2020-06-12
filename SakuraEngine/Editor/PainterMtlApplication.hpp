@@ -22,11 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-12 13:19:27
+ * @LastEditTime: 2020-06-12 18:37:24
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Runtime/Painter/Include/SakuraPainter.h"
 #include "SakuraEngine/StaticBuilds/Runtime/Painter/Include/SDLSupport.h"
+#include "StaticBuilds/Engine/FileManagement/FileMetaGenerator.h"
+#include "StaticBuilds/Runtime/Painter/Include/ShaderTranslator/ShaderTranslator.h"
 extern "C"
 {
 	#include "SDL2/SDL.h"
@@ -34,9 +36,9 @@ extern "C"
 	#include "SDL2/SDL_metal.h"
 	#undef main
 }
-#include "StaticBuilds/Runtime/Painter/Include/ShaderTranslator/ShaderTranslator.h"
+#include <EASTL/chrono.h>
 #include <iostream>
-#include "StaticBuilds/Engine/FileMetaGenerator/FileMetaGenerator.h"
+#include <Modules/ProjectManagement/ProjectManager.hpp>
 
 using namespace Sakura::Graphics;
 using namespace Sakura::Graphics::Metal;
@@ -52,13 +54,15 @@ const float vertexData[] =
     1.0f, -1.0f, 0.0f,
 };
 
-#include <EASTL/chrono.h>
 
 class PainterMetalApp
 {
 public:
     void run()
     {
+        Sakura::Engine::ProjectManager::NewProjectEntry(
+            L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/",
+            L"SakuraTest");
         // Init SDL Window
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         auto win = SDL_CreateWindow(

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:31:41
- * @LastEditTime: 2020-06-12 12:38:05
+ * @LastEditTime: 2020-06-12 18:45:23
  */ 
 #pragma once
 #include "../../Include/Painter.h"

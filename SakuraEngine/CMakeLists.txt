@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.11)
 
 project(Sakura VERSION 0.1.0)
 set(EngineVersion 0.1.0)
+configure_file(
+  "./Version.h.in"
+  "${CMAKE_SOURCE_DIR}/SakuraEngine/Version.h"
+)
 #execute_process(COMMAND python3 ${CMAKE_SOURCE_DIR}/SPA/anyToheader.py meta .json ${CMAKE_SOURCE_DIR}/SakuraEngine 
 #WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/SPA)
 #execute_process(COMMAND python3 ${CMAKE_SOURCE_DIR}/SPA/ModuleCollector.py meta  ${CMAKE_SOURCE_DIR}/SakuraEngine 

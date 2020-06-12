@@ -146,5 +146,7 @@
     },
     "cmake.buildDirectory": "${workspaceFolder}/${buildType}-build",
     "VSCodeCounter.showInStatusBar": true,
-    "telemetry.enableTelemetry": true
+    "telemetry.enableTelemetry": true,
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/${buildType}-build/compile_commands.json",
+    "cquery.launch.args": []
 }

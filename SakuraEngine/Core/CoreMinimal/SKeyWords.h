@@ -5,14 +5,16 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-08 14:17:20
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-01 17:50:42
+ * @LastEditTime: 2020-06-12 18:32:07
  */
 #pragma once
-#include <string>
-#include <stdint.h>
+#include <Version.h>
+#include <cstdint>
+#include <cstddef>
 
 namespace Sakura
 {
+    using namespace std;
     typedef unsigned int uint;
     typedef unsigned char uchar;
 
@@ -24,7 +26,7 @@ namespace Sakura
     using int16 = int16_t;
     using int32 = int32_t;
     using int64 = int64_t;
-    using size_t = size_t;
+    using size_t = std::size_t;
     using atom = size_t;
 }
 

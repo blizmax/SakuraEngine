@@ -4,7 +4,7 @@
  * @Author: SaeruHikari
  * @Date: 2020-02-02 09:36:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-07 00:14:30
+ * @LastEditTime: 2020-06-12 14:48:15
  */
 #pragma once
 // Concepts
@@ -12,7 +12,7 @@
 // Definations
 #include "SDefination.h"
 // UUID
-#include "SUUID.h"
+#include "SGUID.h"
 // Interfaces
 #include "sinterface.h"
 // Assert
