@@ -44,7 +44,7 @@ const void* ShaderMetal::NewFunctionHandle(
     return shaderFunctions[entryName].GetPtr();
 }
 
-Shader* PainterMetal::CreateShader(
+Shader* PainterMetal::CreateShaderBinaryCode(
     const char* data, std::size_t dataSize, const Shader::MacroTable& macroTable)
 {
     mtlpp::Library library 
@@ -52,6 +52,11 @@ Shader* PainterMetal::CreateShader(
     return new ShaderMetal(library);
 }
 
+PainterShader* PainterMetal::CreateShader(const Sakura::swstring &path,
+    const Shader::MacroTable &macroTable)
+{
+    return nullptr;
+}
 
 //---------------GPU Resource Create---------------
 GPUBuffer* PainterMetal::CreateBuffer( 

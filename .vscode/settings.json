@@ -125,7 +125,8 @@
         "__threading_support": "cpp",
         "__tree": "cpp",
         "__tuple": "cpp",
-        "compare": "cpp"
+        "compare": "cpp",
+        "__functional_03": "cpp"
     },
     //"cmake.generator" : "MinGW Makefiles",
     "cmake.configureOnOpen": true,

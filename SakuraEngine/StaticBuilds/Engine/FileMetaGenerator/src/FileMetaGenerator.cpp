@@ -22,11 +22,12 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-11 23:39:56
- * @LastEditTime: 2020-06-12 01:49:32
+ * @LastEditTime: 2020-06-12 14:31:42
  */ 
 #include "../FileMetaGenerator.h"
 #include <codecvt>
 #include <filesystem>
+#include <sstream>
 
 using namespace Sakura::Engine;
 //namespace fs = std::filesystem;
@@ -92,7 +93,6 @@ Sakura::sstring FileMetaGenerator::GetInformation(
             auto cut = line.find(":");
             if(cut > 0)
             {
-                std::cout << line.substr(0, cut) << std::endl;
                 if(line.substr(0, cut) == title.c_str())
                 {
                     res = line.substr(cut + 1, line.size()).c_str();
@@ -105,4 +105,40 @@ Sakura::sstring FileMetaGenerator::GetInformation(
     }
     outf.close();
     return res;
+}
+
+FileMetaGenerator::MetaMap FileMetaGenerator::GetAllMeta(
+    const Sakura::swstring &path)
+{
+    FileMetaGenerator::MetaMap res;
+    std::fstream outf(path.c_str(), fstream::in);
+    std::string line;
+    while(std::getline(outf, line))
+    {
+        if(!line.empty())
+        {
+            auto cut = line.find(":");
+            if(cut > 0)
+            {
+                res[line.substr(0, cut).c_str()] =
+                     line.substr(cut + 1, line.size()).c_str();
+            }
+        }
+    }
+    outf.close();
+    return res;
+}
+
+FileMetaGenerator::FileMetaGenerator()
+{
+    namespace fs = std::filesystem;
+    functors.push_back(
+        [](const Sakura::swstring& path) -> Sakura::Engine::FileMetaGenerator::MetaPair
+    {
+        std::time_t t = 
+            std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        std::stringstream ss;
+        ss << t;
+        return {"timestamp", ss.str().c_str()};
+    });
 }

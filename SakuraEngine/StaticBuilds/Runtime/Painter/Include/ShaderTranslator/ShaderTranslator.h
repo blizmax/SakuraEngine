@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-08 23:19:06
- * @LastEditTime: 2020-06-11 23:26:02
+ * @LastEditTime: 2020-06-12 02:44:11
  */ 
 #pragma once
 #include <Core/Containers/Containers.h>
@@ -31,20 +31,6 @@
 
 namespace Sakura::Graphics
 {
-    enum class ShaderILBC
-    {
-        SPIRV,
-        DXBC,
-        DXIL,
-        Count
-    };
-    enum class ShadingLanguage
-    {
-        HLSL,
-        MSL,
-        GLSL,
-        Count
-    };
     struct ShaderCompileDesc 
     {
         Sakura::swstring shaderFileName;

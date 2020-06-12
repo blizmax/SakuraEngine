@@ -21,7 +21,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-11 23:32:58
- * @LastEditTime: 2020-06-12 00:57:03
+ * @LastEditTime: 2020-06-12 14:30:45
  */ 
 #pragma once
 #include "SakuraEngine/Core/Containers/Containers.h"
@@ -33,6 +33,33 @@ namespace Sakura::Engine
     //hash : 1232142321
     struct FileMetaGenerator
     {
+        using MetaPair = eastl::pair<Sakura::sstring, Sakura::sstring>;
+        using MetaMap = Sakura::smap<Sakura::sstring, Sakura::sstring>;
+        using Functor = eastl::function<MetaPair(const Sakura::swstring&)>;
+        void AddMeta(Functor functor)
+        {
+            functors.push_back(functor);
+        }
+        FileMetaGenerator();
+        FileMetaGenerator(Sakura::svector<Functor> _functors)
+            :functors(_functors)
+        {
+            FileMetaGenerator();
+        }
+        void GenMeta(const Sakura::swstring& path)
+        {
+            for(auto& functor : functors)
+            {
+                AddInformation(path, functor(path).first, functor(path).second);
+            }
+        }
+        Sakura::sstring GetMeta(
+            const Sakura::swstring& path, const Sakura::sstring& title)
+        {
+            return GetInformation(path, title);
+        }
+        MetaMap GetAllMeta(const Sakura::swstring& path);
+    protected:
         static void AddInformation(
             const Sakura::swstring& path,
             const Sakura::sstring& title, const Sakura::sstring& data);
@@ -40,5 +67,6 @@ namespace Sakura::Engine
         static Sakura::sstring GetInformation(
             const Sakura::swstring& path,
             const Sakura::sstring& title, int* line = nullptr);
+        Sakura::svector<Functor> functors;
     };
 }

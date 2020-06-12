@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.10)
 #features
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS YES)
 #/home/saeruhikari/OpenLib/vcpkg/vcpkg install --triplet x64-linux eigen3 boost gtest spdlog glfw3 SDL2 fmt xxHash SDL2[vulkan]
 set(VCPKG_PKGS SDL2 freetype 
 tinyobjloader tinyobjloader[double]
-fmt entt 
+fmt entt
 SDL2[vulkan] vulkan-memory-allocator)
 
 set(SAKURA_UNITY_BUILD on)
@@ -88,7 +88,8 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     #add_definitions(-D "SAKURA_COMPILER_CLANG")
     message(STATUS "Use CLANG Compiler Clang")
     add_definitions(-msse4.2)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -std=c++20 -stdlib=libc++ -m64 -fPIC -march=native -O3 -pthread ${VAR_CONFIG_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -stdlib=libc++ -m64 -fPIC -march=native -O3 -pthread ${VAR_CONFIG_FLAGS}")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function")
 else()
     #add_definitions(-D "SAKURA_COMPILER_GCC")
     message(STATUS "Use GCC Compiler gcc")

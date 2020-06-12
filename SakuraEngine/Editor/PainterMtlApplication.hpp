@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-12 00:58:33
+ * @LastEditTime: 2020-06-12 13:19:27
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Runtime/Painter/Include/SakuraPainter.h"
@@ -40,42 +40,6 @@ extern "C"
 
 using namespace Sakura::Graphics;
 using namespace Sakura::Graphics::Metal;
-
-const char shadersSrc[] = R"""(
-    #include <metal_stdlib>
-    #include <simd/simd.h>
-
-    using namespace metal;
-
-    struct vertFunc_out
-    {
-        float4 gl_Position [[position]];
-    };
-
-    struct vertFunc_in
-    {
-        float3 in_var_SV_Position [[attribute(0)]];
-    };
-
-    vertex vertFunc_out vertFunc(vertFunc_in in [[stage_in]])
-    {
-        vertFunc_out out = {};
-        out.gl_Position = float4(in.in_var_SV_Position, 1.0);
-        return out;
-    }
-
-    struct fragFunc_out
-    {
-        float4 out_var_SV_TARGET [[color(0)]];
-    };
-
-    fragment fragFunc_out fragFunc()
-    {
-        fragFunc_out out = {};
-        out.out_var_SV_TARGET = float4(1.0);
-        return out;
-    }
-)""";
 
 const uint32_t indexData[] =
 {
@@ -155,17 +119,15 @@ public:
             ShadingLanguage::MSL,
             L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/TrianglePS.mtl"
         );
-        Sakura::Engine::FileMetaGenerator::AddInformation(
-            L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/TrianglePS.meta",
-            "timestamp", "000000");
-
+        Sakura::Engine::FileMetaGenerator s_gen;
+        s_gen.GenMeta(
+            L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/TrianglePS.meta");
+        
         // MTL Shader
         auto vertShader = 
             Shader::Create(*painter, vsrc.c_str(), vsrc.size());
         auto fragShader = 
             Shader::Create(*painter, psrc.c_str(), psrc.size());
-        auto shader =
-            Shader::Create(*painter, shadersSrc, strlen(shadersSrc));
         // Create RenderPipeline
         RenderPipelineDescripor desc
         {

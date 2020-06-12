@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:35:56
- * @LastEditTime: 2020-06-08 02:47:32
+ * @LastEditTime: 2020-06-12 12:38:20
  */ 
 #pragma once
 #include "Extension.h"
@@ -70,8 +70,18 @@ namespace Sakura::Graphics
          * @return: Shader pointer
          * @author: SaeruHikari
          */   
-        [[nodiscard]] virtual Shader* CreateShader(
+        [[nodiscard]] virtual Shader* CreateShaderBinaryCode(
             const char* data, const std::size_t dataSize,
+            const Shader::MacroTable& macroTable = _Shader::nullTable) = 0;
+
+        /**
+         * @description: Create a shader with hlsl-source directry.
+         * @param {const char*} source code or binary code of shader.
+         * @return: Shader pointer
+         * @author: SaeruHikari
+         */   
+        [[nodiscard]] virtual PainterShader* CreateShader(
+            const Sakura::swstring& path, 
             const Shader::MacroTable& macroTable = _Shader::nullTable) = 0;
 
         /**
@@ -128,6 +138,7 @@ namespace Sakura::Graphics
                 delete iter->second.ptr;
             }
         }
+        ShadingLanguage defaultShadingLanguage;
         // Check and Add Extensions
     public:
         template<typename ExtensionType, typename std::enable_if<
