@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-12 17:52:28
- * @LastEditTime: 2020-06-12 18:43:02
+ * @LastEditTime: 2020-06-13 02:03:45
  */ 
 #include "../ProjectManager.hpp"
 #include <fstream>
@@ -30,17 +30,21 @@
 
 using namespace Sakura::Engine;
 
+ProjectManager::ProjectManager()
+    :MetaGenerator(L".sproject")
+{
+    
+}
+
+ProjectManager::ProjectManager(
+    const Sakura::svector<ProjectPropertyRegister>& _registers)
+    :MetaGenerator(_registers, L".sproject")
+{
+    
+}
+
 void ProjectManager::NewProjectEntry(
     const Sakura::swstring& path, const Sakura::swstring& projectName)
 {
-    auto projectDirection  = path;
-    projectDirection = 
-        projectDirection.append(L"/").append(projectName).append(L".sproject");
-    std::string utf8N;
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
-    utf8N = conv.to_bytes(projectDirection.c_str());
-    std::ofstream fout(projectDirection.c_str());
-    YAML::Node config = YAML::LoadFile(utf8N);
-    config["EngineVersion"] = ENGINE_VERSION;
-    fout << config;
+    NewMetaFile(path, projectName);
 }

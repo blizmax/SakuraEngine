@@ -1,5 +1,6 @@
 add_library(FileManagement 
 src/FileMetaGenerator.cpp
+src/FileMetaManager.cpp
 
 )
 

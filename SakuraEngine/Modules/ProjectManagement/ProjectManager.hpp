@@ -22,18 +22,24 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-12 17:49:33
- * @LastEditTime: 2020-06-12 17:56:46
+ * @LastEditTime: 2020-06-13 00:56:12
  */ 
 #pragma once
 #include <Core/Containers/Containers.h>
-#include <SakuraEngine/StaticBuilds/Engine/FileManagement/FileMetaGenerator.h>
+#include <SakuraEngine/StaticBuilds/Engine/FileManagement/FileMetaManager.h>
 
 namespace Sakura::Engine
 {
-    class ProjectManager
+    class ProjectManager : public MetaGenerator
     {
     public:
-        static void NewProjectEntry(
+        using ProjectProerty = MetaProperty;
+        using ProjectProperties = MetaProperties;
+        using ProjectPropertyRegister = MetaPropertyRegister;
+        ProjectManager();
+        ProjectManager(const Sakura::svector<ProjectPropertyRegister>& registers);
+    public:
+        void NewProjectEntry(
             const Sakura::swstring& path, const Sakura::swstring& projectName);
     };
 }

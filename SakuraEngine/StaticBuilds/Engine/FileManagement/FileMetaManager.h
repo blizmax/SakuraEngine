@@ -21,8 +21,33 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-06-12 18:20:00
- * @LastEditTime: 2020-06-12 19:46:22
+ * @Date: 2020-06-13 00:37:44
+ * @LastEditTime: 2020-06-13 02:54:36
  */ 
 #pragma once
-#define ENGINE_VERSION "@EngineVersion@"
+#include "FileMetaGenerator.h"
+#include <filesystem>
+
+namespace Sakura::Engine
+{
+    class MetaManager : public MetaGenerator
+    {
+    public:
+        MetaManager(
+            const Sakura::swstring& bash, const Sakura::swstring& suffix);
+        
+        MetaManager(const Sakura::svector<MetaPropertyRegister>& registers,
+            const Sakura::swstring& bash, const Sakura::swstring& suffix);
+
+        void Mount(const Sakura::swstring& bash);
+
+        using FileVisitor = Sakura::function<void(const std::filesystem::path&)>;
+        void VisitAllMetaFiles(FileVisitor visitor);
+        
+        std::filesystem::path GetMetaWithGUID(const Sakura::Guid& guid);
+    protected:
+        void CollectMetaUnder(const std::filesystem::path& path);
+        Sakura::smap<Sakura::Guid, std::filesystem::path> managedMetas;
+        Sakura::svector<std::filesystem::path> bashes;
+    };
+}

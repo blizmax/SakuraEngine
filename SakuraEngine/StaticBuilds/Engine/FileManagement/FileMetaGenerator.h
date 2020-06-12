@@ -21,61 +21,76 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-11 23:32:58
- * @LastEditTime: 2020-06-12 17:58:56
+ * @LastEditTime: 2020-06-13 02:51:25
  */ 
 #pragma once
 #include "SakuraEngine/Core/Containers/Containers.h"
 #include "yaml.hpp"
 #include <fstream>
+#include <codecvt>
 
 namespace Sakura::Engine
 {
-    //timestamp : 24123
-    //hash : 1232142321
-    struct FileMetaGenerator
+    // Generate YAML meta files
+    class MetaGenerator
     {
-        using MetaPair = eastl::pair<Sakura::sstring, Sakura::sstring>;
-        using MetaMap = Sakura::smap<Sakura::sstring, Sakura::sstring>;
-        using Functor = eastl::function<MetaPair(FileMetaGenerator&, const Sakura::swstring&)>;
-        void AddMeta(Functor functor)
-        {
-            functors.push_back(functor);
-        }
-        FileMetaGenerator();
-        FileMetaGenerator(Sakura::svector<Functor> _functors)
-            :functors(_functors)
-        {
-            FileMetaGenerator();
-        }
-        void GenMeta(const Sakura::swstring& path)
-        {
-            for(auto& functor : functors)
-            {
-                AddInformation(path,
-                    functor(*this, path).first, functor(*this, path).second);
-            }
-        }
-        Sakura::sstring GetMeta(
-            const Sakura::swstring& path, const Sakura::sstring& title)
-        {
-            return GetInformation(path, title);
-        }
-        bool HasMeta(
-            const Sakura::swstring& path, const Sakura::sstring& title)
-        {
-            int line = -1;
-            GetInformation(path, title, &line);
-            return line != -1;
-        }
-        MetaMap GetAllMeta(const Sakura::swstring& path);
-    protected:
-        static void AddInformation(
-            const Sakura::swstring& path,
-            const Sakura::sstring& title, const Sakura::sstring& data);
+    public:
+        using MetaProperty =
+            Sakura::pair<YAML::Node, YAML::Node>;
+        using MetaProperties = 
+            Sakura::sunordered_map<YAML::Node, YAML::Node>;
+        using MetaPropertyRegister = 
+            Sakura::function<MetaProperty(MetaGenerator&)>;
+        MetaGenerator(const Sakura::swstring& suffix);
+        MetaGenerator(
+            const Sakura::svector<MetaPropertyRegister>& registers, const Sakura::swstring& suffix);
+    public:
+        void NewMetaFile(
+            const Sakura::swstring& path, const Sakura::swstring& fileName);
 
-        static Sakura::sstring GetInformation(
-            const Sakura::swstring& path,
-            const Sakura::sstring& title, int* line = nullptr);
-        Sakura::svector<Functor> functors;
+        //using MetaVisitor = Sakura::function<void(YAML::Node&)>;
+        template<typename MetaVisitor>
+        void VisitMeta(
+            const Sakura::swstring& path, const Sakura::swstring& fileName,
+            MetaVisitor visitor)
+        {
+            auto projectDirection  = path;
+            projectDirection = 
+                projectDirection.append(L"/").append(fileName).append(file_suffix);
+            std::string utf8N;
+            std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+            utf8N = conv.to_bytes(projectDirection.c_str());
+            YAML::Node config = YAML::LoadFile(utf8N);
+            visitor(config);
+        }
+        
+        template<typename MetaVisitor>
+        void VisitMeta(const std::filesystem::path& path,
+            MetaVisitor visitor)
+        {
+            YAML::Node config = YAML::LoadFile(path);
+            visitor(config);
+        }
+
+        template<typename Key, typename... T>
+        inline YAML::Node GetMeta(
+            const Key& title, T&&... args)
+        {
+            YAML::Node result;
+            VisitMeta(std::forward<T>(args)..., 
+                [&](YAML::Node& master){
+                if(master[title])
+                    result = master[title];
+            });
+            return result;
+        }
+
+        void RegistNewProperty(MetaPropertyRegister _register)
+        {
+            registers.push_back(_register);
+        }
+    protected:
+        Sakura::swstring file_suffix;
+        Sakura::svector<MetaPropertyRegister> registers;
     };
 }

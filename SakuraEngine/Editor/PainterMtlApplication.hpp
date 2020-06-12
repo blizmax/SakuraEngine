@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-12 18:37:24
+ * @LastEditTime: 2020-06-13 02:03:35
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Runtime/Painter/Include/SakuraPainter.h"
@@ -60,9 +60,31 @@ class PainterMetalApp
 public:
     void run()
     {
-        Sakura::Engine::ProjectManager::NewProjectEntry(
+        using ProjectManager = Sakura::Engine::ProjectManager;
+        ProjectManager projectManager;
+        projectManager.RegistNewProperty(
+            [](auto& manager) -> ProjectManager::ProjectProerty
+            {
+                YAML::Node title("TestEditor");
+                YAML::Node data("MetalBackend");
+                YAML::Node res;
+                res[title] = data;
+                return {title, res};
+            });
+        projectManager.NewProjectEntry(
             L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/",
             L"SakuraTest");
+
+        // Meta Manager
+        Sakura::Engine::MetaManager s_gen(
+            L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest",
+            L".meta");
+        s_gen.NewMetaFile(
+            L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest", 
+            L"TrianglePS");
+
+
+
         // Init SDL Window
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         auto win = SDL_CreateWindow(
@@ -123,9 +145,7 @@ public:
             ShadingLanguage::MSL,
             L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/TrianglePS.mtl"
         );
-        Sakura::Engine::FileMetaGenerator s_gen;
-        s_gen.GenMeta(
-            L"/Users/huangzheng/Coding/SakuraEngine/SakuraTestProject/shaders/SPIRVTest/TrianglePS.meta");
+        
         
         // MTL Shader
         auto vertShader = 

@@ -5,7 +5,7 @@
  * @Author: SaeruHikari
  * @Date: 2020-02-02 17:25:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-05-28 18:11:32
+ * @LastEditTime: 2020-06-12 20:56:15
  */
 #pragma once
 #define EA_CPP14_CONSTEXPR constexpr
@@ -16,3 +16,9 @@
 #include "SVector.h"
 #include <EASTL/unique_ptr.h>
 #include <EASTL/bitset.h>
+#include <EASTL/functional.h>
+
+namespace Sakura
+{
+    using eastl::function;
+}

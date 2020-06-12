@@ -22,10 +22,9 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-11 23:39:56
- * @LastEditTime: 2020-06-12 17:42:52
+ * @LastEditTime: 2020-06-13 02:36:12
  */ 
 #include "../FileMetaGenerator.h"
-#include <codecvt>
 #include <filesystem>
 #include <sstream>
 #include "SakuraEngine/Core/CoreMinimal/SGUID.h"
@@ -34,124 +33,55 @@ using namespace Sakura::Engine;
 //namespace fs = std::filesystem;
 //auto ftime = fs::last_write_time(src);
 //std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime);
-#include <iostream>
-void FileMetaGenerator::AddInformation(
-    const Sakura::swstring& path,
-    const Sakura::sstring& title, const Sakura::sstring& data)
-{
-    if(title.empty())
-        return;
-    int l = -1;
-    auto _d = GetInformation(path, title, &l);
-    if(_d == data)
-        return;
-    if(l == -1) // Add new line
-    {
-        std::ofstream outf(path.c_str(), ios::app);
-        outf << title.c_str() << ":" << data.c_str() << "\n";
-        outf.close();
-    }
-    else // edit old line
-    {
-        std::ifstream inf(path.c_str());
-        std::string line;
-        std::string strFileData;
-        int i = 0;
-        while(std::getline(inf, line))
-        {
-            if (i == l)
-            {
-                strFileData.append(title.c_str()).append(":").append(data.c_str());
-                strFileData += "\n";
-            }
-            else
-            {
-                strFileData += line;
-                strFileData += "\n";
-            }
-            i++;
-        }
-        inf.close();
-        ofstream out(path.c_str());
-        out.flush();
-        out << strFileData;
-        out.close();
-    }
-}
 
-Sakura::sstring FileMetaGenerator::GetInformation(
-    const Sakura::swstring& path, const Sakura::sstring& title,
-    int* _line)
-{
-    Sakura::sstring res;
-    if(_line != nullptr)
-        *_line = -1;
-    std::fstream outf(path.c_str(), fstream::in);
-    std::string line;
-    int l = 0;
-    while(std::getline(outf, line))
-    {
-        if(!line.empty())
-        {
-            auto cut = line.find(":");
-            if(cut > 0)
-            {
-                if(line.substr(0, cut) == title.c_str())
-                {
-                    res = line.substr(cut + 1, line.size()).c_str();
-                    if(_line != nullptr)
-                        *_line = l;
-                }
-            }
-        }
-        l++;
-    }
-    outf.close();
-    return res;
-}
+using namespace Sakura::Engine;
 
-FileMetaGenerator::MetaMap FileMetaGenerator::GetAllMeta(
-    const Sakura::swstring &path)
+MetaGenerator::MetaGenerator(const Sakura::swstring& suffix)
+    :file_suffix(suffix)
 {
-    FileMetaGenerator::MetaMap res;
-    std::fstream outf(path.c_str(), fstream::in);
-    std::string line;
-    while(std::getline(outf, line))
+    registers.push_back(
+        [](MetaGenerator& manager)->MetaGenerator::MetaProperty
     {
-        if(!line.empty())
-        {
-            auto cut = line.find(":");
-            if(cut > 0)
-            {
-                res[line.substr(0, cut).c_str()] =
-                     line.substr(cut + 1, line.size()).c_str();
-            }
-        }
-    }
-    outf.close();
-    return res;
-}
-
-FileMetaGenerator::FileMetaGenerator()
-{
-    namespace fs = std::filesystem;
-    functors.push_back(
-        [](FileMetaGenerator& generator, const Sakura::swstring& path) -> Sakura::Engine::FileMetaGenerator::MetaPair
-    {
-        std::time_t t = 
-            std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        std::stringstream ss;
-        ss << t;
-        return {"timestamp", ss.str().c_str()};
+        YAML::Node title("EngineVersion");
+        YAML::Node data(ENGINE_VERSION);
+        return {title, data};
     });
-    functors.push_back(
-        [](FileMetaGenerator& generator, const Sakura::swstring& path) -> Sakura::Engine::FileMetaGenerator::MetaPair
+    registers.push_back(
+        [](MetaGenerator& manager)->MetaGenerator::MetaProperty
     {
-        if(generator.HasMeta(path, "GUID"))
-            return {Sakura::sstring(), Sakura::sstring()};
+        YAML::Node title("GUID");
         Sakura::Guid guid = Sakura::newGuid();
         std::stringstream ss;
         ss << guid;
-        return {"GUID", ss.str().c_str()};
+        YAML::Node data(ss.str());
+        return {title, data};
     });
 }
+
+MetaGenerator::MetaGenerator(
+    const Sakura::svector<MetaPropertyRegister>& _registers,
+    const Sakura::swstring& file_suf)
+    :registers(_registers)
+{
+    MetaGenerator(file_suf.c_str());
+}
+
+void MetaGenerator::NewMetaFile(
+    const Sakura::swstring& path, const Sakura::swstring& fileName)
+{
+    auto projectDirection  = path;
+    projectDirection = 
+        projectDirection.append(L"/").append(fileName).append(file_suffix);
+    std::filesystem::path _path = projectDirection.c_str();
+    if(std::filesystem::exists(_path))
+        return;
+    std::ofstream fout(_path);
+    YAML::Node config = YAML::LoadFile(_path);
+    for(auto& functor : registers)
+    {
+        auto&& pair = functor(*this);
+        config[pair.first] = pair.second;
+    }
+    fout << config;
+}
+

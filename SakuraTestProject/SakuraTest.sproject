@@ -1,1 +1,4 @@
 EngineVersion: 0.1.0
+GUID: e71976e4-940a-4399-be29-9d4988f599e1
+&1 TestEditor:
+  *1: MetalBackend
