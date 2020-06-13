@@ -2,5 +2,4 @@
 #add_subdirectory(TaskSystem)
 #add_subdirectory(ImGuiProfiler)
 #add_subdirectory(RenderGraph)
-add_subdirectory(Engine)
 add_subdirectory(Runtime)

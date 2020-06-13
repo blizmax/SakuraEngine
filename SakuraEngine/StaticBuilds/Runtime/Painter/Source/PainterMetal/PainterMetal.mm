@@ -52,12 +52,6 @@ Shader* PainterMetal::CreateShaderBinaryCode(
     return new ShaderMetal(library);
 }
 
-PainterShader* PainterMetal::CreateShader(const Sakura::swstring &path,
-    const Shader::MacroTable &macroTable)
-{
-    return nullptr;
-}
-
 //---------------GPU Resource Create---------------
 GPUBuffer* PainterMetal::CreateBuffer( 
     const GPUBuffer::BufferUsage usage, 

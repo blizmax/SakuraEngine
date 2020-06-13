@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-28 01:19:36
- * @LastEditTime: 2020-06-12 13:44:28
+ * @LastEditTime: 2020-06-13 13:53:02
  */ 
 #pragma once
 #include <Core/Containers/Containers.h>
@@ -121,27 +121,5 @@ namespace Sakura::Graphics
         // For vulkan, this handle keeps as nullptr
         // For Direct3D12, this handle keeps as nullptr
         const void* funcHandle = nullptr;
-    };
-
-    /**
-    * @description: This is a cross-platform shader reference.
-    * pivots to a HLSL-shader source file
-    * and links to several generated-shaders which are platform-specified.
-    */
-    struct PainterShader
-    {
-        using MacroTable = Sakura::sunordered_map<Sakura::sstring, Sakura::sstring>;
-        // Find or create platform-specified shader BC or IL
-        // And Initialize ShaderFunction for Pipeline Setting.
-        PainterShader(Sakura::sstring_view backend,
-            const Sakura::swstring& hlslPath,
-            const Sakura::sstring& entryName, const ShaderStageFlags shaderStage,
-            const MacroTable& PreprocessorMacros = _Shader::nullTable,
-            const Sakura::swstring& generatedPath = L"");
-    protected:
-        const Sakura::sstring_view backendName;
-        // Shader and shader function will be created automatically
-        Shader* shader = nullptr;
-        ShaderFunction function;
     };
 }

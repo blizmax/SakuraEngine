@@ -21,25 +21,31 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-06-12 17:49:33
- * @LastEditTime: 2020-06-13 14:07:21
+ * @Date: 2020-06-13 13:45:59
+ * @LastEditTime: 2020-06-13 14:08:07
  */ 
-#pragma once
-#include <Core/Containers/Containers.h>
-#include <SakuraEngine/StaticBuilds/Runtime/FileManagement/FileMetaManager.h>
+#include "SharedShaderManager.h"
 
-namespace Sakura::Engine
+using namespace Sakura::Graphics;
+
+PainterShader::PainterShader(Sakura::sstring_view backend,
+    const Sakura::swstring& hlslPath,
+    const Sakura::sstring& entryName, const ShaderStageFlags shaderStage,
+    const PainterShader::MacroTable& PreprocessorMacros,
+    const Sakura::swstring& generatedPath)
 {
-    class ProjectManager : public MetaGenerator
+    // find generated File in meta file
+    
+}
+
+SharedShaderManager::SharedShaderManager(const Sakura::swstring& bash)
+    :bash_path(bash.c_str())
+{
+    if(!std::filesystem::exists(bash_path))
     {
-    public:
-        using ProjectProerty = MetaProperty;
-        using ProjectProperties = MetaProperties;
-        using ProjectPropertyRegister = MetaPropertyRegister;
-        ProjectManager();
-        ProjectManager(const Sakura::svector<ProjectPropertyRegister>& registers);
-    public:
-        void NewProjectEntry(
-            const Sakura::swstring& path, const Sakura::swstring& projectName);
-    };
+        Sakura::sstring error_info = "Construct error: path ";
+        error_info.append(bash_path.c_str()).append(" does not exist!");
+        SharedShaderManager::error(error_info.c_str());
+        assert(0);
+    }
 }

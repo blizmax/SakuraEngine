@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 12:36:03
- * @LastEditTime: 2020-06-12 13:46:16
+ * @LastEditTime: 2020-06-13 13:52:13
  */ 
 #include "Fence.h"
 #include "Painter.h"
@@ -43,16 +43,6 @@ Shader* Shader::Create(Painter& painter,
     const char* data, const std::size_t dataSize, const Shader::MacroTable& tbl)
 {
     return painter.CreateShaderBinaryCode(data, dataSize);
-}
-
-PainterShader::PainterShader(Sakura::sstring_view backend,
-    const Sakura::swstring& hlslPath,
-    const Sakura::sstring& entryName, const ShaderStageFlags shaderStage,
-    const PainterShader::MacroTable& PreprocessorMacros,
-    const Sakura::swstring& generatedPath)
-{
-    // find generated File in meta file
-    
 }
 
 GPUBuffer* GPUBuffer::Create(Painter& painter,

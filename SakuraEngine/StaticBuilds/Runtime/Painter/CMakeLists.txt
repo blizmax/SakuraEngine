@@ -61,3 +61,10 @@ spirv-cross-util)
 message(STATUS ${libspirv_cross})
 #link
 target_link_libraries(ShaderTranslator PUBLIC ${libspirv_cross})
+
+# Shared Shader Manager
+add_library(SharedShaderManager SHARED 
+Source/SharedShaderManager.cpp
+Include/SharedShaderManager.h
+)
+target_link_libraries(SharedShaderManager ShaderTranslator)

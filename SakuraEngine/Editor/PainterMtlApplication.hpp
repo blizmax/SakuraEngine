@@ -22,12 +22,12 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-29 02:48:38
- * @LastEditTime: 2020-06-13 02:03:35
+ * @LastEditTime: 2020-06-13 14:08:45
  */ 
 #pragma once
 #include "SakuraEngine/StaticBuilds/Runtime/Painter/Include/SakuraPainter.h"
 #include "SakuraEngine/StaticBuilds/Runtime/Painter/Include/SDLSupport.h"
-#include "StaticBuilds/Engine/FileManagement/FileMetaGenerator.h"
+#include "StaticBuilds/Runtime/FileManagement/FileMetaGenerator.h"
 #include "StaticBuilds/Runtime/Painter/Include/ShaderTranslator/ShaderTranslator.h"
 extern "C"
 {

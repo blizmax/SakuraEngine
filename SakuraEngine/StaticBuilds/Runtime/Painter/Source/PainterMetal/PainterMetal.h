@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-05-27 20:31:41
- * @LastEditTime: 2020-06-12 18:45:23
+ * @LastEditTime: 2020-06-13 13:49:25
  */ 
 #pragma once
 #include "../../Include/Painter.h"
@@ -66,10 +66,6 @@ namespace Sakura::Graphics::Metal
             std::uint32_t length, const void* pointer = nullptr) override;
         [[nodiscard]] virtual RenderPipeline* CreateRenderPipeline(
             const RenderPipelineDescripor& desc) override;
-
-        [[nodiscard]] virtual PainterShader* CreateShader(
-            const Sakura::swstring& path, 
-            const Shader::MacroTable& macroTable = _Shader::nullTable) override;
     protected:
         PainterMetal(bool bEnableDebugLayer) 
             :Painter(bEnableDebugLayer)
