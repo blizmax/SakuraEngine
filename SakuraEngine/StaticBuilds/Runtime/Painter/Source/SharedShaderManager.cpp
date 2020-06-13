@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-13 13:45:59
- * @LastEditTime: 2020-06-13 14:08:07
+ * @LastEditTime: 2020-06-13 14:20:55
  */ 
 #include "SharedShaderManager.h"
 
@@ -39,8 +39,9 @@ PainterShader::PainterShader(Sakura::sstring_view backend,
 }
 
 SharedShaderManager::SharedShaderManager(const Sakura::swstring& bash)
-    :bash_path(bash.c_str())
+    :Sakura::Engine::MetaManager(bash, L".shader.meta")
 {
+    std::filesystem::path bash_path(bash.c_str());
     if(!std::filesystem::exists(bash_path))
     {
         Sakura::sstring error_info = "Construct error: path ";

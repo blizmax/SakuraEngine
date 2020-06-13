@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-11 23:39:56
- * @LastEditTime: 2020-06-13 02:36:12
+ * @LastEditTime: 2020-06-14 00:50:02
  */ 
 #include "../FileMetaGenerator.h"
 #include <filesystem>
@@ -73,9 +73,11 @@ void MetaGenerator::NewMetaFile(
     projectDirection = 
         projectDirection.append(L"/").append(fileName).append(file_suffix);
     std::filesystem::path _path = projectDirection.c_str();
+    
     if(std::filesystem::exists(_path))
         return;
     std::ofstream fout(_path);
+    
     YAML::Node config = YAML::LoadFile(_path);
     for(auto& functor : registers)
     {

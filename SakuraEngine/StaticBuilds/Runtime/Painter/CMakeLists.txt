@@ -67,4 +67,7 @@ add_library(SharedShaderManager SHARED
 Source/SharedShaderManager.cpp
 Include/SharedShaderManager.h
 )
-target_link_libraries(SharedShaderManager ShaderTranslator)
+target_link_libraries(SharedShaderManager
+    PRIVATE
+    ShaderTranslator FileManagement
+)

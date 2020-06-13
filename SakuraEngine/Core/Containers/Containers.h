@@ -5,7 +5,7 @@
  * @Author: SaeruHikari
  * @Date: 2020-02-02 17:25:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-12 20:56:15
+ * @LastEditTime: 2020-06-14 00:32:44
  */
 #pragma once
 #define EA_CPP14_CONSTEXPR constexpr
@@ -21,4 +21,5 @@
 namespace Sakura
 {
     using eastl::function;
+    using eastl::unique_ptr;
 }

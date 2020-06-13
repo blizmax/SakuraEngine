@@ -22,12 +22,13 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-13 13:43:25
- * @LastEditTime: 2020-06-13 13:56:32
+ * @LastEditTime: 2020-06-13 14:21:02
  */ 
 #pragma once
 #include "Shader.h"
 #include <filesystem>
 #include <Core/EngineUtils/log.h>
+#include <StaticBuilds/Runtime/FileManagement/FileMetaManager.h>
 
 namespace Sakura::Graphics
 {   
@@ -52,7 +53,7 @@ namespace Sakura::Graphics
         Shader* shader = nullptr;
         ShaderFunction function;
     };
-    class SharedShaderManager
+    class SharedShaderManager : public Sakura::Engine::MetaManager
     {
     public:
         DECLARE_LOGGER("SharedShaderManager");
@@ -66,7 +67,5 @@ namespace Sakura::Graphics
         [[nodiscard]] PainterShader* CreateShader(
             const Sakura::swstring& path, 
             const Shader::MacroTable& macroTable = _Shader::nullTable);
-    protected:
-        std::filesystem::path bash_path;
     };
 }
