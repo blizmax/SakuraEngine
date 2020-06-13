@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-13 00:44:24
- * @LastEditTime: 2020-06-13 02:53:52
+ * @LastEditTime: 2020-06-13 11:13:06
  */ 
 #include "../FileMetaManager.h"
 #include "Core/EngineUtils/log.h"
@@ -72,7 +72,7 @@ void MetaManager::CollectMetaUnder(const std::filesystem::path &path)
                     {
                         Sakura::Guid guid = Sakura::Guid(result.as<std::string>());
                         // Add meta to the indexed map.
-                        managedMetas[guid] = entry.path();
+                        managedMetas[entry.path()][guid] = entry.path();
                     }
                 }
             }
@@ -82,18 +82,24 @@ void MetaManager::CollectMetaUnder(const std::filesystem::path &path)
 
 void MetaManager::VisitAllMetaFiles(FileVisitor visitor)
 {
-    for(auto&& managedMeta : managedMetas)
+    for(auto& iter : managedMetas)
     {
-        visitor(managedMeta.second);
+        for(auto&& iteriter : iter.second)
+        {
+            visitor(iteriter.second);
+        }
     }
 }
 
 std::filesystem::path MetaManager::GetMetaWithGUID(const Sakura::Guid &guid)
 {
     std::filesystem::path result;
-    if(managedMetas.find(guid) != managedMetas.end())
+    for(auto& iter : managedMetas)
     {
-        result = managedMetas[guid];
+        if(iter.second.find(guid) != iter.second.end())
+        {
+            result = iter.second[guid];
+        }
     }
     return result;
 }

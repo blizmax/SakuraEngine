@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-13 00:37:44
- * @LastEditTime: 2020-06-13 02:54:36
+ * @LastEditTime: 2020-06-13 11:10:25
  */ 
 #pragma once
 #include "FileMetaGenerator.h"
@@ -47,7 +47,7 @@ namespace Sakura::Engine
         std::filesystem::path GetMetaWithGUID(const Sakura::Guid& guid);
     protected:
         void CollectMetaUnder(const std::filesystem::path& path);
-        Sakura::smap<Sakura::Guid, std::filesystem::path> managedMetas;
+        Sakura::smap<std::filesystem::path, Sakura::smap<Sakura::Guid, std::filesystem::path>> managedMetas;
         Sakura::svector<std::filesystem::path> bashes;
     };
 }
