@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-09 19:30:30
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-05 19:41:21
+ * @LastEditTime: 2020-06-14 15:46:09
  */
 #include "Core/EngineUtils/os.h"
 #include <unistd.h>
@@ -15,27 +15,27 @@
 
 namespace Sakura::os
 {
-    sstring env(const char* name)
+    Sakura::string env(const char* name)
     {
         char* x = getenv(name);
-        return x ? sstring(x) : sstring();
+        return x ? Sakura::string(x) : Sakura::string();
     }
 
-    sstring homedir()
+    Sakura::string homedir()
     {
         return os::env("HOME");
     }
 
-    sstring cwd()
+    Sakura::string cwd()
     {
         char buf[512];
         char* s = getcwd(buf, 4096);
-        return s ? sstring(s) : sstring();
+        return s ? Sakura::string(s) : Sakura::string();
     }
 
-    sstring exename()
+    Sakura::string exename()
     {
-        sstring s = os::exepath();
+        Sakura::string s = os::exepath();
         return s.substr(s.rfind('/') + 1);
     }
 
@@ -51,17 +51,17 @@ namespace Sakura::os
     }
 
 #if defined(__linux__) || defined(SAKURA_TARGET_PLATFORM_LINUX)
-    sstring exepath() {
+    Sakura::string exepath() {
         char buf[4096] = { 0 };
         int r = (int) readlink("/proc/self/exe", buf, 4096);
-        return r > 0 ? sstring(buf, r) : sstring();
+        return r > 0 ? Sakura::string(buf, r) : Sakura::string();
     }
 #else
-    sstring exepath() {
+    Sakura::string exepath() {
         char buf[4096] = { 0 };
         uint32_t size = sizeof(buf);
         int r = _NSGetExecutablePath(buf, &size);
-        return r == 0 ? sstring(buf) : sstring();
+        return r == 0 ? Sakura::string(buf) : Sakura::string();
     }
 #endif
 }

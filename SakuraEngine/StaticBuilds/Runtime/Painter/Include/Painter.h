@@ -108,7 +108,7 @@ namespace Sakura::Graphics
          * @return: BackEnd Name
          * @author: SaeruHikari
          */
-        virtual const Sakura::sstring_view GetBackEndName() const = 0;
+        virtual const Sakura::string_view GetBackEndName() const = 0;
 
     public:
         template<typename PainterClass, typename... Args>
@@ -146,9 +146,9 @@ namespace Sakura::Graphics
             return std::decay_t<ExtensionType>::EnableIf(this);
         }
         using ExtensionsMap
-            = Sakura::sunordered_map<Sakura::sstring, eastl::unique_ptr<Extension>>;
+            = Sakura::unordered_map<Sakura::string, eastl::unique_ptr<Extension>>;
         using ExtensionsDataMap 
-            = Sakura::sunordered_map<Sakura::sstring, Extension::DataSlot>;
+            = Sakura::unordered_map<Sakura::string, Extension::DataSlot>;
         template<typename ExtensionType, typename... Args>
         inline ExtensionType* EnableExtension(Args... args)
         {
@@ -175,7 +175,7 @@ namespace Sakura::Graphics
             }
             return nullptr;
         }
-        inline Extension* FindActivatedExtension(const Sakura::sstring& name)
+        inline Extension* FindActivatedExtension(const Sakura::string& name)
         {
             if(extensions.find(name) != extensions.end())
             {

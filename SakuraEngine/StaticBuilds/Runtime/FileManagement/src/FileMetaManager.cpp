@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-13 00:44:24
- * @LastEditTime: 2020-06-13 11:13:06
+ * @LastEditTime: 2020-06-14 11:14:08
  */ 
 #include "../FileMetaManager.h"
 #include "Core/EngineUtils/log.h"
@@ -30,15 +30,15 @@
 using namespace Sakura::Engine;
 
 MetaManager::MetaManager(
-    const Sakura::swstring& _bash, const eastl::wstring& suffix)
+    const Sakura::wstring& _bash, const eastl::wstring& suffix)
     :MetaGenerator(suffix), bashes({_bash.c_str()})
 {
     std::filesystem::path newBash = _bash.c_str();
     CollectMetaUnder(newBash);
 }
 
-MetaManager::MetaManager(const Sakura::svector<MetaPropertyRegister>& registers,
-    const Sakura::swstring& _bash, const Sakura::swstring& suffix)
+MetaManager::MetaManager(const Sakura::vector<MetaPropertyRegister>& registers,
+    const Sakura::wstring& _bash, const Sakura::wstring& suffix)
     :MetaGenerator(registers, suffix), bashes({_bash.c_str()})
 {
     std::filesystem::path newBash = _bash.c_str();
@@ -56,7 +56,7 @@ void MetaManager::CollectMetaUnder(const std::filesystem::path &path)
             auto filename = entry.path().filename();
             if (fs::is_directory(entry.status()))
                 ;// This is a folder, thus we do nothing here.
-            else if (fs::is_regular_file(entry.status()) && entry.path().has_extension())
+            else if (fs::is_regular_file(entry.path()) && entry.path().has_extension())
             {
                 // Collect all managed files
                 if(entry.path().extension() == suffix_path)
@@ -104,14 +104,14 @@ std::filesystem::path MetaManager::GetMetaWithGUID(const Sakura::Guid &guid)
     return result;
 }
 
-void MetaManager::Mount(const Sakura::swstring &bash)
+void MetaManager::Mount(const Sakura::wstring &bash)
 {
     std::filesystem::path newBash = bash.c_str();
     for(auto i = 0u; i < bashes.size(); i++)
     {
         auto&& path = bashes[i];
-        Sakura::sstring_view ab_path = std::filesystem::absolute(path).c_str();
-        Sakura::sstring_view ab_new = std::filesystem::absolute(path).c_str();
+        Sakura::string_view ab_path = std::filesystem::absolute(path).c_str();
+        Sakura::string_view ab_new = std::filesystem::absolute(path).c_str();
         // if newBash is included in a mounted bash, then return directly
         if(ab_new.starts_with(ab_path))
             return;

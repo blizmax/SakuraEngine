@@ -37,14 +37,14 @@ ProjectManager::ProjectManager()
 }
 
 ProjectManager::ProjectManager(
-    const Sakura::svector<ProjectPropertyRegister>& _registers)
+    const Sakura::vector<ProjectPropertyRegister>& _registers)
     :MetaGenerator(_registers, L".sproject")
 {
     
 }
 
 void ProjectManager::NewProjectEntry(
-    const Sakura::swstring& path, const Sakura::swstring& projectName)
+    const Sakura::wstring& path, const Sakura::wstring& projectName)
 {
     NewMetaFile(path, projectName);
 }

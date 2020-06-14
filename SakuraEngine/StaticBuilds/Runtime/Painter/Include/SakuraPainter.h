@@ -45,7 +45,7 @@ namespace Sakura::Graphics
             eastl::unique_ptr<CommandQueue> blitQueue;
         };
         AsyncComputeExtension() = default;
-        inline static const eastl::vector<Sakura::sstring_view> supportedBackEnds = {
+        inline static const eastl::vector<Sakura::string_view> supportedBackEnds = {
             "Metal",
             "Direct3D12",
             "Vulkan",

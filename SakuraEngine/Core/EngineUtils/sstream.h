@@ -62,8 +62,8 @@ public:
         return _p;
     }
 
-    Sakura::sstring str() const {
-        return Sakura::sstring(_p, _size);
+    Sakura::string str() const {
+        return Sakura::string(_p, _size);
     }
 
     void clear() {
@@ -114,7 +114,7 @@ public:
         return this->append(s.data(), s.size());
     }
 
-    sstream& append(const Sakura::sstring& s) {
+    sstream& append(const Sakura::string& s) {
         return this->append(s.data(), s.size());
     }
 

@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-13 22:00:21
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-05 19:41:29
+ * @LastEditTime: 2020-06-14 15:45:45
  */
 #ifndef _WIN32
 #include "../fs.h"
@@ -57,7 +57,7 @@ namespace Sakura::fs
         const char* s = strrchr((char*)path, '/');
         if (s == 0) return ::mkdir(path, 0755) == 0;
 
-        sstring parent(path, s - path);
+        Sakura::string parent(path, s - path);
         
         if (fs::exists(parent.c_str())) {
             return ::mkdir(path, 0755) == 0;
@@ -77,7 +77,7 @@ namespace Sakura::fs
                 return rmdir(path) == 0;
             return unlink(path) == 0;
         } else {
-            sstring cmd;
+            Sakura::string cmd;
             cmd.resize(strlen(path) + 9);
             cmd.append("rm -rf \"").append(path);
             cmd += '"';
@@ -113,7 +113,7 @@ namespace xx
     struct fctx 
     {
         int fd;
-        sstring path;
+        Sakura::string path;
     };
 
     Sakura::fs::file::~file() 
@@ -130,7 +130,7 @@ namespace xx
         return p && p->fd != nullfd;
     }
 
-    const sstring& file::path() const 
+    const Sakura::string& file::path() const 
     {
         fctx* p = (fctx*) _p;
         return p->path;
@@ -162,8 +162,8 @@ namespace xx
         return r < 0 ? 0 : (size_t)r;
     }
 
-    sstring file::read(size_t n) {
-        sstring s;
+    Sakura::string file::read(size_t n) {
+        Sakura::string s;
         s.resize(n + 1);
         this->read((void*)s.data(), n);
         return s;

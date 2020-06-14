@@ -32,7 +32,7 @@ using namespace Sakura::Graphics;
 
 namespace Sakura::RenderGraph
 {
-	Sakura::StringHasher rghasher;
+	Sakura::stringHasher rghasher;
 	SRenderGraph::SRenderGraph(CGD* commanGraphicsDevice)
 		:cgd(commanGraphicsDevice)
 	{

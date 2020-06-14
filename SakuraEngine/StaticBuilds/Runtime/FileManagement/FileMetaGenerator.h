@@ -38,20 +38,20 @@ namespace Sakura::Engine
         using MetaProperty =
             Sakura::pair<YAML::Node, YAML::Node>;
         using MetaProperties = 
-            Sakura::sunordered_map<YAML::Node, YAML::Node>;
+            Sakura::unordered_map<YAML::Node, YAML::Node>;
         using MetaPropertyRegister = 
             Sakura::function<MetaProperty(MetaGenerator&)>;
-        MetaGenerator(const Sakura::swstring& suffix);
+        MetaGenerator(const Sakura::wstring& suffix);
         MetaGenerator(
-            const Sakura::svector<MetaPropertyRegister>& registers, const Sakura::swstring& suffix);
+            const Sakura::vector<MetaPropertyRegister>& registers, const Sakura::wstring& suffix);
     public:
         void NewMetaFile(
-            const Sakura::swstring& path, const Sakura::swstring& fileName);
+            const Sakura::wstring& path, const Sakura::wstring& fileName);
 
         //using MetaVisitor = Sakura::function<void(YAML::Node&)>;
         template<typename MetaVisitor>
         void VisitMeta(
-            const Sakura::swstring& path, const Sakura::swstring& fileName,
+            const Sakura::wstring& path, const Sakura::wstring& fileName,
             MetaVisitor visitor)
         {
             auto projectDirection  = path;
@@ -90,7 +90,7 @@ namespace Sakura::Engine
             registers.push_back(_register);
         }
     protected:
-        Sakura::swstring file_suffix;
-        Sakura::svector<MetaPropertyRegister> registers;
+        Sakura::wstring file_suffix;
+        Sakura::vector<MetaPropertyRegister> registers;
     };
 }

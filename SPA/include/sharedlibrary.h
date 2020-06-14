@@ -38,7 +38,7 @@ namespace Sakura::SPA
         {load(path);}
         SharedLibrary(const std::string& path)
         {load(path);}
-        SharedLibrary(const Sakura::sstring& path)
+        SharedLibrary(const Sakura::string& path)
         {load(path);}
         SharedLibrary(std::string_view path)
         {load(path);}
@@ -70,7 +70,7 @@ namespace Sakura::SPA
         * @overload 
         * @see load(const char* path) 
         */
-        inline bool load(const Sakura::sstring& path)
+        inline bool load(const Sakura::string& path)
         {return load(path.c_str());}
         /**
         * @overload 
@@ -136,7 +136,7 @@ namespace Sakura::SPA
         * @see get(const char* symbolName)
         */
         template<typename SymT>
-        SymT& get(const Sakura::sstring& symbolName)
+        SymT& get(const Sakura::string& symbolName)
         {return get<SymT>(symbolName.c_str());}
         /**
         * @overload

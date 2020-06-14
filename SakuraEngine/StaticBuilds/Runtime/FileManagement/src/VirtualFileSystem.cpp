@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-14 00:57:52
- * @LastEditTime: 2020-06-14 02:51:26
+ * @LastEditTime: 2020-06-14 11:22:57
  */ 
 #include "../VirtualFileSystem.h"
 
@@ -49,7 +49,8 @@ bool virtual_filesystem::exists(const path& pth)
 {
     for(auto&& root : mounted_roots)
     {
-        //if()
+        if(root->exists(pth))
+            return true;
     }
     return false;
 }
@@ -70,6 +71,10 @@ bool virtual_filesystem::mount(directory_root* entry)
 
 
 //-----------------local filesystem(based on stl)----------------------
+bool directory_entry_local::exists()
+{
+    return stl_entry.exists();
+}
 void directory_root_local::on_mount()
 {
     // Just do nothing when mounted to local filesystem
@@ -79,10 +84,39 @@ void directory_root_local::on_mount()
 
 bool directory_root_local::exists(const path &path)
 {
-    return std::filesystem::exists(path.stl_path);
+    return std::filesystem::exists(path);
 }
 
+Sakura::string_view directory_root_local::get_mount_method()
+{
+    return this->mount_method;
+}
 
+void directory_root_local::foreach(
+    const path &path, Sakura::function<void (directory_entry *)> visitor)
+{
+    namespace fs = std::filesystem;
+    if(fs::exists(path))
+    {
+        if(fs::is_directory(path))
+        {
+            for (const auto& entry : fs::directory_iterator(path))
+            {
+
+            }
+        }
+        else if(fs::is_regular_file(path))
+        {
+            
+        }
+    }
+}
+
+void directory_root_local::foreach_recursively(
+    const path &path, Sakura::function<void (directory_entry *)> visitor)
+{
+    assert(0);
+}
 
 
 ___local_detail::vfs_initializer::vfs_initializer()

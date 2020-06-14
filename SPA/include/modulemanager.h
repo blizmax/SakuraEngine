@@ -70,7 +70,7 @@ namespace Sakura::SPA
     struct ModuleProperty
     {
         bool bActive = false;
-        Sakura::sstring name;
+        Sakura::string name;
     };
     using registerer = eastl::function<eastl::unique_ptr<IModule>(void)>;
     using ModuleProp = property<ModuleProp_t, ModuleProperty>;
@@ -82,36 +82,36 @@ namespace Sakura::SPA
         friend struct IModule;
     public:
         ModuleManager() = default;
-        virtual IModule* GetModule(const Sakura::sstring& name);
+        virtual IModule* GetModule(const Sakura::string& name);
     
-        virtual const ModuleGraph& MakeModuleGraph(const Sakura::sstring& entry, 
+        virtual const ModuleGraph& MakeModuleGraph(const Sakura::string& entry, 
             bool shared = false);
         virtual bool InitModuleGraph(void);
         virtual bool DestroyModuleGraph(void);
     public:
-        virtual void Mount(const Sakura::sstring& rootdir);
-        virtual Sakura::sstring_view GetRoot(void);
+        virtual void Mount(const Sakura::string& rootdir);
+        virtual Sakura::string_view GetRoot(void);
         virtual void RegisterStaticallyLinkedModule(
             const char* moduleName, registerer _register);
-        virtual IModule* SpawnStaticModule(const Sakura::sstring& moduleName);
-        virtual IModule* SpawnDynamicModule(const Sakura::sstring& moduleName);
-        virtual ModuleProperty GetModuleProp(const Sakura::sstring& name);
-        virtual void SetModuleProp(const Sakura::sstring& name, const ModuleProperty& prop);
+        virtual IModule* SpawnStaticModule(const Sakura::string& moduleName);
+        virtual IModule* SpawnDynamicModule(const Sakura::string& moduleName);
+        virtual ModuleProperty GetModuleProp(const Sakura::string& name);
+        virtual void SetModuleProp(const Sakura::string& name, const ModuleProperty& prop);
     private:
-        bool __internal_DestroyModuleGraph(const Sakura::sstring& nodename);
-        void __internal_MakeModuleGraph(const Sakura::sstring& entry,
+        bool __internal_DestroyModuleGraph(const Sakura::string& nodename);
+        void __internal_MakeModuleGraph(const Sakura::string& entry,
             bool shared = false);
-        bool __internal_InitModuleGraph(const Sakura::sstring& nodename);
+        bool __internal_InitModuleGraph(const Sakura::string& nodename);
         Version CoreVersion{"0.1.0"};
         ModuleInfo ParseMetaData(const char* metadata);
     private:
-        Sakura::sstring moduleDir;
-        eastl::vector<Sakura::sstring> roots;
-        Sakura::sstring mainModuleName;
+        Sakura::string moduleDir;
+        eastl::vector<Sakura::string> roots;
+        Sakura::string mainModuleName;
         ModuleGraph moduleDependecyGraph;
-        eastl::map<Sakura::sstring, int, eastl::less<>> NodeMap;
-        eastl::map<Sakura::sstring, registerer, eastl::less<>> InitializeMap;
-        eastl::map<Sakura::sstring, eastl::unique_ptr<IModule>, eastl::less<>>
+        eastl::map<Sakura::string, int, eastl::less<>> NodeMap;
+        eastl::map<Sakura::string, registerer, eastl::less<>> InitializeMap;
+        eastl::map<Sakura::string, eastl::unique_ptr<IModule>, eastl::less<>>
             ModulesMap;
     };
 

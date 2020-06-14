@@ -625,7 +625,7 @@ namespace Sakura::Graphics
 
     struct RenderPassDescriptor
     {
-        Sakura::svector<RenderPassColorAttachmentDescriptor> colorAttachments;
+        Sakura::vector<RenderPassColorAttachmentDescriptor> colorAttachments;
         RenderPassDepthAttachmentDescriptor depthAttachment;
         RenderPassStencilAttachmentDescriptor stencilAttachment;
     };
@@ -664,12 +664,12 @@ namespace Sakura::Graphics
             //PerPatch                                          = 3, ?
             //PerPatchControlPoint                              = 4, ?
         };
-        VertexAttribute(const Sakura::sstring& _semantic_name, uint32_t _stride, uint32_t _offset, 
+        VertexAttribute(const Sakura::string& _semantic_name, uint32_t _stride, uint32_t _offset, 
             VertexFormat _format, uint32_t _stepRate = 1, VertexStepFunction _stepFunction = VertexStepFunction::PerVertex)
             :semantic_name(_semantic_name), stride(_stride), offset(_offset), format(_format),
             stepRate(_stepRate), stepFunction(_stepFunction)
         {}
-        Sakura::sstring semantic_name;
+        Sakura::string semantic_name;
         uint32_t stride;
         uint32_t offset;
         VertexFormat format;
@@ -682,8 +682,8 @@ namespace Sakura::Graphics
         PixelFormat depthFormat;
         PixelFormat stencilFormat;
         PrimitiveTopology topology = PrimitiveTopology::Triangle;
-        Sakura::svector<ShaderFunction> shaderFunctions;
-        Sakura::svector<RenderPipelineColorAttachmentDescriptor> colorAttachments;
-        Sakura::svector<VertexAttribute> vertexAttributes;
+        Sakura::vector<ShaderFunction> shaderFunctions;
+        Sakura::vector<RenderPipelineColorAttachmentDescriptor> colorAttachments;
+        Sakura::vector<VertexAttribute> vertexAttributes;
     };
 }

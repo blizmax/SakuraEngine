@@ -39,16 +39,16 @@ namespace Sakura::Graphics
     */
     struct PainterShader
     {
-        using MacroTable = Sakura::sunordered_map<Sakura::sstring, Sakura::sstring>;
+        using MacroTable = Sakura::unordered_map<Sakura::string, Sakura::string>;
         // Find or create platform-specified shader BC or IL
         // And Initialize ShaderFunction for Pipeline Setting.
-        PainterShader(Sakura::sstring_view backend,
-            const Sakura::swstring& hlslPath,
-            const Sakura::sstring& entryName, const ShaderStageFlags shaderStage,
+        PainterShader(Sakura::string_view backend,
+            const Sakura::wstring& hlslPath,
+            const Sakura::string& entryName, const ShaderStageFlags shaderStage,
             const MacroTable& PreprocessorMacros = _Shader::nullTable,
-            const Sakura::swstring& generatedPath = L"");
+            const Sakura::wstring& generatedPath = L"");
     protected:
-        const Sakura::sstring_view backendName;
+        const Sakura::string_view backendName;
         // Shader and shader function will be created automatically
         Shader* shader = nullptr;
         ShaderFunction function;
@@ -57,7 +57,7 @@ namespace Sakura::Graphics
     {
     public:
         DECLARE_LOGGER("SharedShaderManager");
-        SharedShaderManager(const Sakura::swstring& bash);
+        SharedShaderManager(const Sakura::wstring& bash);
         /**
          * @description: Create a shader with hlsl-source directry.
          * @param {const char*} source code or binary code of shader.
@@ -65,7 +65,7 @@ namespace Sakura::Graphics
          * @author: SaeruHikari
          */   
         [[nodiscard]] PainterShader* CreateShader(
-            const Sakura::swstring& path, 
+            const Sakura::wstring& path, 
             const Shader::MacroTable& macroTable = _Shader::nullTable);
     };
 }

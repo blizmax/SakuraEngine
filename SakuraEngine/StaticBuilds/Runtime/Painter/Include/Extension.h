@@ -36,9 +36,9 @@ namespace Sakura::Graphics
 {
     struct DefaultBackEndNames
     {
-        static constexpr const Sakura::sstring_view Metal = "Metal";
-        static constexpr const Sakura::sstring_view Direct3D12 = "Direct3D12";
-        static constexpr const Sakura::sstring_view Vulkan = "Vulkan";
+        static constexpr const Sakura::string_view Metal = "Metal";
+        static constexpr const Sakura::string_view Direct3D12 = "Direct3D12";
+        static constexpr const Sakura::string_view Vulkan = "Vulkan";
     };
 
     struct Extension

@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-02-09 15:43:31
- * @LastEditTime : 2020-02-09 16:49:07
- * @LastEditors  : SaeruHikari
+ * @LastEditTime: 2020-06-14 15:49:20
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /SakuraEngine/Core/EngineUtils/time.h
  */
@@ -20,7 +20,7 @@ namespace Sakura
          * @param output format 
          * @return: "%Y-%m-%d %H:%M:%S" ==> 2018-08-08 08:08:08
          */
-        sstring str(const char* fm = "%Y-%m-%d %H:%M:%S");
+        Sakura::string str(const char* fm = "%Y-%m-%d %H:%M:%S");
     } 
 
     class Timer

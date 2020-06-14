@@ -33,15 +33,15 @@ namespace Sakura::Graphics
 {
     struct ShaderCompileDesc 
     {
-        Sakura::swstring shaderFileName;
-        Sakura::swstring entryPoint;
-        Sakura::swstring binaryPath;
-        Sakura::swstring pdbPath;
+        Sakura::wstring shaderFileName;
+        Sakura::wstring entryPoint;
+        Sakura::wstring binaryPath;
+        Sakura::wstring pdbPath;
         ShaderStageFlags shaderStage;
         // Advanced Options
         bool bEnableDebugInformation = false;
-        Sakura::smap<Sakura::swstring, Sakura::swstring> macroDefs;
-        Sakura::svector<Sakura::swstring> compilerArgs;
+        Sakura::map<Sakura::wstring, Sakura::wstring> macroDefs;
+        Sakura::vector<Sakura::wstring> compilerArgs;
     };
     
     struct ShaderCompileQuery
@@ -89,9 +89,9 @@ namespace Sakura::Graphics
 
     struct SPIRVShaderTranslator
     {
-        Sakura::sstring Translate(
+        Sakura::string Translate(
             const uint32_t *ir_, size_t word_count,
             const ShadingLanguage sl = ShadingLanguage::MSL,
-            const Sakura::swstring& outputPath = Sakura::swstring());
+            const Sakura::wstring& outputPath = Sakura::wstring());
     };
 }

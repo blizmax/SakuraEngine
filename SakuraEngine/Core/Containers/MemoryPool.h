@@ -21,24 +21,14 @@
  * @Description: 
  * @Version: 0.1.0
  * @Autor: SaeruHikari
- * @Date: 2020-05-28 01:39:22
- * @LastEditTime: 2020-06-08 02:47:58
+ * @Date: 2020-06-14 15:23:10
+ * @LastEditTime: 2020-06-14 15:24:00
  */ 
 #pragma once
-#include "../../Include/Shader.h"
+#include <climits>
+#include <cstddef>
 
-namespace Sakura::Graphics::Metal
+namespace Sakura
 {
-    struct ShaderMetal final : public Shader
-    {
-        friend struct PainterMetal;
-    protected:
-        ShaderMetal(mtlpp::Library lib);
-    public:
-        virtual const void* NewFunctionHandle(
-            const Sakura::string& functionName) override;
-
-        mtlpp::Library library;
-        Sakura::unordered_map<Sakura::string, mtlpp::Function> shaderFunctions;
-    };
+    
 }

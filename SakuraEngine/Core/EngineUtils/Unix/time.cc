@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-02-09 16:02:00
- * @LastEditTime: 2020-04-22 13:34:10
+ * @LastEditTime: 2020-06-14 15:48:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /SakuraEngine/Core/EngineUtils/Unix/time.cc
@@ -55,7 +55,7 @@ int64 Sakura::now::us()
     return _Clk::us();
 }
 
-sstring Sakura::now::str(const char* fm /*="%Y-%m-%d %H:%M:%S"*/)
+Sakura::string Sakura::now::str(const char* fm /*="%Y-%m-%d %H:%M:%S"*/)
 {
     time_t x = time(0);
     struct tm t;
@@ -63,5 +63,5 @@ sstring Sakura::now::str(const char* fm /*="%Y-%m-%d %H:%M:%S"*/)
 
     char buf[32]; // 32 is big enough in most cases
     size_t r = strftime(buf, 32, fm, &t);
-    return sstring(buf, r);
+    return Sakura::string(buf, r);
 }

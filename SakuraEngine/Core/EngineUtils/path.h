@@ -4,8 +4,8 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-09 20:03:51
- * @LastEditors  : SaeruHikari
- * @LastEditTime : 2020-02-13 16:44:20
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-14 15:57:05
  */
 #pragma once
 #include "Core/Containers/SString.h"
@@ -70,18 +70,18 @@ namespace Sakura::path
         typename std::enable_if<
             std::is_constructible<std::string_view, T>::value 
         >::type * = nullptr>
-        sinline sstring __join(const T& str)
+        sinline Sakura::string __join(const T& str)
         {
-            return (sstring)str;
+            return (Sakura::string)str;
         }
 
         template<typename T, typename... Ts,
         typename std::enable_if<
             std::is_constructible<std::string_view, T>::value 
         >::type * = nullptr>
-        sinline sstring __join(const T& str, const Ts&... s)
+        sinline Sakura::string __join(const T& str, const Ts&... s)
         {
-            return !((sstring)str).empty() ? ((sstring)str + "/" + __join(s...))  
+            return !((Sakura::string)str).empty() ? ((Sakura::string)str + "/" + __join(s...))  
                 : __join(s...);
         }
     }
@@ -90,7 +90,7 @@ namespace Sakura::path
     typename std::enable_if<
         std::is_constructible<std::string_view, T>::value 
     >::type * = nullptr>
-    sinline sstring join(const T& str, const Ts&... str2)
+    sinline Sakura::string join(const T& str, const Ts&... str2)
     {
         return ____::__join(str, str2...);
     }    
@@ -139,7 +139,7 @@ namespace Sakura::path
         if (p == 0) 
             return _T(1, '/');
 
-        sstring_view x = (p == s.size() ? s : s.substr(0, p));
+        Sakura::string_view x = (p == s.size() ? s : s.substr(0, p));
         size_t c = x.rfind('/');
         if constexpr(std::is_constructible<std::string_view, T>::value)
             return c != x.npos ? (_T)x.substr(c + 1) : (_T)x;

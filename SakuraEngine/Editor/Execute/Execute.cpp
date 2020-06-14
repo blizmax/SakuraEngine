@@ -20,7 +20,7 @@ int main(void)
     auto mng = GetModuleManager();
     auto path = std::filesystem::path(Sakura::os::exepath().c_str());
     auto dir = path.remove_filename();
-    Sakura::sstring root = dir.string().c_str();
+    Sakura::string root = dir.string().c_str();
     mng->Mount(root);
     std::string mainName = "EditorModule";//Need a module as the entry, this module can be the total dispatcher
     mng->MakeModuleGraph(mainName.c_str(), true);

@@ -48,7 +48,7 @@ namespace Sakura::Graphics::Metal
         DECLARE_LOGGER("PainterMetal")
     public:
         virtual ~PainterMetal() = default;
-        virtual const Sakura::sstring_view GetBackEndName() const override 
+        virtual const Sakura::string_view GetBackEndName() const override 
         {
             return Sakura::Graphics::DefaultBackEndNames::Metal;
         } 

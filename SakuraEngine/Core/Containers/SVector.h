@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-09 09:34:34
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-17 03:40:41
+ * @LastEditTime: 2020-06-14 15:53:55
  */
 #pragma once
 #define EA_CPP14_CONSTEXPR constexpr
@@ -16,8 +16,8 @@
 namespace Sakura
 {
     template<class T, size_t N>
-    using ssmall_vector = boost::container::small_vector<T, N>;
+    using small_vector = boost::container::small_vector<T, N>;
 
     template<class T>
-    using svector = eastl::vector<T>;
+    using vector = eastl::vector<T>;
 }

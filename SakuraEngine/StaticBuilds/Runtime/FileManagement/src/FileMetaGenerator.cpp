@@ -36,7 +36,7 @@ using namespace Sakura::Engine;
 
 using namespace Sakura::Engine;
 
-MetaGenerator::MetaGenerator(const Sakura::swstring& suffix)
+MetaGenerator::MetaGenerator(const Sakura::wstring& suffix)
     :file_suffix(suffix)
 {
     registers.push_back(
@@ -59,15 +59,15 @@ MetaGenerator::MetaGenerator(const Sakura::swstring& suffix)
 }
 
 MetaGenerator::MetaGenerator(
-    const Sakura::svector<MetaPropertyRegister>& _registers,
-    const Sakura::swstring& file_suf)
+    const Sakura::vector<MetaPropertyRegister>& _registers,
+    const Sakura::wstring& file_suf)
     :registers(_registers)
 {
     MetaGenerator(file_suf.c_str());
 }
 
 void MetaGenerator::NewMetaFile(
-    const Sakura::swstring& path, const Sakura::swstring& fileName)
+    const Sakura::wstring& path, const Sakura::wstring& fileName)
 {
     auto projectDirection  = path;
     projectDirection = 

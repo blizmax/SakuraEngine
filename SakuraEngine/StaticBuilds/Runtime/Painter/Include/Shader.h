@@ -69,19 +69,19 @@ namespace Sakura::Graphics
         
     namespace _Shader
     {
-        inline const Sakura::sunordered_map<Sakura::sstring, Sakura::sstring> nullTable;
+        inline const Sakura::unordered_map<Sakura::string, Sakura::string> nullTable;
     }
     
     struct Shader
     {
         friend class ShaderFunction;
-        using MacroTable = Sakura::sunordered_map<Sakura::sstring, Sakura::sstring>;
+        using MacroTable = Sakura::unordered_map<Sakura::string, Sakura::string>;
         [[nodiscard]] static Shader* Create(
             Painter&, const char* data, std::size_t dataSize,
             const MacroTable& PreprocessorMacros = _Shader::nullTable);
     protected:
         [[nodiscard]] virtual const void* NewFunctionHandle(
-            const Sakura::sstring& functionName)
+            const Sakura::string& functionName)
         {
             return nullptr;
         }
@@ -92,7 +92,7 @@ namespace Sakura::Graphics
         friend struct PainterMetal;
         ShaderFunction() = default;
         ShaderFunction(const ShaderStageFlags _stage,
-            Shader* _shader, const Sakura::sstring& _entry)
+            Shader* _shader, const Sakura::string& _entry)
             : stage(_stage), shader(_shader), entry(_entry)
         {
             funcHandle = shader->NewFunctionHandle(_entry);
@@ -105,7 +105,7 @@ namespace Sakura::Graphics
         {
             return shader;
         }
-        const Sakura::sstring& GetEntry() const
+        const Sakura::string& GetEntry() const
         {
             return entry;
         }
@@ -116,7 +116,7 @@ namespace Sakura::Graphics
     protected:
         ShaderStageFlags stage;
         Shader* shader = nullptr;
-        Sakura::sstring entry;
+        Sakura::string entry;
         // For metal, this is called MTLFunction in MTLLibrary
         // For vulkan, this handle keeps as nullptr
         // For Direct3D12, this handle keeps as nullptr

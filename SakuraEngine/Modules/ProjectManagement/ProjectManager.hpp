@@ -37,9 +37,9 @@ namespace Sakura::Engine
         using ProjectProperties = MetaProperties;
         using ProjectPropertyRegister = MetaPropertyRegister;
         ProjectManager();
-        ProjectManager(const Sakura::svector<ProjectPropertyRegister>& registers);
+        ProjectManager(const Sakura::vector<ProjectPropertyRegister>& registers);
     public:
         void NewProjectEntry(
-            const Sakura::swstring& path, const Sakura::swstring& projectName);
+            const Sakura::wstring& path, const Sakura::wstring& projectName);
     };
 }

@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-08 13:58:16
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-08 00:41:45
+ * @LastEditTime: 2020-06-14 15:51:01
  */
 // Excellent Prototype from Star Engine :
 // https://github.com/star-e/StarEngine/blob/master/Star/SMap.h
@@ -21,7 +21,7 @@
 namespace Sakura
 {
     template <typename... Args>
-    using smap = eastl::map<Args...>;
+    using map = eastl::map<Args...>;
 
     template <typename Key,
         typename T,
@@ -29,7 +29,7 @@ namespace Sakura
         typename Predicate = eastl::equal_to<Key>,
         typename Allocator = EASTLAllocatorType,
         bool bCacheHashCode = false>
-    using sunordered_map = eastl::unordered_map<Key, T, Hash, Predicate, Allocator, bCacheHashCode>;
+    using unordered_map = eastl::unordered_map<Key, T, Hash, Predicate, Allocator, bCacheHashCode>;
     
     struct StringHasher
     {
@@ -40,7 +40,7 @@ namespace Sakura
             return Sakura::hash::hash(key, Sakura::hash::defaultseed);
         }
         
-        inline std::size_t operator()(const Sakura::sstring &key) const
+        inline std::size_t operator()(const Sakura::string &key) const
         {
             using std::size_t;
             using std::hash;

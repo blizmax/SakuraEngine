@@ -60,8 +60,8 @@ namespace Sakura::Graphics::Mtl
         const CGDMtl& cgd;
         MtlView m_view;
         NSWindow* window = nullptr;
-        mutable Sakura::svector<GpuTexture*> textures;
-        mutable Sakura::svector<ResourceView*> drawableViews;
+        mutable Sakura::vector<GpuTexture*> textures;
+        mutable Sakura::vector<ResourceView*> drawableViews;
         uint8 frameIndex = 0;
         uint8 frameCount = 0;
     };

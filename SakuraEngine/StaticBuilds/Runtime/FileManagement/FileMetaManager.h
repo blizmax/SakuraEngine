@@ -34,12 +34,12 @@ namespace Sakura::Engine
     {
     public:
         MetaManager(
-            const Sakura::swstring& bash, const Sakura::swstring& suffix);
+            const Sakura::wstring& bash, const Sakura::wstring& suffix);
         
-        MetaManager(const Sakura::svector<MetaPropertyRegister>& registers,
-            const Sakura::swstring& bash, const Sakura::swstring& suffix);
+        MetaManager(const Sakura::vector<MetaPropertyRegister>& registers,
+            const Sakura::wstring& bash, const Sakura::wstring& suffix);
 
-        void Mount(const Sakura::swstring& bash);
+        void Mount(const Sakura::wstring& bash);
 
         using FileVisitor = Sakura::function<void(const std::filesystem::path&)>;
         void VisitAllMetaFiles(FileVisitor visitor);
@@ -47,7 +47,7 @@ namespace Sakura::Engine
         std::filesystem::path GetMetaWithGUID(const Sakura::Guid& guid);
     protected:
         void CollectMetaUnder(const std::filesystem::path& path);
-        Sakura::smap<std::filesystem::path, Sakura::smap<Sakura::Guid, std::filesystem::path>> managedMetas;
-        Sakura::svector<std::filesystem::path> bashes;
+        Sakura::map<std::filesystem::path, Sakura::map<Sakura::Guid, std::filesystem::path>> managedMetas;
+        Sakura::vector<std::filesystem::path> bashes;
     };
 }

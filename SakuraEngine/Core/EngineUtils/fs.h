@@ -98,7 +98,7 @@ namespace Sakura::fs
 
 		operator bool() const;
 
-		const Sakura::sstring& path() const;
+		const Sakura::string& path() const;
 
 		int64 size() const
 		{
@@ -118,7 +118,7 @@ namespace Sakura::fs
 
 		size_t read(void* buf, size_t size);
 
-		Sakura::sstring read(size_t size);
+		Sakura::string read(size_t size);
 
 		size_t write(const void* buf, size_t size);
 
@@ -201,7 +201,7 @@ namespace Sakura::fs
 			return this->append(s, strlen(s));
 		}
 
-		fstream& operator<<(const sstring& s) {
+		fstream& operator<<(const Sakura::string& s) {
 			return this->append(s.data(), s.size());
 		}
 

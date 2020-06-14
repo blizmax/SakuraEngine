@@ -4,8 +4,8 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-09 16:16:33
- * @LastEditors  : SaeruHikari
- * @LastEditTime : 2020-02-09 19:59:35
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-14 15:48:05
  */
 #pragma once
 #include "../Containers/SString.h"
@@ -20,7 +20,7 @@ namespace Sakura
          * @return: env param value
          * @author: SaeruHikari
          */
-        sstring env(const char* name);
+        Sakura::string env(const char* name);
 
         /**
          * @description: 
@@ -28,7 +28,7 @@ namespace Sakura
          * @return: home dir or current user
          * @author: SaeruHikari
          */
-        sstring homedir(void);
+        Sakura::string homedir(void);
 
         /**
          * @description: Get current work directory 
@@ -36,7 +36,7 @@ namespace Sakura
          * @return: current work directory.
          * @author: SaeruHikari
          */
-        sstring cwd(void);
+        Sakura::string cwd(void);
 
         /**
          * @description: 
@@ -44,7 +44,7 @@ namespace Sakura
          * @return: 
          * @author: SaeruHikari
          */
-        sstring exepath(void);
+        Sakura::string exepath(void);
 
         /**
          * @description: 
@@ -52,7 +52,7 @@ namespace Sakura
          * @return: name of executable.
          * @author: SaeruHikari
          */
-        sstring exename(void);
+        Sakura::string exename(void);
 
         /**
          * @description: Get PID. 

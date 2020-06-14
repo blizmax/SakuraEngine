@@ -52,7 +52,7 @@ bool Sakura::Graphics::HLSLShaderCompiler::Compile(
     // Create default include handler. (You can create your own...)
     if(pIncludeHandler == nullptr)
         pUtils->CreateDefaultIncludeHandler(&pIncludeHandler);
-    Sakura::swstring stage;
+    Sakura::wstring stage;
     switch(compileDesc.shaderStage)
     {
         case ShaderStageFlags::VertexStage:
@@ -79,7 +79,7 @@ bool Sakura::Graphics::HLSLShaderCompiler::Compile(
         default:
             return false;
     }
-    Sakura::svector<LPCWSTR> pszArgs =
+    Sakura::vector<LPCWSTR> pszArgs =
     {
         // shader file name
         compileDesc.shaderFileName.c_str(),            // Optional shader source file name for error reporting and for PIX shader source view.  
@@ -206,13 +206,13 @@ bool Sakura::Graphics::HLSLShaderCompiler::Compile(
     return true;
 }
 
-Sakura::sstring Sakura::Graphics::SPIRVShaderTranslator::Translate(
+Sakura::string Sakura::Graphics::SPIRVShaderTranslator::Translate(
     const uint32_t *ir_, size_t word_count,
     const ShadingLanguage sl,
-    const Sakura::swstring& outputPath)
+    const Sakura::wstring& outputPath)
 {
     spirv_cross::Compiler* compiler = nullptr;
-    Sakura::sstring result;
+    Sakura::string result;
     // Set some options.
     spirv_cross::CompilerGLSL::Options options;
     options.version = 450;
