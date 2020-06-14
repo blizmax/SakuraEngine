@@ -7,7 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS YES)
 #/home/saeruhikari/OpenLib/vcpkg/vcpkg install --triplet x64-linux eigen3 boost gtest spdlog glfw3 SDL2 fmt xxHash SDL2[vulkan]
 set(VCPKG_PKGS SDL2 freetype yaml-cpp
 tinyobjloader tinyobjloader[double]
-fmt entt
+fmt entt TBB
 SDL2[vulkan] vulkan-memory-allocator)
 
 set(SAKURA_UNITY_BUILD on)
@@ -46,6 +46,7 @@ link_directories(${ENGINE_TOOLS_DIR})
 
 
 find_package(freetype CONFIG REQUIRED)
+find_package(TBB CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
@@ -88,7 +89,7 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     #add_definitions(-D "SAKURA_COMPILER_CLANG")
     message(STATUS "Use CLANG Compiler Clang")
     add_definitions(-msse4.2)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -stdlib=libc++ -m64 -fPIC -march=native -O3 -pthread ${VAR_CONFIG_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -stdlib=libc++ -m64 -fPIC -march=native -O3 -pthread ${VAR_CONFIG_FLAGS} -Wno-macro-redefined")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function -Wno-macro-redefined")
 else()
     #add_definitions(-D "SAKURA_COMPILER_GCC")

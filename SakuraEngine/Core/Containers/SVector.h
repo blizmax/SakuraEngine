@@ -5,19 +5,23 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-09 09:34:34
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-14 15:53:55
+ * @LastEditTime: 2020-06-14 16:29:03
  */
 #pragma once
 #define EA_CPP14_CONSTEXPR constexpr
 #include "Core/CoreMinimal/SDefination.h"
 #include <boost/container/small_vector.hpp>
 #include <EASTL/vector.h>
+#ifndef TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS
+#define TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS 1
+#endif
+#include <tbb/concurrent_vector.h>
 
 namespace Sakura
 {
-    template<class T, size_t N>
-    using small_vector = boost::container::small_vector<T, N>;
+    using boost::container::small_vector;
 
-    template<class T>
-    using vector = eastl::vector<T>;
+    using eastl::vector;
+    
+    using tbb::concurrent_vector;
 }

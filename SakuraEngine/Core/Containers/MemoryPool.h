@@ -22,13 +22,19 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-14 15:23:10
- * @LastEditTime: 2020-06-14 15:24:00
+ * @LastEditTime: 2020-06-14 17:51:10
  */ 
 #pragma once
-#include <climits>
-#include <cstddef>
+#include "Core/CoreMinimal/SKeyWords.h"
 
 namespace Sakura
 {
-    
+    template< typename T, int blocksize=255>  
+    class memory_pool  
+    {  
+        static constexpr size_t objsize = sizeof(T);  
+        static constexpr uint64_t aba_staging  =0x0001000000000000LL; // Staging
+        static constexpr uint64_t aba_bit_mark =0xFFFF000000000000LL; // Counter  
+        static constexpr uint64_t ptr_bit_mask =0x0000FFFFFFFFFFFFLL; // Ptr
+    };
 }

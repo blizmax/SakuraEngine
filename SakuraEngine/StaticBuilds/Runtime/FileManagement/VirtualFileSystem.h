@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-14 00:28:25
- * @LastEditTime: 2020-06-14 15:52:38
+ * @LastEditTime: 2020-06-15 00:51:47
  */ 
 #pragma once
 #include <filesystem>
@@ -34,6 +34,8 @@ namespace Sakura::Engine
     namespace virtual_filesystem
     {
         using path = std::filesystem::path;
+        using copy_options = std::filesystem::copy_options;
+        using file_time_type = std::filesystem::file_time_type;
 
         static constexpr Sakura::string_view 
             mount_method_local_filesystem = "lfs";
@@ -43,53 +45,121 @@ namespace Sakura::Engine
         struct directory_entry
         {
             virtual ~directory_entry(){};
-            virtual bool exists() = 0;
+            //---------------------modifiers-----------------------//
+            virtual void replace_filename(const path& p) = 0;
+            virtual void assign(const path& p) = 0;
+            virtual void refresh() = 0;
+            // --------------------observers----------------------//
+            virtual bool exists() const = 0;
+            virtual bool is_regular_file() const = 0;
+            virtual bool is_directory() const = 0;
+            virtual path path() const = 0;
+            /**
+             * @description: The VFS is an upper layer, and the symlink would 
+            // link cross different mounted roots!
+            // A Cross-Mount-Method SymLink Protocol is provided here:
+            // 1. Has extension name: .ssymlink
+            // 2. Has YAML content matches:
+            //      1) from: URL
+            //      2) to: URL
+            // More protocals shold be supported in implementation-classes
+            // For more information you can visit the local filesystem implementation.
+             * @author: SaeruHikari
+             */
+            virtual bool is_symlink() const
+            {
+                return path().extension().compare(".ssymlink");
+            }
+            virtual std::uintmax_t file_size() const = 0;
+            virtual file_time_type last_write_time() const = 0;
         };
-
+        
+        using entry_visitor = Sakura::function<void(Sakura::shared_ptr<directory_entry>)>;
         struct directory_root
         {
             virtual ~directory_root(){};
-            virtual bool exists(const path& path) = 0;
+            virtual bool exists(const path& path) const = 0;
             virtual void on_mount() = 0;
-            virtual Sakura::string_view get_mount_method() = 0;
-            virtual void foreach(const path& path,
-                Sakura::function<void(directory_entry*)> visitor) = 0;
-            virtual void foreach_recursively(const path& path,
-                Sakura::function<void(directory_entry*)> visitor) = 0;
+            virtual Sakura::string_view get_mount_method() const = 0;
+            virtual bool is_directory(const path& pth) const = 0;
+            virtual bool is_regular_file(const path& pth) const = 0;
+
+            virtual bool copy_file(const path& from, const path& to,
+                copy_options options = copy_options::none) = 0;
+            virtual void copy(const path& from, const path& to,
+                copy_options options = copy_options::none) = 0;
+            virtual path absolute(const path& p) const = 0;
+            
+
+
+            virtual void foreach(const path& path, entry_visitor visitor) = 0;
+            virtual void foreach_recursively(const path& path, entry_visitor visitor) = 0;
         };
-
-
-        static bool exists(const path& pth);
         static bool mount(directory_root* entry);
+        static bool exists(const path& pth);
         static bool is_directory(const path& pth);
         static bool is_regular_file(const path& pth);
         static bool equivalent(const path& lhs, const path& rhs);
+        static Sakura::vector<Sakura::unique_ptr<directory_root>> mounted_roots;
+        static void foreach(const path& path, entry_visitor visitor);
+        static void foreach_recursively(const path& path, entry_visitor visitor);
+        
 
 
-        static Sakura::vector<
-            Sakura::unique_ptr<directory_root>> mounted_roots;
 
-        static void foreach(
-            const path& path, Sakura::function<void(directory_entry*)> visitor);
-        static void foreach_recursively(
-            const path& path, Sakura::function<void(directory_entry*)> visitor);
         
         struct directory_entry_local final : public directory_entry
         {
-            virtual bool exists() override;
+            friend struct directory_root_local;
+            //---------------------modifiers---------------------//
+            virtual void replace_filename(const virtual_filesystem::path& p) override;
+            virtual void assign(const virtual_filesystem::path& p) override;
+            virtual void refresh() override;
+            
+            //---------------------observers---------------------//
+            virtual bool exists() const override;
+            virtual bool is_regular_file() const override;
+            virtual bool is_directory() const override;
+            virtual virtual_filesystem::path path() const override;
+            virtual bool is_symlink() const override;
+            virtual std::uintmax_t file_size() const override;
+            virtual file_time_type last_write_time() const override;
+
+
+
+            ~directory_entry_local() = default;
+        protected:
+            directory_entry_local(const std::filesystem::directory_entry& stl_e);
+            directory_entry_local(const std::filesystem::path& stl_path);
             std::filesystem::directory_entry stl_entry;
         };
+
 
         struct directory_root_local final : public directory_root
         {
             virtual void on_mount() override;
-            virtual bool exists(const path& path) override;
-            virtual Sakura::string_view get_mount_method() override;
-            virtual void foreach(const path& path,
-                Sakura::function<void(directory_entry*)> visitor) override;
-            virtual void foreach_recursively(const path& path,
-                Sakura::function<void(directory_entry*)> visitor) override;
+            virtual bool exists(const path& path) const override;
+            virtual Sakura::string_view get_mount_method() const override;
+
+            virtual path absolute(const path& path) const override;
+
+            virtual bool copy_file(const path& from, const path& to,
+                copy_options options = copy_options::none) override;
+            virtual void copy(const path& from, const path& to,
+                copy_options options = copy_options::none) override;
+
+                
+            virtual void foreach(const path& path, entry_visitor visitor) override;
+            virtual void foreach_recursively(const path& path, entry_visitor visitor) override;
+
+
+            virtual bool is_directory(const path& path) const override;
+            virtual bool is_regular_file(const path& path) const override;
             static constexpr Sakura::string_view mount_method = "lfs";
+
+            // Pool Allocate for better performance
+            static directory_entry_local* new_entry_local(
+                const std::filesystem::path& stl_e);
         };
 
         namespace ___local_detail

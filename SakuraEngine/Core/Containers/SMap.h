@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-08 13:58:16
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-14 15:51:01
+ * @LastEditTime: 2020-06-14 16:28:51
  */
 // Excellent Prototype from Star Engine :
 // https://github.com/star-e/StarEngine/blob/master/Star/SMap.h
@@ -17,19 +17,18 @@
 #include "SString.h"
 #include "Core/EngineUtils/SHash.h"
 #include "Core/CoreMinimal/SKeyWords.h"
+#ifndef TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS
+#define TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS 1
+#endif
+#include <tbb/concurrent_unordered_map.h>
+#include <tbb/concurrent_map.h>
 
 namespace Sakura
 {
-    template <typename... Args>
-    using map = eastl::map<Args...>;
-
-    template <typename Key,
-        typename T,
-        typename Hash = eastl::hash<Key>,
-        typename Predicate = eastl::equal_to<Key>,
-        typename Allocator = EASTLAllocatorType,
-        bool bCacheHashCode = false>
-    using unordered_map = eastl::unordered_map<Key, T, Hash, Predicate, Allocator, bCacheHashCode>;
+    using eastl::map;
+    using eastl::unordered_map;
+    using tbb::concurrent_unordered_map;
+    using tbb::concurrent_map;
     
     struct StringHasher
     {
