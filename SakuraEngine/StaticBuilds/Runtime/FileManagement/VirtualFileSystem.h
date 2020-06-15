@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-14 00:28:25
- * @LastEditTime: 2020-06-16 00:26:44
+ * @LastEditTime: 2020-06-16 02:48:27
  */ 
 #pragma once
 #include <filesystem>
@@ -40,7 +40,7 @@ namespace Sakura::Engine
             path() = default;
             path(const char* str_c);
             path(const std::filesystem::path& p);
-            inline bool is_sakura_vfs_absolute_path()
+            inline bool is_sakura_vfs_absolute_path() const
             {
                 return is_vfs_path;
             }
@@ -49,42 +49,42 @@ namespace Sakura::Engine
             // 2.Unix: /...
             // 3.Our VFS: SakuraVFS:${mounted_method}/
             // For example: SakuraVFS:Project/ 
-            path root_path();
-            path root_name();
-            Sakura::string_view relative_path();
-            bool has_relative_path();
+            path root_path() const;
+            path root_name() const;
+            Sakura::string_view relative_path() const;
+            bool has_relative_path() const;
             path make_preferred();
             
         private:
             // Hide this: VFS only support absolute path.
-            Sakura::string __root_name();
-            Sakura::string __root_path();
-            Sakura::string_view __path();
-            bool has_root_path()
+            Sakura::string __root_name() const;
+            Sakura::string __root_path() const;
+            Sakura::string_view __path() const;
+            bool has_root_path() const
             {
                 return true;
             }
-            bool has_root_name()
+            bool has_root_name() const
             {
                 return !root_name().empty();
             }
-            bool is_absolute()
+            bool is_absolute() const
             {
                 return true;
             }
-            bool is_relative()
+            bool is_relative() const 
             {
                 return false;
             }
-            path lexically_normal()
+            path lexically_normal() const
             {
                 return *this;
             }
-            path lexically_relative(const path& base)
+            path lexically_relative(const path& base) const
             {
                 return *this;
             }
-            path lexically_proximate(const path& base)
+            path lexically_proximate(const path& base) const
             {
                 return *this;
             }
@@ -182,33 +182,40 @@ namespace Sakura::Engine
         struct directory_root
         {
             virtual ~directory_root(){};
+            virtual bool under_root_symbol(const path& path) const
+            {
+                Sakura::string r = "SakuraVFS:";
+                r.append(get_mount_method().data());
+                return (path.root_name() == r.c_str());
+            }
             virtual bool exists(const path& path) const = 0;
             virtual void on_mount() = 0;
             virtual Sakura::string_view get_mount_method() const = 0;
             virtual bool is_directory(const path& pth) const = 0;
             virtual bool is_regular_file(const path& pth) const = 0;
-            virtual path current_path() const = 0;
+            virtual std::uintmax_t file_size(const path& pth) const = 0;
+            virtual file_time_type last_write_time(const path& p) const = 0;
+            virtual void last_write_time(const path& p, file_time_type new_time) = 0;
             virtual file_status status(const path& p) const = 0;
             virtual file_status symlink_status(const path& p) const = 0;
+            
 
             // path operations
             virtual path absolute(const path& p) const = 0;
             virtual path canonical(const path& p) const = 0;
-            virtual path weakly_canonical(const path& p) const = 0;
-            virtual path relative(
-                const path& p, const path& base = path()) const = 0;
             virtual path proximate(
                 const path& p, const path& base = path()) const = 0;
             virtual bool equivalent(const path& lhs, const path& rhs) const = 0;
     
+
             // file operations
             virtual bool create_directory(
                 const path& p, const path& existing_p = path()) = 0;
-            virtual void create_symlink(const path& target, const path& link)
+            void create_symlink(const path& target, const path& link)
             {
                 assert(0 && "Wait for implementation of VFS SymLink Protocol!");
             }
-            virtual void create_directory_symlink(const path& target, const path& link) 
+            void create_directory_symlink(const path& target, const path& link) 
             {
                 assert(0 && "Wait for implementation of VFS SymLink Protocol!");
             }
@@ -220,38 +227,37 @@ namespace Sakura::Engine
             virtual bool remove(const path& p) = 0;
             virtual std::uintmax_t remove_all(const path& p) = 0;
             virtual void rename(const path& old_p, const path& new_p) = 0;
-
-            virtual bool is_root(const path& root_path) const = 0;
+            virtual void resize_file(const path& old_p, std::uintmax_t size) = 0;
 
             // entry operations
             virtual void foreach(const path& path, entry_visitor visitor) = 0;
             virtual void foreach_recursively(const path& path, entry_visitor visitor) = 0;
             virtual Sakura::unique_ptr<directory_entry> entry(const path& p) const = 0;
         };
+       
+       
         // Observers
         bool mount(directory_root* entry);
         bool exists(const path& pth);
         bool is_directory(const path& pth);
         bool is_regular_file(const path& pth);
-        path current_path(
-            Sakura::string_view mount_method = Sakura::string_view());
+        std::uintmax_t file_size(const path& pth);
+        file_time_type last_write_time(const path& p);
         file_status status(const path& p);
         file_status symlink_status(const path& p);
 
 
         path absolute(const path& pth);
         path canonical(const path& pth);
-        path weakly_canonical(const path& pth);
         path relative(const path& pth, const path& base = path());
         path proximate(const path& pth, const path& base = path());
         bool equivalent(const path& lhs, const path& rhs);
 
 
-        bool create_directory(
-            const path& p, Sakura::string_view mount_method = Sakura::string_view(),
-            const path& existing_p = path());
-        bool create_directories(
-            const path& p, Sakura::string_view mount_method = Sakura::string_view());
+        void create_symlink(const path& target, const path& link);
+        void create_directory_symlink(const path& target, const path& link);
+        bool create_directory(const path& p, const path& existing_p = path());
+        bool create_directories(const path& p);
         bool copy_file(const path& from, const path& to,
             copy_options options = copy_options::none);
         void copy(const path& from, const path& to,
@@ -259,14 +265,16 @@ namespace Sakura::Engine
         bool remove(const path& p);
         std::uintmax_t remove_all(const path& p);
         void rename(const path& old_p, const path& new_p);
-
         void resize_file(const path& old_p, std::uintmax_t size);
+        void last_write_time(const path& p, file_time_type new_time);
         
         void foreach(const path& path, entry_visitor visitor);
         void foreach_recursively(const path& path, entry_visitor visitor);
         
-        inline Sakura::unique_ptr<directory_entry> entry(const path& p);
-        inline Sakura::vector<Sakura::unique_ptr<directory_root>> mounted_roots;
+        Sakura::unique_ptr<directory_entry> entry(const path& p);
+
+        inline Sakura::vector<
+            Sakura::unique_ptr<directory_root>> mounted_roots;
         
         struct directory_entry_local final : public directory_entry
         {
@@ -274,8 +282,7 @@ namespace Sakura::Engine
             //---------------------modifiers---------------------//
             virtual void replace_filename(const virtual_filesystem::path& p) override;
             virtual void assign(const virtual_filesystem::path& p) override;
-            virtual void refresh() override;
-            
+            virtual void refresh() override;            
             //---------------------observers---------------------//
             virtual bool exists() const override;
             virtual bool is_regular_file() const override;
@@ -298,22 +305,23 @@ namespace Sakura::Engine
         {
             virtual void on_mount() override;
             virtual Sakura::string_view get_mount_method() const override;
-
-
+            virtual bool under_root_symbol(const path& path) const override
+            {
+                return ((std::filesystem::path)path).is_absolute();
+            }
             virtual bool exists(const path& path) const override;
             virtual bool is_directory(const path& path) const override;
             virtual bool is_regular_file(const path& path) const override;
-            virtual bool is_root(const path& root_path) const override;
-            virtual path current_path() const override;
+            virtual std::uintmax_t file_size(const path& pth) const override;
+
+            virtual file_time_type last_write_time(const path& p) const override;
+
             virtual file_status status(const path& p) const override;
             virtual file_status symlink_status(const path& p) const override;
 
 
             virtual path absolute(const path& path) const override;
             virtual path canonical(const path& p) const override;
-            virtual path weakly_canonical(const path& p) const override;
-            virtual path relative(const path& path,
-                const virtual_filesystem::path& base = virtual_filesystem::path()) const override;
             virtual path proximate(const path& path,
                 const virtual_filesystem::path& base = virtual_filesystem::path()) const override;
             virtual bool equivalent(const path& lhs, const path& rhs) const override;
@@ -329,7 +337,8 @@ namespace Sakura::Engine
             virtual bool remove(const path& p) override;
             virtual std::uintmax_t remove_all(const path& p) override;
             virtual void rename(const path& old_p, const path& new_p) override;
-
+            virtual void resize_file(const path& old_p, std::uintmax_t size) override;
+            virtual void last_write_time(const path& p, file_time_type new_time) override;
                 
             virtual void foreach(const path& path, entry_visitor visitor) override;
             virtual void foreach_recursively(const path& path, entry_visitor visitor) override;

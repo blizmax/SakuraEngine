@@ -22,9 +22,10 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-16 00:19:59
- * @LastEditTime: 2020-06-16 00:39:43
+ * @LastEditTime: 2020-06-16 02:53:59
  */ 
 #include "../VirtualFileSystem.h"
+#include <fstream>
 
 namespace virtual_filesystem = Sakura::Engine::virtual_filesystem;
 using namespace virtual_filesystem;
@@ -34,18 +35,20 @@ int main(void)
     directory_root_local* local_root = new directory_root_local();
     virtual_filesystem::mount(local_root);
 
-    virtual_filesystem::path path_test("SakuraVFS:Project/shaders/SakuraTest.sproject");
+    virtual_filesystem::path path_test("SakuraVFS:Project/shaders/../shaders/SakuraTest.sproject");
     std::cout << "full: " << path_test.c_str() << std::endl;
     std::cout << "root name: " << path_test.root_name().c_str() << std::endl;
     std::cout << "root path: " << path_test.root_path().c_str() << std::endl;
     std::cout << "relative path: " << path_test.relative_path().data() << std::endl << std::endl;
+    std::cout << "abs: " << virtual_filesystem::absolute(path_test) << std::endl;
+    std::cout << "canonical: " << virtual_filesystem::canonical(path_test) << std::endl;
     for(auto& iter : path_test)
     {
         std::cout << iter.c_str() << std::endl;
     }   
     std::cout << std::endl;
 #ifdef SAKURA_TARGET_PLATFORM_OSX
-    virtual_filesystem::path path("/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/Version.h");
+    virtual_filesystem::path path("/Users/huangzheng/Coding/SakuraEngine/../SakuraEngine/SakuraEngine/Version.h");
 #elif SAKURA_TARGET_PLATFORM_WIN
     virtual_filesystem::path path("/Users/huangzheng/Coding/SakuraEngine/SakuraEngine/Version.h");
 #endif
@@ -53,6 +56,10 @@ int main(void)
     std::cout << "root name: " << path.root_name().c_str() << std::endl;
     std::cout << "root path: " << path.root_path().c_str() << std::endl;
     std::cout << "relative path: " << path.relative_path().data() << std::endl;
+    std::cout << "abs: " << virtual_filesystem::absolute(path) << std::endl;
+    std::cout << "canonical: " << virtual_filesystem::canonical(path) << std::endl;
+    virtual_filesystem::path pathh;
+    virtual_filesystem::create_directory("/Users/huangzheng/Coding/SakuraEngine/SKTest");
     for(auto& iter : path)
     {
         std::cout << iter.c_str() << std::endl;
@@ -63,7 +70,13 @@ int main(void)
         [&](auto&& entry)
         {
             std::cout << entry->is_regular_file() << std::endl;
+            std::cout << "file size: " << virtual_filesystem::file_size(path) << std::endl;
+            //virtual_filesystem::resize_file(path, 1500);//This is okay
+            auto ftime = virtual_filesystem::last_write_time(path);
+            std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime);
+            std::cout << std::asctime(std::localtime(&cftime));
             entry_holder = Sakura::move(entry);
         });
+    
     return 0;
 }

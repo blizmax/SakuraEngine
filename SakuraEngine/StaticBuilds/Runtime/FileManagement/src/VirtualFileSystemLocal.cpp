@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-15 14:35:47
- * @LastEditTime: 2020-06-15 20:16:53
+ * @LastEditTime: 2020-06-16 02:46:50
  */ 
 #include "../VirtualFileSystem.h"
 
@@ -168,19 +168,6 @@ path directory_root_local::canonical(const path &path) const
     return std::filesystem::canonical(path);
 }
 
-path directory_root_local::weakly_canonical(const path &path) const
-{
-    return std::filesystem::weakly_canonical(path);
-}
-
-path directory_root_local::relative(
-    const path &path, const virtual_filesystem::path& base) const
-{
-    if(base.empty())
-        return std::filesystem::relative(path);
-    return std::filesystem::relative(path, base);
-}
-
 path directory_root_local::proximate(
     const path &path, const virtual_filesystem::path& base) const
 {
@@ -204,12 +191,10 @@ bool directory_root_local::is_regular_file(const path &path) const
     return std::filesystem::is_regular_file(path);
 }
 
-bool directory_root_local::is_root(const virtual_filesystem::path& p) const
+std::uintmax_t directory_root_local::file_size(const path& pth) const
 {
-    //if()
-    return false;
+    return std::filesystem::file_size(pth);    
 }
-
 
 file_status directory_root_local::status(const path &p) const
 {
@@ -221,15 +206,14 @@ file_status directory_root_local::symlink_status(const path &p) const
     return this->entry(p)->symlink_status();
 }
 
+file_time_type directory_root_local::last_write_time(const path& p) const
+{
+    return std::filesystem::last_write_time(p);
+}
 
 bool directory_root_local::exists(const path &path) const
 {
     return std::filesystem::exists(path);
-}
-
-path directory_root_local::current_path() const
-{
-    return std::filesystem::current_path();
 }
 
 
@@ -240,7 +224,7 @@ path directory_root_local::current_path() const
 bool directory_root_local::create_directory(const path& p, const path& existing_p) 
 {
     if(existing_p.empty())
-        std::filesystem::create_directory(p);
+        return std::filesystem::create_directory(p);
     return std::filesystem::create_directory(p, existing_p);
 }
 
@@ -275,6 +259,15 @@ void directory_root_local::rename(const path& old_p, const path& new_p)
     return std::filesystem::rename(old_p, new_p);
 }
 
+void directory_root_local::resize_file(const path& old_p, std::uintmax_t size)
+{
+    return std::filesystem::resize_file(old_p, size);
+}
+
+void directory_root_local::last_write_time(const path& p, file_time_type new_time)
+{
+    return std::filesystem::last_write_time(p, new_time);
+}
 
 void directory_root_local::foreach(
     const path &path, virtual_filesystem::entry_visitor visitor)

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-14 00:57:52
- * @LastEditTime: 2020-06-16 00:28:13
+ * @LastEditTime: 2020-06-16 02:49:38
  */ 
 #include "../VirtualFileSystem.h"
 #include "Core/EngineUtils/log.h"
@@ -54,7 +54,7 @@ path::path(const std::filesystem::path& p)
         Sakura::log::error("VFS path do not support relative path!");
     // TODO: automatically fix relative-path as absolute-path
 }
-path path::root_name()
+path path::root_name() const
 {
     if(is_vfs_path)
         return *super::begin();
@@ -62,7 +62,7 @@ path path::root_name()
         return super::root_name();
 }
 
-path path::root_path()
+path path::root_path() const
 {
     if(is_vfs_path)
         return __root_path().c_str();
@@ -70,7 +70,7 @@ path path::root_path()
         return super::root_path();
 }
 
-Sakura::string_view path::relative_path()
+Sakura::string_view path::relative_path() const
 {
     if(is_vfs_path)
     {
@@ -81,27 +81,27 @@ Sakura::string_view path::relative_path()
         return super::relative_path().c_str();
 }
 
-bool path::has_relative_path()
+bool path::has_relative_path() const
 {
     return !relative_path().empty();
 }
 
-path path::make_preferred()
+path path::make_preferred() 
 {
     if(!is_vfs_path)
         return super::make_preferred();
     return *this;
 }
 
-Sakura::string_view path::__path()
+Sakura::string_view path::__path() const
 {
     return super::c_str();
 }
-Sakura::string path::__root_name()
+Sakura::string path::__root_name() const
 {
     return (*super::begin()).c_str();
 }
-Sakura::string path::__root_path()
+Sakura::string path::__root_path() const
 {
     return __root_name().append("/");
 }
@@ -122,8 +122,7 @@ bool virtual_filesystem::mount(directory_root* entry)
     {
         if(mounted_root.get() == entry)
             return false;//Already mounted, can't remount the same root.
-        if(entry->current_path().root_path() 
-            == mounted_root->current_path().root_path())
+        if(entry->get_mount_method() == mounted_root->get_mount_method())
         {
             Sakura::log::error("Can't mount two filesystem on the same root.");
             return false;//Cannot mount two filesystem on the same root.
@@ -165,17 +164,28 @@ bool virtual_filesystem::is_regular_file(const path &pth)
     return false;
 }
 
-path virtual_filesystem::current_path(Sakura::string_view mount_method)
+std::uintmax_t virtual_filesystem::file_size(const path& pth)
 {
-    if(mount_method.empty())
-        mount_method = virtual_filesystem::default_mount_method;
+    for(auto&& root : mounted_roots)
+    {
+        if(root->exists(pth))
+            return root->file_size(pth);
+    }
+    return 0;
+}
+
+file_time_type virtual_filesystem::last_write_time(const path& p)
+{
     for(auto&& mounted_root : mounted_roots)
     {
-        if(mounted_root->get_mount_method() == mount_method)
-            return mounted_root->current_path();//Already mounted, can't remount the same root.
+        if(mounted_root->exists(p))
+        {
+            return mounted_root->last_write_time(p);
+        }
     }
-    return path();
 }
+
+
 
 file_status virtual_filesystem::status(const path& p)
 {
@@ -204,7 +214,6 @@ file_status virtual_filesystem::symlink_status(const path& p)
 }
 
 
-
 virtual_filesystem::path virtual_filesystem::absolute(const path& pth)
 {
     for(auto&& root : mounted_roots)
@@ -225,26 +234,6 @@ virtual_filesystem::path virtual_filesystem::canonical(const path& pth)
     return pth;
 }
 
-virtual_filesystem::path virtual_filesystem::weakly_canonical(const path& pth)
-{
-    for(auto&& root : mounted_roots)
-    {
-        if(root->exists(pth))
-            return root->weakly_canonical(pth);
-    }
-    return pth;
-}
-
-virtual_filesystem::path virtual_filesystem::relative(
-    const path& pth, const path& base)
-{
-    for(auto&& root : mounted_roots)
-    {
-        if(root->exists(pth))
-            return root->relative(pth, base);
-    }
-    return pth;
-}
 
 virtual_filesystem::path virtual_filesystem::proximate(
     const path& pth, const path& base)
@@ -270,19 +259,38 @@ bool virtual_filesystem::equivalent(const path& lhs, const path& rhs)
 
 
 
-
-bool virtual_filesystem::create_directory(
-    const path& p, Sakura::string_view mount_method,
-    const path& existing_p)
+void virtual_filesystem::create_symlink(
+    const path& target, const path& link)
 {
-    if(mount_method.empty())
-        mount_method = virtual_filesystem::default_mount_method;
     for(auto&& mounted_root : mounted_roots)
     {
-        if(mounted_root->get_mount_method() == mount_method)
+        if(mounted_root->under_root_symbol(link))
+        {
+            return mounted_root->create_symlink(target, link); 
+        }
+    }
+}
+void virtual_filesystem::create_directory_symlink(
+    const path& target, const path& link)
+{
+    for(auto&& mounted_root : mounted_roots)
+    {
+        if(mounted_root->under_root_symbol(link))
+        {
+            return mounted_root->create_directory_symlink(target, link); 
+        }
+    }
+}
+
+bool virtual_filesystem::create_directory(
+    const path& p, const path& existing_p)
+{
+    for(auto&& mounted_root : mounted_roots)
+    {
+        if(mounted_root->under_root_symbol(p))
         {
             if(existing_p.empty())
-                return mounted_root->create_directory(p, mounted_root->current_path()); 
+                return mounted_root->create_directory(p); 
             else
                 return mounted_root->create_directory(p, existing_p);    
         }
@@ -290,14 +298,11 @@ bool virtual_filesystem::create_directory(
     return false;
 }
 
-bool virtual_filesystem::create_directories(
-    const path& p, Sakura::string_view mount_method)
+bool virtual_filesystem::create_directories(const path& p)
 {
-    if(mount_method.empty())
-        mount_method = virtual_filesystem::default_mount_method;
     for(auto&& mounted_root : mounted_roots)
     {
-        if(mounted_root->get_mount_method() == mount_method)
+        if(mounted_root->under_root_symbol(p))
         {
             return mounted_root->create_directories(p);
         }
@@ -372,6 +377,27 @@ void virtual_filesystem::rename(const path& old_p, const path& new_p)
     }
 }
 
+void virtual_filesystem::resize_file(const path& old_p, std::uintmax_t size)
+{
+    for(auto&& mounted_root : mounted_roots)
+    {
+        if(mounted_root->exists(old_p))
+        {
+            return mounted_root->resize_file(old_p, size);
+        }
+    }
+}
+
+void virtual_filesystem::last_write_time(const path& p, file_time_type new_time)
+{
+    for(auto&& mounted_root : mounted_roots)
+    {
+        if(mounted_root->exists(p))
+        {
+            return mounted_root->last_write_time(p, new_time);
+        }
+    }
+}
 
 void virtual_filesystem::foreach_recursively(
     const path& path, entry_visitor visitor)
