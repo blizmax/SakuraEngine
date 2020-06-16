@@ -22,11 +22,10 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-13 13:43:25
- * @LastEditTime: 2020-06-13 14:21:02
+ * @LastEditTime: 2020-06-16 23:56:30
  */ 
 #pragma once
 #include "Shader.h"
-#include <filesystem>
 #include <Core/EngineUtils/log.h>
 #include <StaticBuilds/Runtime/FileManagement/FileMetaManager.h>
 

@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-14 00:28:25
- * @LastEditTime: 2020-06-16 02:48:27
+ * @LastEditTime: 2020-06-16 02:56:22
  */ 
 #pragma once
 #include <filesystem>
@@ -139,6 +139,11 @@ namespace Sakura::Engine
         inline Sakura::string_view default_mount_method = mount_method_local_filesystem;
         void set_default_mount_method(Sakura::string_view mount_method);
 
+        struct fstream
+        {
+            virtual void read() = 0;
+        };
+
         struct directory_entry
         {
             virtual ~directory_entry(){};
@@ -234,7 +239,7 @@ namespace Sakura::Engine
             virtual void foreach_recursively(const path& path, entry_visitor visitor) = 0;
             virtual Sakura::unique_ptr<directory_entry> entry(const path& p) const = 0;
         };
-       
+
        
         // Observers
         bool mount(directory_root* entry);

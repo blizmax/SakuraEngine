@@ -22,15 +22,10 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-11 08:39:32
- * @LastEditTime: 2020-06-05 19:43:05
+ * @LastEditTime: 2020-06-16 23:47:21
  */
 #ifdef _WIN32
-#include "Win32/fs.cpp"
 #include "Win32/os.cpp"
-#include "Win32/time.cpp"
 #else
-#include "Unix/fs.cc"
 #include "Unix/os.cc"
-#include "Unix/time.cc"
 #endif
-#include "Common/T2String.cc"

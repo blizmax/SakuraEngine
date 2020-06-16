@@ -5,7 +5,7 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-11 17:28:48
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-04-20 21:25:48
+ * @LastEditTime: 2020-06-17 00:06:24
  */
 // Source page:
 //   boost.org/doc/libs/1_61_0/libs/graph/doc/
@@ -13,7 +13,6 @@
 #pragma once
 #include <EASTL/vector.h>
 #include <EASTL/list.h>
-#include <vector>
 #include <boost/graph/adjacency_list.hpp>
 
 namespace DAG

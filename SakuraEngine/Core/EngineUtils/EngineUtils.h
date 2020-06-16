@@ -5,16 +5,10 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-09 16:55:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-03-30 11:53:15
+ * @LastEditTime: 2020-06-16 23:46:41
  */
 #pragma once
 #include "../Containers/Containers.h"
-#include "ConsoleDesk.h"
 #include "os.h"
-#include "time.h"
-#include "path.h"
-#include "T2String.h"
-#include "sstream.h"
 #include "SHash.h"
-#include "fs.h"
 #include "log.h"

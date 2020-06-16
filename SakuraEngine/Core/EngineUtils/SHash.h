@@ -22,13 +22,12 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-03-01 19:46:34
- * @LastEditTime: 2020-06-08 00:12:07
+ * @LastEditTime: 2020-06-16 23:50:04
  */
 #pragma once
 #include "SakuraEngine/Core/CoreMinimal/SDefination.h"
 #include "xxHash/xxhash.h"
 #include <EASTL/string.h>
-#include <string>
 
 namespace Sakura::hash
 {
@@ -40,11 +39,6 @@ namespace Sakura::hash
     }
 
     inline static hash_code hash(const std::string& str, uint64 seed)
-    {
-        return XXH64(str.c_str(), str.size(), seed);
-    }
-
-    inline static hash_code hash(const eastl::string& str, uint64 seed)
     {
         return XXH64(str.c_str(), str.size(), seed);
     }
