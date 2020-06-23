@@ -22,9 +22,9 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-02-25 22:25:45
- * @LastEditTime: 2020-04-20 22:16:40
+ * @LastEditTime: 2020-06-17 04:05:11
  */
-#include "../Modules.generated.h"
+#include "SPAModules.generated.h"
 #include "../SPA/include/modulemanager.h"
 #include "plugin_main/plugin_main.h"
 #include "../Extern/include/confinfo.h"
@@ -36,15 +36,14 @@ int main()
     auto mng = GetModuleManager();
 #ifndef _WIN32
     #ifdef CONFINFO_PLATFORM_MACOS
-        mng->Mount("/Users/saeruhikari/Coding/SakuraEngine/build/macosx/x86_64");
+        mng->Mount("/Users/huangzheng/Coding/SakuraEngine/Debug-build/Engine/bin/");
     #else
         mng->Mount("/home/saeruhikari/Coding/SakuraEngine/build");
     #endif
 #elif defined(_WIN32)
     mng->Mount("D:\\Coding\\SakuraEngine\\build");
 #endif
-
-    std::cout << "Root: " << mng->GetRoot() << std::endl;
+    std::cout << "Root: " << mng->GetRoot().data() << std::endl;
     std::string mainName = "plugin_main";
     mng->MakeModuleGraph(mainName.c_str());
     if(!mng->InitModuleGraph())

@@ -13,4 +13,4 @@ add_subdirectory(plugin_main)
 
 add_executable(UnitTestSPA UnitTestSPA.cpp)
 
-target_link_libraries(UnitTestSPA SPA plugin_0 plugin_1 plugin_main)
+target_link_libraries(UnitTestSPA SPA plugin_0 plugin_1 plugin_main EASTL)

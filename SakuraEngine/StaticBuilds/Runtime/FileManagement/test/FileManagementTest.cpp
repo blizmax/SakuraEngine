@@ -22,7 +22,7 @@
  * @Version: 0.1.0
  * @Autor: SaeruHikari
  * @Date: 2020-06-16 00:19:59
- * @LastEditTime: 2020-06-16 22:44:28
+ * @LastEditTime: 2020-06-18 17:59:10
  */ 
 #include "../VirtualFileSystem.h"
 #include <fstream>
@@ -30,8 +30,33 @@
 namespace virtual_filesystem = Sakura::Engine::virtual_filesystem;
 using namespace virtual_filesystem;
 
+struct interfaces
+{
+    interfaces() = default;
+    virtual ~interfaces() = default;
+    virtual void f() = 0;
+protected:
+    float ff = 1;
+};
+
+struct imple : public interfaces
+{
+    imple(int i)
+    {
+        j = 1;
+    }
+    imple() = default;
+    ~imple() = default;
+    void f() override 
+    {
+        std::cout << "WTF" << std::endl;
+    }
+    int j;
+};
+
 int main(void)
 {
+    imple im(5);
     directory_root_local* local_root = new directory_root_local();
     virtual_filesystem::mount(local_root);
 
@@ -58,8 +83,6 @@ int main(void)
     std::cout << "relative path: " << path.relative_path().data() << std::endl;
     std::cout << "abs: " << virtual_filesystem::absolute(path) << std::endl;
     std::cout << "canonical: " << virtual_filesystem::canonical(path) << std::endl;
-    virtual_filesystem::path pathh;
-    virtual_filesystem::create_directory("/Users/huangzheng/Coding/SakuraEngine/SKTest");
     for(auto& iter : path)
     {
         std::cout << iter.c_str() << std::endl;
@@ -77,6 +100,15 @@ int main(void)
             std::cout << std::asctime(std::localtime(&cftime));
             entry_holder = Sakura::move(entry);
         });
-    
+    try
+    {
+        virtual_filesystem::path pathh("/Users/huangzheng/Coding/SakuraEngine/SKTest");
+        virtual_filesystem::remove_all(pathh);
+    }
+    catch(std::exception e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+    std::cout << "WTF" << std::endl;
     return 0;
 }

@@ -5,10 +5,11 @@
  * @Autor: SaeruHikari
  * @Date: 2020-02-14 00:31:40
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-14 15:56:22
+ * @LastEditTime: 2020-06-17 04:01:46
  */
 #pragma once
 #include <EASTL/string.h>
+#include "../../Extern/include/DefaultAllocate.h"
 
 namespace Sakura
 {
